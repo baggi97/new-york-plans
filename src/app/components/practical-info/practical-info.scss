@@ -1,0 +1,128 @@
+.practical {
+  padding: var(--space-3xl) 0;
+  background-color: var(--color-bg);
+  border-top: 1px solid var(--color-border-light);
+
+  &__header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent-sage);
+    margin-bottom: var(--space-sm);
+  }
+
+  &__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--color-text);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+
+    @media (min-width: 600px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  &__card-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    background: rgba(61, 79, 111, 0.06);
+    color: var(--color-accent-navy);
+    margin-bottom: var(--space-xs);
+  }
+
+  &__card-title {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  &__detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border-light);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__detail-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-navy);
+  }
+
+  &__detail-value {
+    font-size: 0.95rem;
+    color: var(--color-text);
+
+    &--bold {
+      font-weight: 500;
+    }
+  }
+
+  &__detail-note {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+
+  &__notes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    li {
+      position: relative;
+      padding-left: 1.2em;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--color-text-secondary);
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.6em;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--color-accent-gold);
+        opacity: 0.6;
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+.footer {
+  padding: var(--space-2xl) 0 var(--space-xl);
+  background-color: var(--color-bg-warm);
+  border-top: 1px solid var(--color-border);
+
+  &__divider {
+    width: 60px;
+    height: 1px;
+    background: var(--color-accent-gold);
+    margin: 0 auto var(--space-xl);
+    opacity: 0.5;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+
+    @media (min-width: 600px) {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  &__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  &__logo {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: 0.05em;
+  }
+
+  &__tagline {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    font-family: var(--font-serif);
+  }
+
+  &__details {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  &__note {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+  }
+}
