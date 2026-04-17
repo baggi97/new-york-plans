@@ -11,13 +11,13 @@ import { Component, OnInit, signal } from '@angular/core';
       </h3>
       <div class="currency__row">
         <div class="currency__field">
-          <label class="currency__label">DKK</label>
-          <input type="number" class="currency__input" [value]="dkk()" (input)="onDkkInput($event)" placeholder="0" />
+          <label class="currency__label">USD</label>
+          <input type="number" class="currency__input" [value]="usd()" (input)="onUsdInput($event)" placeholder="0" />
         </div>
         <span class="currency__arrow">→</span>
         <div class="currency__field">
-          <label class="currency__label">USD</label>
-          <input type="number" class="currency__input" [value]="usd()" (input)="onUsdInput($event)" placeholder="0" />
+          <label class="currency__label">DKK</label>
+          <input type="number" class="currency__input" [value]="dkk()" (input)="onDkkInput($event)" placeholder="0" />
         </div>
       </div>
       <span class="currency__rate">1 USD ≈ {{ rate().toFixed(2) }} DKK</span>
@@ -27,12 +27,12 @@ import { Component, OnInit, signal } from '@angular/core';
 })
 export class CurrencyConverterComponent implements OnInit {
   rate = signal(6.85);
-  dkk = signal(100);
-  usd = signal(15);
+  usd = signal(25);
+  dkk = signal(171);
 
   ngOnInit() {
     this.fetchRate();
-    this.usd.set(Math.round((this.dkk() / this.rate()) * 100) / 100);
+    this.dkk.set(Math.round(this.usd() * this.rate() * 100) / 100);
   }
 
   async fetchRate() {
@@ -42,7 +42,7 @@ export class CurrencyConverterComponent implements OnInit {
       const data = await res.json();
       if (data.rates?.DKK) {
         this.rate.set(data.rates.DKK);
-        this.usd.set(Math.round((this.dkk() / this.rate()) * 100) / 100);
+        this.dkk.set(Math.round(this.usd() * this.rate() * 100) / 100);
       }
     } catch { /* use fallback rate */ }
   }
