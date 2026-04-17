@@ -3,8 +3,7 @@
   publish = "dist/nyc-magazine/browser"
 
 [build.environment]
-  NODE_VERSION = "20.19.0"
-  NPM_VERSION = "10"
+  NODE_VERSION = "22"
 
 [[redirects]]
   from = "/*"
