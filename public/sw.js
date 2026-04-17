@@ -29,6 +29,7 @@ const PRECACHE_IMAGES = [
   'https://images.unsplash.com/photo-1655301885279-2a83e9504154?w=1200&q=80',
   'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80',
   'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80',
+  'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1600&q=80',
 ];
 
 self.addEventListener('install', (event) => {

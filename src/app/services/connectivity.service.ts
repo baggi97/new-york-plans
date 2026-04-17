@@ -5,20 +5,29 @@ export class ConnectivityService implements OnDestroy {
   private zone = inject(NgZone);
 
   isOnline = signal(navigator.onLine);
-  private callbacks: Array<() => void> = [];
+  private reconnectCallbacks: Array<() => void> = [];
+  private disconnectCallbacks: Array<() => void> = [];
 
   private onOnline = () => this.zone.run(() => {
     this.isOnline.set(true);
-    for (const cb of this.callbacks) cb();
+    for (const cb of this.reconnectCallbacks) cb();
   });
 
   private onOffline = () => this.zone.run(() => {
     this.isOnline.set(false);
+    for (const cb of this.disconnectCallbacks) cb();
   });
 
   constructor() {
     window.addEventListener('online', this.onOnline);
     window.addEventListener('offline', this.onOffline);
+
+    if (navigator.onLine) {
+      fetch('/favicon.svg', { method: 'HEAD', cache: 'no-store' })
+        .catch(() => {
+          this.zone.run(() => this.isOnline.set(false));
+        });
+    }
   }
 
   ngOnDestroy() {
@@ -27,6 +36,10 @@ export class ConnectivityService implements OnDestroy {
   }
 
   onReconnect(callback: () => void) {
-    this.callbacks.push(callback);
+    this.reconnectCallbacks.push(callback);
+  }
+
+  onDisconnect(callback: () => void) {
+    this.disconnectCallbacks.push(callback);
   }
 }

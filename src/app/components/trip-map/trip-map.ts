@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TRIP_DATA } from '../../data/trip-data';
 import { ConnectivityService } from '../../services/connectivity.service';
@@ -23,14 +23,14 @@ import { ConnectivityService } from '../../services/connectivity.service';
           }
         </div>
         <div class="trip-map__frame">
-          @if (connectivity.isOnline()) {
-            <iframe [src]="activeSafeUrl" width="100%" height="450" style="border:0; border-radius: var(--radius-md);" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          } @else {
+          @if (showOffline()) {
             <div class="trip-map__offline">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
               <span class="trip-map__offline-text">Kort ikke tilgængeligt offline</span>
               <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="trip-map__offline-link">Åbn Google Maps</a>
             </div>
+          } @else {
+            <iframe [src]="activeSafeUrl" width="100%" height="450" style="border:0; border-radius: var(--radius-md);" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           }
         </div>
         <div class="trip-map__info">
@@ -48,9 +48,10 @@ import { ConnectivityService } from '../../services/connectivity.service';
   styleUrl: './trip-map.scss',
 })
 export class TripMapComponent {
-  connectivity = inject(ConnectivityService);
+  private connectivity = inject(ConnectivityService);
   days = TRIP_DATA.days;
   activeDay = 1;
+  showOffline = signal(!navigator.onLine);
 
   private safeUrls: Map<number, SafeResourceUrl>;
 
@@ -58,6 +59,8 @@ export class TripMapComponent {
     this.safeUrls = new Map(
       this.days.map(d => [d.id, this.sanitizer.bypassSecurityTrustResourceUrl(d.mapEmbedUrl)])
     );
+    this.connectivity.onReconnect(() => this.showOffline.set(false));
+    this.connectivity.onDisconnect(() => this.showOffline.set(true));
   }
 
   get activeSafeUrl(): SafeResourceUrl {

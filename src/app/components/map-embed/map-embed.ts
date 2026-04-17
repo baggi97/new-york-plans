@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ConnectivityService } from '../../services/connectivity.service';
 
@@ -7,7 +7,13 @@ import { ConnectivityService } from '../../services/connectivity.service';
   standalone: true,
   template: `
     <div class="map">
-      @if (connectivity.isOnline()) {
+      @if (showOffline()) {
+        <div class="map__offline">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span class="map__offline-text">Kort ikke tilgængeligt offline</span>
+          <a [href]="mapsLinkUrl" target="_blank" rel="noopener" class="map__offline-link">Åbn i Google Maps</a>
+        </div>
+      } @else {
         <iframe
           [src]="safeUrl"
           width="100%"
@@ -17,28 +23,26 @@ import { ConnectivityService } from '../../services/connectivity.service';
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
         ></iframe>
-      } @else {
-        <div class="map__offline">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span class="map__offline-text">Kort ikke tilgængeligt offline</span>
-          <a [href]="mapsLinkUrl" target="_blank" rel="noopener" class="map__offline-link">Åbn i Google Maps</a>
-        </div>
       }
     </div>
   `,
   styleUrl: './map-embed.scss',
 })
 export class MapEmbedComponent {
-  connectivity = inject(ConnectivityService);
+  private connectivity = inject(ConnectivityService);
   safeUrl!: SafeResourceUrl;
   mapsLinkUrl = '';
+  showOffline = signal(!navigator.onLine);
+
+  constructor(private sanitizer: DomSanitizer) {
+    this.connectivity.onReconnect(() => this.showOffline.set(false));
+    this.connectivity.onDisconnect(() => this.showOffline.set(true));
+  }
 
   @Input() set url(value: string) {
     this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(value);
     this.mapsLinkUrl = this.extractMapsLink(value);
   }
-
-  constructor(private sanitizer: DomSanitizer) {}
 
   private extractMapsLink(embedUrl: string): string {
     try {
