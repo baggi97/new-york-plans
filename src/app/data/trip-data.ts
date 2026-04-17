@@ -139,12 +139,12 @@ export const TRIP_DATA: TripData = {
           hero: true,
         },
         {
-          url: 'https://images.unsplash.com/photo-1534251369789-5067c8b8602a?w=800&q=80',
-          alt: 'Brooklyn Bridge',
+          url: 'https://images.unsplash.com/photo-1512472102579-8a647ea3559f?w=800&q=80',
+          alt: 'Gående på Brooklyn Bridge',
         },
         {
-          url: 'https://images.unsplash.com/photo-1565711561500-49678a10a63f?w=800&q=80',
-          alt: '9/11 Memorial',
+          url: 'https://images.unsplash.com/photo-1623169734436-513e344a62b3?w=800&q=80',
+          alt: 'Baseball stadion i New York',
         },
       ],
     },
@@ -206,12 +206,12 @@ export const TRIP_DATA: TripData = {
           hero: true,
         },
         {
-          url: 'https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800&q=80',
-          alt: 'Bethesda Fountain',
+          url: 'https://images.unsplash.com/photo-1765908310201-21b4f73b9ea7?w=800&q=80',
+          alt: 'Bethesda Fountain i Central Park',
         },
         {
-          url: 'https://images.unsplash.com/photo-1600716051809-e997e11a5d52?w=800&q=80',
-          alt: 'Top of the Rock udsigt',
+          url: 'https://images.unsplash.com/photo-1693196506405-4c5ef5cbca03?w=800&q=80',
+          alt: 'Solnedgang fra Top of the Rock',
         },
       ],
     },
@@ -295,12 +295,12 @@ export const TRIP_DATA: TripData = {
           hero: true,
         },
         {
-          url: 'https://images.unsplash.com/photo-1555992828-ca4dbe41d294?w=800&q=80',
-          alt: 'SoHo gade',
+          url: 'https://images.unsplash.com/photo-1746407757880-1d848208ca00?w=800&q=80',
+          alt: 'Chinatown i Manhattan',
         },
         {
-          url: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800&q=80',
-          alt: 'Washington Square Park',
+          url: 'https://images.unsplash.com/photo-1759810743306-8727f3beab97?w=800&q=80',
+          alt: 'Washington Square Arch',
         },
       ],
     },
@@ -373,12 +373,12 @@ export const TRIP_DATA: TripData = {
           hero: true,
         },
         {
-          url: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80',
+          url: 'https://images.unsplash.com/photo-1750077806370-806ba3ff2479?w=800&q=80',
           alt: 'Grand Central Terminal',
         },
         {
-          url: 'https://images.unsplash.com/photo-1501466044931-62695aada8e9?w=800&q=80',
-          alt: 'High Line Park',
+          url: 'https://images.unsplash.com/photo-1624553348093-ed95c718f37b?w=800&q=80',
+          alt: 'The High Line, New York',
         },
       ],
     },
@@ -420,8 +420,8 @@ export const TRIP_DATA: TripData = {
         'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.183792036255!2d-73.9871078!3d40.7579747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1710000000000',
       images: [
         {
-          url: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80',
-          alt: 'Brunch i New York',
+          url: 'https://images.unsplash.com/photo-1655301885279-2a83e9504154?w=1200&q=80',
+          alt: 'Morgen ved Brooklyn Bridge',
           hero: true,
         },
         {
