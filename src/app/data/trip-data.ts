@@ -437,8 +437,8 @@ export const TRIP_DATA: TripData = {
   ],
   practicalInfo: {
     flights: [
-      { code: 'SK909', route: 'København → Newark', time: 'Ankomst ca. 14:55' },
-      { code: 'SK910', route: 'Newark → København', time: 'Afgang kl. 17:15' },
+      { code: 'SK909', route: 'København → Newark', time: 'Ankomst ca. 14:55', url: 'https://www.flightera.net/en/flight/SAS+Scandinavian+Airlines/SK909' },
+      { code: 'SK910', route: 'Newark → København', time: 'Afgang kl. 17:15', url: 'https://www.flightera.net/en/flight/SAS+Scandinavian+Airlines/SK910' },
     ],
     hotel: {
       name: 'Millennium Hotel Times Square',

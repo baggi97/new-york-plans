@@ -21,11 +21,14 @@ import { TRIP_DATA } from '../../data/trip-data';
             </div>
             <h3 class="practical__card-title">Fly</h3>
             @for (flight of info.flights; track flight.code) {
-              <div class="practical__detail">
+              <a [href]="flight.url" target="_blank" rel="noopener" class="practical__detail practical__detail--link">
                 <span class="practical__detail-label">{{ flight.code }}</span>
                 <span class="practical__detail-value">{{ flight.route }}</span>
                 <span class="practical__detail-note">{{ flight.time }}</span>
-              </div>
+                <svg class="practical__detail-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17l9.2-9.2M17 17V7.8H7.8"/>
+                </svg>
+              </a>
             }
           </div>
 

@@ -74,6 +74,37 @@
     &:last-child {
       border-bottom: none;
     }
+
+    &--link {
+      text-decoration: none;
+      position: relative;
+      padding-right: 1.5rem;
+      border-radius: var(--radius-sm);
+      padding-left: 0.5rem;
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(61, 79, 111, 0.04);
+        color: inherit;
+
+        .practical__detail-arrow {
+          opacity: 1;
+          transform: translate(1px, -1px);
+        }
+      }
+    }
+  }
+
+  &__detail-arrow {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-accent-navy);
+    opacity: 0.4;
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
   &__detail-label {

@@ -36,7 +36,7 @@ export interface TripDay {
 }
 
 export interface PracticalInfo {
-  flights: { code: string; route: string; time: string }[];
+  flights: { code: string; route: string; time: string; url?: string }[];
   hotel: { name: string; note: string };
   transportNotes: string[];
   generalNotes: string[];
