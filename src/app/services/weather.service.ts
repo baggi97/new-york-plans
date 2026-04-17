@@ -1,5 +1,6 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { TRIP_DATA } from '../data/trip-data';
+import { ConnectivityService } from './connectivity.service';
 
 export interface DayWeather {
   date: string;
@@ -10,8 +11,9 @@ export interface DayWeather {
 
 @Injectable({ providedIn: 'root' })
 export class WeatherService {
+  private connectivity = inject(ConnectivityService);
   private weatherData = signal<DayWeather[]>([]);
-  private loaded = false;
+  private hasFetched = false;
 
   private tripDates = TRIP_DATA.days.map(d => d.isoDate);
 
@@ -25,9 +27,22 @@ export class WeatherService {
 
   allDays = computed(() => this.weatherData());
 
+  constructor() {
+    this.connectivity.onReconnect(() => this.reload());
+  }
+
   async load() {
-    if (this.loaded) return;
-    this.loaded = true;
+    if (this.hasFetched) return;
+    await this.fetchData();
+  }
+
+  async reload() {
+    this.hasFetched = false;
+    await this.fetchData();
+  }
+
+  private async fetchData() {
+    this.hasFetched = true;
     try {
       const res = await fetch(
         'https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.006&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=America%2FNew_York&start_date=' +
@@ -44,9 +59,11 @@ export class WeatherService {
         }))
       );
     } catch {
-      this.weatherData.set(
-        this.tripDates.map(d => ({ date: d, tempMin: 10, tempMax: 17, code: 3 }))
-      );
+      if (this.weatherData().length === 0) {
+        this.weatherData.set(
+          this.tripDates.map(d => ({ date: d, tempMin: 10, tempMax: 17, code: 3 }))
+        );
+      }
     }
   }
 

@@ -1,4 +1,5 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
+import { ConnectivityService } from '../../services/connectivity.service';
 
 @Component({
   selector: 'app-currency-converter',
@@ -26,6 +27,8 @@ import { Component, OnInit, signal } from '@angular/core';
   styleUrl: './currency-converter.scss',
 })
 export class CurrencyConverterComponent implements OnInit {
+  private connectivity = inject(ConnectivityService);
+
   rate = signal(6.85);
   usd = signal(25);
   dkk = signal(171);
@@ -33,6 +36,7 @@ export class CurrencyConverterComponent implements OnInit {
   ngOnInit() {
     this.fetchRate();
     this.dkk.set(Math.round(this.usd() * this.rate() * 100) / 100);
+    this.connectivity.onReconnect(() => this.fetchRate());
   }
 
   async fetchRate() {

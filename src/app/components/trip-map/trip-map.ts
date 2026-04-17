@@ -1,6 +1,7 @@
-import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TRIP_DATA } from '../../data/trip-data';
+import { ConnectivityService } from '../../services/connectivity.service';
 
 @Component({
   selector: 'app-trip-map',
@@ -22,7 +23,7 @@ import { TRIP_DATA } from '../../data/trip-data';
           }
         </div>
         <div class="trip-map__frame">
-          @if (isOnline()) {
+          @if (connectivity.isOnline()) {
             <iframe [src]="activeSafeUrl" width="100%" height="450" style="border:0; border-radius: var(--radius-md);" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           } @else {
             <div class="trip-map__offline">
@@ -46,29 +47,17 @@ import { TRIP_DATA } from '../../data/trip-data';
   `,
   styleUrl: './trip-map.scss',
 })
-export class TripMapComponent implements OnInit, OnDestroy {
+export class TripMapComponent {
+  connectivity = inject(ConnectivityService);
   days = TRIP_DATA.days;
   activeDay = 1;
-  isOnline = signal(navigator.onLine);
 
   private safeUrls: Map<number, SafeResourceUrl>;
-  private onOnline = () => this.isOnline.set(true);
-  private onOffline = () => this.isOnline.set(false);
 
   constructor(private sanitizer: DomSanitizer) {
     this.safeUrls = new Map(
       this.days.map(d => [d.id, this.sanitizer.bypassSecurityTrustResourceUrl(d.mapEmbedUrl)])
     );
-  }
-
-  ngOnInit() {
-    window.addEventListener('online', this.onOnline);
-    window.addEventListener('offline', this.onOffline);
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('online', this.onOnline);
-    window.removeEventListener('offline', this.onOffline);
   }
 
   get activeSafeUrl(): SafeResourceUrl {

@@ -1,4 +1,5 @@
-import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
+import { ConnectivityService } from '../../services/connectivity.service';
 
 @Component({
   selector: 'app-offline-indicator',
@@ -13,19 +14,7 @@ import { Component, signal, OnInit, OnDestroy } from '@angular/core';
   `,
   styleUrl: './offline-indicator.scss',
 })
-export class OfflineIndicatorComponent implements OnInit, OnDestroy {
-  isOffline = signal(!navigator.onLine);
-
-  private onlineHandler = () => this.isOffline.set(false);
-  private offlineHandler = () => this.isOffline.set(true);
-
-  ngOnInit() {
-    window.addEventListener('online', this.onlineHandler);
-    window.addEventListener('offline', this.offlineHandler);
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('online', this.onlineHandler);
-    window.removeEventListener('offline', this.offlineHandler);
-  }
+export class OfflineIndicatorComponent {
+  private connectivity = inject(ConnectivityService);
+  isOffline = computed(() => !this.connectivity.isOnline());
 }

@@ -1,12 +1,13 @@
-import { Component, Input, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ConnectivityService } from '../../services/connectivity.service';
 
 @Component({
   selector: 'app-map-embed',
   standalone: true,
   template: `
     <div class="map">
-      @if (isOnline()) {
+      @if (connectivity.isOnline()) {
         <iframe
           [src]="safeUrl"
           width="100%"
@@ -27,13 +28,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   `,
   styleUrl: './map-embed.scss',
 })
-export class MapEmbedComponent implements OnInit, OnDestroy {
-  isOnline = signal(navigator.onLine);
+export class MapEmbedComponent {
+  connectivity = inject(ConnectivityService);
   safeUrl!: SafeResourceUrl;
   mapsLinkUrl = '';
-
-  private onOnline = () => this.isOnline.set(true);
-  private onOffline = () => this.isOnline.set(false);
 
   @Input() set url(value: string) {
     this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(value);
@@ -41,16 +39,6 @@ export class MapEmbedComponent implements OnInit, OnDestroy {
   }
 
   constructor(private sanitizer: DomSanitizer) {}
-
-  ngOnInit() {
-    window.addEventListener('online', this.onOnline);
-    window.addEventListener('offline', this.onOffline);
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('online', this.onOnline);
-    window.removeEventListener('offline', this.onOffline);
-  }
 
   private extractMapsLink(embedUrl: string): string {
     try {
