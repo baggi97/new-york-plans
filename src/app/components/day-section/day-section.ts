@@ -5,6 +5,7 @@ import { FromListComponent } from '../from-list/from-list';
 import { MapEmbedComponent } from '../map-embed/map-embed';
 import { TripStatusService } from '../../services/trip-status.service';
 import { LightboxService } from '../../services/lightbox.service';
+import { WeatherService } from '../../services/weather.service';
 
 @Component({
   selector: 'app-day-section',
@@ -31,6 +32,13 @@ import { LightboxService } from '../../services/lightbox.service';
               </span>
             }
           </div>
+          @if (dayWeather; as w) {
+            <div class="day__weather">
+              <span class="day__weather-icon">{{ weatherService.icon(w.code) }}</span>
+              <span class="day__weather-temp">{{ w.tempMax }}°</span>
+              <span class="day__weather-label">{{ weatherService.label(w.code) }}</span>
+            </div>
+          }
           @if (day.bookings.length > 0) {
             <div class="day__bookings">
               <app-booking-badge [bookings]="day.bookings" />
@@ -130,9 +138,14 @@ export class DaySectionComponent {
 
   private tripStatus = inject(TripStatusService);
   private lightbox = inject(LightboxService);
+  weatherService = inject(WeatherService);
 
   get isToday(): boolean {
     return this.tripStatus.currentDayNumber() === this.day.id;
+  }
+
+  get dayWeather() {
+    return this.weatherService.byDate().get(this.day.isoDate) ?? null;
   }
 
   get heroImage(): { url: string; alt: string } {
