@@ -103,6 +103,7 @@ export const TRIP_DATA: TripData = {
         { label: "Katz's Delicatessen", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Katzs+Delicatessen+New+York' },
         { label: 'LOS TACOS No.1', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=LOS+TACOS+No.1+New+York' },
         { label: 'Pier 17', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pier+17+New+York' },
+        { label: 'Pier 35', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pier+35+New+York' },
       ],
       mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.518079498!2d-73.9893421!3d40.7063095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a197c06b7cb%3A0x40a06c78f79e5de6!2sBrooklyn%20Bridge!5e0!3m2!1sen!2sus!4v1710000000000',
       mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.706,-73.997&zoom=13&size=600x300&scale=2&maptype=roadmap&key=',
