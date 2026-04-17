@@ -1,4 +1,4 @@
-import { Component, Input, inject, signal } from '@angular/core';
+import { Component, Input, inject, signal, ViewChild, ElementRef } from '@angular/core';
 import { PhotoJournalService, JournalEntry } from '../../services/photo-journal.service';
 
 @Component({
@@ -11,10 +11,10 @@ import { PhotoJournalService, JournalEntry } from '../../services/photo-journal.
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           Rejsedagbog
         </h3>
-        <button class="journal__add-btn" (click)="triggerUpload()" aria-label="Tilføj foto">
+        <button class="journal__add-btn" (click)="fileInput.click()" aria-label="Tilføj foto">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
-        <input #fileInput type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)" style="display:none" />
+        <input #fileInput type="file" accept="image/*" multiple (change)="onFilesSelected($event)" style="display:none" />
       </div>
 
       @if (dayEntries().length > 0) {
@@ -42,7 +42,7 @@ import { PhotoJournalService, JournalEntry } from '../../services/photo-journal.
           }
         </div>
       } @else {
-        <p class="journal__empty">Ingen billeder endnu — tag dit første rejsefoto!</p>
+        <p class="journal__empty">Ingen billeder endnu — tag eller vælg dit første rejsefoto!</p>
       }
     </div>
   `,
@@ -50,6 +50,7 @@ import { PhotoJournalService, JournalEntry } from '../../services/photo-journal.
 })
 export class PhotoJournalComponent {
   @Input({ required: true }) dayId!: number;
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
   private journal = inject(PhotoJournalService);
   editingId = signal<string | null>(null);
@@ -59,17 +60,16 @@ export class PhotoJournalComponent {
       .sort((a, b) => a.timestamp - b.timestamp);
   };
 
-  triggerUpload() {
-    const input = document.querySelector(`app-photo-journal input[type="file"]`) as HTMLInputElement;
-    input?.click();
-  }
+  async onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files || files.length === 0) return;
 
-  async onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-    const data = await this.readFile(file);
-    await this.journal.addEntry(this.dayId, data, '');
-    (event.target as HTMLInputElement).value = '';
+    for (let i = 0; i < files.length; i++) {
+      const data = await this.readFile(files[i]);
+      await this.journal.addEntry(this.dayId, data, '');
+    }
+    input.value = '';
   }
 
   async saveCaption(id: string, event: Event) {
