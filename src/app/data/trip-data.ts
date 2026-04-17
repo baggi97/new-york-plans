@@ -61,7 +61,7 @@ export const TRIP_DATA: TripData = {
         'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.183792036255!2d-73.9871078!3d40.7579747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1710000000000',
       images: [
         {
-          url: 'https://images.unsplash.com/photo-1560703650-ef3e0f254ae0?w=1200&q=80',
+          url: 'https://images.unsplash.com/photo-1539209826553-6d9178ca9089?w=1200&q=80',
           alt: 'Times Square neonlys om aftenen',
           hero: true,
         },
