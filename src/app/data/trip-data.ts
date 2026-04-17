@@ -443,6 +443,7 @@ export const TRIP_DATA: TripData = {
     hotel: {
       name: 'Millennium Hotel Times Square',
       note: 'Centralt beliggende ved Times Square — perfekt udgangspunkt for hele turen.',
+      url: 'https://www.millenniumhotels.com/en/new-york/millennium-hotel-new-york-times-square/',
     },
     transportNotes: [
       'MetroCard eller OMNY til subway og bus',

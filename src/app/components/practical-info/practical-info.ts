@@ -39,10 +39,13 @@ import { TRIP_DATA } from '../../data/trip-data';
               </svg>
             </div>
             <h3 class="practical__card-title">Hotel</h3>
-            <div class="practical__detail">
+            <a [href]="info.hotel.url" target="_blank" rel="noopener" class="practical__detail practical__detail--link">
               <span class="practical__detail-value practical__detail-value--bold">{{ info.hotel.name }}</span>
               <span class="practical__detail-note">{{ info.hotel.note }}</span>
-            </div>
+              <svg class="practical__detail-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17l9.2-9.2M17 17V7.8H7.8"/>
+              </svg>
+            </a>
           </div>
 
           <div class="practical__card">
