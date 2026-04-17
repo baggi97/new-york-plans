@@ -25,6 +25,7 @@ export interface TripDay {
   id: number;
   title: string;
   date: string;
+  isoDate: string;
   theme: string;
   intro: string;
   highlights: string[];
@@ -34,6 +35,20 @@ export interface TripDay {
   fromList: FromListItem[];
   mapEmbedUrl: string;
   images: TripImage[];
+  walkingDistance?: string;
+  tips?: string[];
+}
+
+export interface EmergencyContact {
+  label: string;
+  number: string;
+  note?: string;
+}
+
+export interface ChecklistItem {
+  id: string;
+  label: string;
+  category: string;
 }
 
 export interface PracticalInfo {
@@ -41,6 +56,8 @@ export interface PracticalInfo {
   hotel: { name: string; note: string; url?: string };
   transportNotes: string[];
   generalNotes: string[];
+  emergencyContacts: EmergencyContact[];
+  checklist: ChecklistItem[];
 }
 
 export interface TripData {
@@ -48,6 +65,8 @@ export interface TripData {
   subtitle: string;
   dates: string;
   travelers: string;
+  tripStart: string;
+  tripEnd: string;
   days: TripDay[];
   practicalInfo: PracticalInfo;
 }

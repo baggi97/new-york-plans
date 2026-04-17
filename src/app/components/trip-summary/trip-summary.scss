@@ -31,16 +31,24 @@
   }
 
   &__grid {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
     gap: var(--space-md);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: var(--space-sm);
 
-    @media (min-width: 600px) {
-      grid-template-columns: repeat(2, 1fr);
+    &::-webkit-scrollbar {
+      display: none;
     }
 
     @media (min-width: 900px) {
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
+      overflow-x: visible;
+      scroll-snap-type: none;
+      padding-bottom: 0;
     }
   }
 
@@ -55,6 +63,14 @@
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     cursor: pointer;
     text-decoration: none;
+    scroll-snap-align: start;
+    min-width: 260px;
+    flex-shrink: 0;
+
+    @media (min-width: 900px) {
+      min-width: 0;
+      flex-shrink: 1;
+    }
 
     &:hover {
       box-shadow: var(--shadow-md);
@@ -91,6 +107,16 @@
     color: var(--color-text-secondary);
     font-style: italic;
     font-family: var(--font-serif);
+  }
+
+  &__card-walk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-accent-sage);
+    margin-top: 0.25rem;
   }
 
   &__card-booking {

@@ -5,12 +5,16 @@ export const TRIP_DATA: TripData = {
   subtitle: 'A curated guide for two',
   dates: '22.–27. april 2026',
   travelers: '2 personer',
+  tripStart: '2026-04-22',
+  tripEnd: '2026-04-27',
   days: [
     {
       id: 1,
       title: 'Ankomst + Times Square',
       date: '22. april',
+      isoDate: '2026-04-22',
       theme: 'Rolig start',
+      walkingDistance: '~4 km',
       intro:
         'Ankomst til New York med SAS SK909 til Newark ca. kl. 14:55. Efter en lang flytur venter en rolig aften med check-in og de første skridt gennem Midtowns neonlys.',
       highlights: [
@@ -24,11 +28,16 @@ export const TRIP_DATA: TripData = {
         "M&M's Store",
         "Hershey's Chocolate World",
       ],
+      tips: [
+        'Tag AirTrain + NJ Transit fra Newark — billigere end taxi',
+        'Times Square er mest magisk efter mørkets frembrud',
+        'Køb en OMNY-kompatibel MetroCard med det samme',
+      ],
       food: [
         { name: "Tony's Di Napoli", note: 'Klassisk italiensk familierestaurant', url: 'https://www.tonysnyc.com/' },
         { name: 'The Smith', note: 'Moderne amerikansk brasserie', url: 'https://thesmithrestaurant.com/' },
       ],
-      transport: ['Newark → Manhattan', 'Hotel som udgangspunkt'],
+      transport: ['Newark → Manhattan (AirTrain + NJ Transit)', 'Hotel som udgangspunkt'],
       bookings: [],
       fromList: [
         {
@@ -79,7 +88,9 @@ export const TRIP_DATA: TripData = {
       id: 2,
       title: 'DUMBO → Brooklyn Bridge → 9/11 → Færge → Mets',
       date: '23. april',
+      isoDate: '2026-04-23',
       theme: 'Ikonisk NYC dag',
+      walkingDistance: '~14 km',
       intro:
         'En dag der starter med Brooklyns bedste udsigt, fortsætter over den ikoniske bro, dykker ned i historien ved Ground Zero og slutter med baseball under lysene på Citi Field.',
       highlights: [
@@ -98,14 +109,21 @@ export const TRIP_DATA: TripData = {
         'Tilbage mod hotel',
         'Mets kamp på Citi Field',
       ],
+      tips: [
+        'Start Brooklyn Bridge-turen tidligt om morgenen for færre turister',
+        'Gå broen fra Brooklyn → Manhattan for skyline-udsigten foran dig',
+        '9/11 Museum er emotionelt — beregn mindst 2 timer',
+        'Citi Field: Tag 7-toget direkte fra Times Sq–42 St',
+      ],
       food: [
         { name: 'Golden Diner', note: 'Moderne diner i Lower Manhattan', url: 'https://www.goldendinerny.com/' },
       ],
       transport: [
-        'Subway fra hotel til Brooklyn',
+        'Subway: N/R fra Times Sq → Court St (DUMBO)',
+        'Gåtur over Brooklyn Bridge',
         'Gåtur gennem Lower Manhattan',
-        'NYC Ferry',
-        'Subway til Citi Field',
+        'NYC Ferry: Battery Park → St. George → Pier 11',
+        'Subway: 7 fra Times Sq–42 St → Mets-Willets Point',
       ],
       bookings: [{ label: '9/11 Museum', note: 'Husk at booke billet på forhånd', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
       fromList: [
@@ -152,7 +170,9 @@ export const TRIP_DATA: TripData = {
       id: 3,
       title: 'Central Park + Midtown + Top of the Rock',
       date: '24. april',
+      isoDate: '2026-04-24',
       theme: 'Natur + klassisk NYC',
+      walkingDistance: '~10 km',
       intro:
         'En dag i forårets Central Park med ikoniske broer og fontæner, efterfulgt af Midtowns glans og en uforglemmelig solnedgang fra Top of the Rock.',
       highlights: [
@@ -169,11 +189,16 @@ export const TRIP_DATA: TripData = {
         'Radio City Music Hall',
         'Top of the Rock',
       ],
+      tips: [
+        'Book Top of the Rock til ca. 1 time før solnedgang',
+        'Central Park er enorm — hold dig til den sydlige halvdel',
+        'Nintendo Store har ofte kø — gå tidligt eller sent',
+      ],
       food: [
         { name: 'Quality Italian', note: 'Upscale italiensk i Midtown', url: 'https://www.qualityitalian.com/' },
         { name: 'Osteria La Baia', note: 'Elegant italiensk', url: 'https://www.labaianyc.com/' },
       ],
-      transport: ['Primært gåafstand'],
+      transport: ['Primært gåafstand fra hotel'],
       bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
       fromList: [
         {
@@ -219,7 +244,9 @@ export const TRIP_DATA: TripData = {
       id: 4,
       title: 'Chinatown + SoHo + DUMBO + Village',
       date: '25. april',
+      isoDate: '2026-04-25',
       theme: 'Mad + kvarterer + Brooklyn + filmspots',
+      walkingDistance: '~12 km',
       intro:
         'En dag dedikeret til New Yorks mest karakterfulde kvarterer — fra Chinatowns dufte og SoHos boutiques til Brooklyns waterfront og Greenwichs filmlocations.',
       highlights: [
@@ -243,11 +270,22 @@ export const TRIP_DATA: TripData = {
         '66 Perry St',
         'Ghostbusters HQ',
       ],
+      tips: [
+        'Chinatown er bedst til frokost — prøv dim sum',
+        "Katz's: Bestil ved disken, mist IKKE din billet",
+        'SoHo er bedst for shopping sidst på formiddagen',
+        "Monica's Apartment (fra Friends) er på 90 Bedford St",
+      ],
       food: [
         { name: 'Don Angie', note: 'Kreativ italiensk i West Village', url: 'https://www.donangie.com/' },
         { name: 'Via Carota', note: 'Populær italiensk trattoria', url: 'https://www.viacarota.com/' },
       ],
-      transport: ['Subway + gåafstand'],
+      transport: [
+        'Subway: N/Q/R fra Times Sq → Canal St (Chinatown)',
+        'Gåtur: Chinatown → SoHo → Little Italy',
+        'Subway: F fra Broadway-Lafayette → York St (DUMBO)',
+        'Subway: A/C fra High St → W 4 St (Village)',
+      ],
       bookings: [],
       fromList: [
         {
@@ -308,7 +346,9 @@ export const TRIP_DATA: TripData = {
       id: 5,
       title: 'Midtown + Empire State',
       date: '26. april',
+      isoDate: '2026-04-26',
       theme: 'Klassisk NYC + aftenoplevelse',
+      walkingDistance: '~11 km',
       intro:
         'Den klassiske New York-dag — fra Grand Centrals majestætiske hal over Fifth Avenues shopping til High Lines grønne oase. Dagen afsluttes med et besøg på Empire State Building.',
       highlights: [
@@ -327,8 +367,19 @@ export const TRIP_DATA: TripData = {
         'Aftensmad',
         'Empire State Building',
       ],
+      tips: [
+        'Grand Central: Se op i loftet — stjernehimlen er malet omvendt',
+        'High Line: Gå fra syd mod nord for den bedste oplevelse',
+        'Empire State Building: Aftenbillet giver færre køer og magisk udsigt',
+        'FAO Schwarz har den ikoniske gulvklaviatur fra "Big"',
+      ],
       food: [],
-      transport: ['Gåafstand + subway'],
+      transport: [
+        'Subway: S fra Times Sq → Grand Central',
+        'Gåtur langs Fifth Avenue',
+        'Subway: 7 fra Hudson Yards → Times Sq',
+        'Gåtur til Empire State Building',
+      ],
       bookings: [
         { label: 'Empire State Building', note: 'Aftenbillet anbefales', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' },
       ],
@@ -386,7 +437,9 @@ export const TRIP_DATA: TripData = {
       id: 6,
       title: 'Afslutning + hjemrejse',
       date: '27. april',
+      isoDate: '2026-04-27',
       theme: 'Rolig afslutning',
+      walkingDistance: '~3 km',
       intro:
         'Den sidste morgen i New York. Tid til en langsom brunch, et sidste blik på byen og en stille afslutning på en uforglemmelig uge.',
       highlights: [
@@ -396,8 +449,13 @@ export const TRIP_DATA: TripData = {
         'Afgang mod Newark',
         'SAS SK910 kl. 17:15',
       ],
+      tips: [
+        'Pak aftenen før så morgenen er stressfri',
+        'Penn Station → Newark Airport: Tag NJ Transit + AirTrain',
+        'Vær i lufthavnen senest 3 timer før afgang',
+      ],
       food: [],
-      transport: ['Penn Station → Newark', 'Hotel som udgangspunkt'],
+      transport: ['Penn Station → Newark (NJ Transit + AirTrain)', 'Hotel som udgangspunkt'],
       bookings: [],
       fromList: [
         {
@@ -456,6 +514,32 @@ export const TRIP_DATA: TripData = {
       'Færgetider kan variere — tjek NYC Ferry-appen',
       'Book restauranter i forvejen hvor muligt',
       'Hav altid en powerbank med',
+    ],
+    emergencyContacts: [
+      { label: 'Nødopkald (politi/brand/ambulance)', number: '911' },
+      { label: 'Dansk ambassade i New York', number: '+1-212-223-4545', note: 'Hverdage 9-16' },
+      { label: 'Millennium Hotel Times Square', number: '+1-212-768-4400' },
+      { label: 'SAS kundeservice', number: '+45-70-10-20-00', note: 'Dansk support' },
+      { label: 'Europæiske Rejseforsikring (SOS)', number: '+45-70-10-50-50', note: '24/7 nødhjælp' },
+    ],
+    checklist: [
+      { id: 'pas', label: 'Pas (gyldigt mindst 6 mdr.)', category: 'Dokumenter' },
+      { id: 'esta', label: 'ESTA-godkendelse', category: 'Dokumenter' },
+      { id: 'forsikring', label: 'Rejseforsikring', category: 'Dokumenter' },
+      { id: 'boardingpass', label: 'Boardingpass (digitalt/print)', category: 'Dokumenter' },
+      { id: 'hotelbekraeft', label: 'Hotelbekræftelse', category: 'Dokumenter' },
+      { id: 'gocity', label: 'GoCity-app installeret', category: 'Apps & digitalt' },
+      { id: 'nycferry', label: 'NYC Ferry-app', category: 'Apps & digitalt' },
+      { id: 'googlemaps', label: 'Google Maps offline-kort NYC', category: 'Apps & digitalt' },
+      { id: 'powerbank', label: 'Powerbank (opladt)', category: 'Elektronik' },
+      { id: 'adapter', label: 'Strømadapter (US)', category: 'Elektronik' },
+      { id: 'ladekabel', label: 'Ladekabel til telefon', category: 'Elektronik' },
+      { id: 'hoeretelefoner', label: 'Høretelefoner', category: 'Elektronik' },
+      { id: 'comfyshoes', label: 'Gode gåsko', category: 'Tøj & personligt' },
+      { id: 'jakke', label: 'Let jakke (april-vejr)', category: 'Tøj & personligt' },
+      { id: 'medicin', label: 'Evt. medicin', category: 'Tøj & personligt' },
+      { id: 'kreditkort', label: 'Kreditkort (Visa/Mastercard)', category: 'Økonomi' },
+      { id: 'kontanter', label: 'Lidt USD kontanter til tips', category: 'Økonomi' },
     ],
   },
 };

@@ -28,8 +28,22 @@
     padding: var(--space-lg);
   }
 
-  &__eyebrow {
+  &__countdown {
     display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-md);
+    background: rgba(201, 169, 110, 0.85);
+    color: #fff;
+    padding: 0.45em 1.4em;
+    border-radius: 100px;
+    text-shadow: none;
+  }
+
+  &__eyebrow {
+    display: block;
     font-family: var(--font-sans);
     font-size: 0.75rem;
     font-weight: 500;
@@ -37,9 +51,6 @@
     text-transform: uppercase;
     opacity: 0.85;
     margin-bottom: var(--space-md);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 0.4em 1.2em;
-    border-radius: 100px;
   }
 
   &__title {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HeroSectionComponent } from './components/hero-section/hero-section';
 import { StickyNavComponent } from './components/sticky-nav/sticky-nav';
 import { TripSummaryComponent } from './components/trip-summary/trip-summary';
@@ -6,6 +6,9 @@ import { DaySectionComponent } from './components/day-section/day-section';
 import { FoodListComponent } from './components/food-list/food-list';
 import { PracticalInfoComponent } from './components/practical-info/practical-info';
 import { SiteFooterComponent } from './components/site-footer/site-footer';
+import { LightboxComponent } from './components/lightbox/lightbox';
+import { OfflineIndicatorComponent } from './components/offline-indicator/offline-indicator';
+import { DarkModeService } from './services/dark-mode.service';
 import { TRIP_DATA } from './data/trip-data';
 
 @Component({
@@ -19,6 +22,8 @@ import { TRIP_DATA } from './data/trip-data';
     FoodListComponent,
     PracticalInfoComponent,
     SiteFooterComponent,
+    LightboxComponent,
+    OfflineIndicatorComponent,
   ],
   template: `
     <div id="top">
@@ -31,6 +36,8 @@ import { TRIP_DATA } from './data/trip-data';
       <app-food-list />
       <app-practical-info />
       <app-site-footer />
+      <app-lightbox />
+      <app-offline-indicator />
     </div>
   `,
   styles: `
@@ -39,6 +46,11 @@ import { TRIP_DATA } from './data/trip-data';
     }
   `,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   days = TRIP_DATA.days;
+  private darkMode = inject(DarkModeService);
+
+  ngOnInit() {
+    this.darkMode.init();
+  }
 }

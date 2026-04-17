@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { TripStatusService } from '../../services/trip-status.service';
 
 @Component({
   selector: 'app-hero-section',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
     <section class="hero">
       <div class="hero__overlay"></div>
       <div class="hero__content">
+        <span class="hero__countdown">{{ tripStatus.heroLabel() }}</span>
         <span class="hero__eyebrow">April 2026 · 6 dage · 2 rejsende</span>
         <h1 class="hero__title">New York</h1>
         <p class="hero__subtitle">A curated guide for two</p>
@@ -21,4 +23,6 @@ import { Component } from '@angular/core';
   `,
   styleUrl: './hero-section.scss',
 })
-export class HeroSectionComponent {}
+export class HeroSectionComponent {
+  tripStatus = inject(TripStatusService);
+}

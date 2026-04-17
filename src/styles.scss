@@ -5,6 +5,7 @@
   --color-bg-alt: #f3efe9;
   --color-bg-card: #ffffff;
   --color-bg-warm: #f0ebe3;
+  --color-bg-nav: rgba(250, 248, 245, 0.95);
   --color-text: #2c2825;
   --color-text-secondary: #7a7068;
   --color-text-muted: #a39890;
@@ -37,6 +38,26 @@
   --nav-height: 56px;
 }
 
+[data-theme="dark"] {
+  --color-bg: #1a1a1e;
+  --color-bg-alt: #222226;
+  --color-bg-card: #2a2a2e;
+  --color-bg-warm: #252528;
+  --color-bg-nav: rgba(26, 26, 30, 0.95);
+  --color-text: #e8e4df;
+  --color-text-secondary: #a09890;
+  --color-text-muted: #706860;
+  --color-accent-navy: #7a94c0;
+  --color-accent-sage: #8db892;
+  --color-accent-gold: #d4b878;
+  --color-border: #3a3a3e;
+  --color-border-light: #2e2e32;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
 *,
 *::before,
 *::after {
@@ -59,6 +80,7 @@ body {
   line-height: 1.7;
   color: var(--color-text);
   background-color: var(--color-bg);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {

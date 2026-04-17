@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v1';
+const CACHE_VERSION = 'nyc-v2';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -54,6 +54,13 @@ function isFontRequest(url) {
 
 function isGoogleMapsEmbed(url) {
   return url.hostname === 'www.google.com' && url.pathname.startsWith('/maps');
+}
+
+function isApiRequest(url) {
+  return (
+    url.hostname === 'api.open-meteo.com' ||
+    url.hostname === 'open.er-api.com'
+  );
 }
 
 async function staleWhileRevalidate(request, cacheName) {
@@ -112,6 +119,11 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   if (isGoogleMapsEmbed(url)) return;
+
+  if (isApiRequest(url)) {
+    event.respondWith(staleWhileRevalidate(event.request, STATIC_CACHE));
+    return;
+  }
 
   if (isImageRequest(url)) {
     event.respondWith(cacheFirst(event.request, IMAGE_CACHE));
