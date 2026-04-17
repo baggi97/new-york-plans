@@ -61,6 +61,12 @@
     height: 120px;
     object-fit: cover;
     display: block;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.85;
+    }
   }
 
   &__entry-footer {

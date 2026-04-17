@@ -1,5 +1,6 @@
 import { Component, Input, inject, signal, ViewChild, ElementRef } from '@angular/core';
 import { PhotoJournalService, JournalEntry } from '../../services/photo-journal.service';
+import { LightboxService } from '../../services/lightbox.service';
 
 @Component({
   selector: 'app-photo-journal',
@@ -21,7 +22,7 @@ import { PhotoJournalService, JournalEntry } from '../../services/photo-journal.
         <div class="journal__grid">
           @for (entry of dayEntries(); track entry.id) {
             <div class="journal__entry">
-              <img [src]="entry.imageData" [alt]="entry.caption || 'Rejsefoto'" class="journal__image" />
+              <img [src]="entry.imageData" [alt]="entry.caption || 'Rejsefoto'" class="journal__image" (click)="openLightbox($index)" />
               <div class="journal__entry-footer">
                 @if (editingId() === entry.id) {
                   <input class="journal__caption-input"
@@ -53,12 +54,18 @@ export class PhotoJournalComponent {
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
   private journal = inject(PhotoJournalService);
+  private lightbox = inject(LightboxService);
   editingId = signal<string | null>(null);
 
   dayEntries = () => {
     return (this.journal.entriesByDay().get(this.dayId) ?? [])
       .sort((a, b) => a.timestamp - b.timestamp);
   };
+
+  openLightbox(index: number) {
+    const images = this.dayEntries().map(e => ({ url: e.imageData, alt: e.caption || 'Rejsefoto' }));
+    this.lightbox.open(images, index);
+  }
 
   async onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
