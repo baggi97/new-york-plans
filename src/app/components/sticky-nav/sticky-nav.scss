@@ -71,5 +71,16 @@
       color: var(--color-text);
       background-color: rgba(44, 40, 37, 0.05);
     }
+
+    &--active {
+      color: var(--color-bg);
+      background-color: var(--color-accent-navy);
+      font-weight: 600;
+
+      &:hover {
+        color: var(--color-bg);
+        background-color: var(--color-accent-navy);
+      }
+    }
   }
 }
