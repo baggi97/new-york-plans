@@ -17,6 +17,7 @@ export interface FromListItem {
 export interface Booking {
   label: string;
   note?: string;
+  url?: string;
 }
 
 export interface TripDay {

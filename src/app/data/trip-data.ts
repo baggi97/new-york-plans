@@ -107,7 +107,7 @@ export const TRIP_DATA: TripData = {
         'NYC Ferry',
         'Subway til Citi Field',
       ],
-      bookings: [{ label: '9/11 Museum', note: 'Husk at booke billet på forhånd' }],
+      bookings: [{ label: '9/11 Museum', note: 'Husk at booke billet på forhånd', url: 'https://gocity.com/new-york/en-us/products/9-11-memorial-museum' }],
       fromList: [
         {
           label: 'Golden Diner',
@@ -174,7 +174,7 @@ export const TRIP_DATA: TripData = {
         { name: 'Osteria La Baia', note: 'Elegant italiensk' },
       ],
       transport: ['Primært gåafstand'],
-      bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang' }],
+      bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang', url: 'https://gocity.com/new-york/en-us/products/top-of-the-rock' }],
       fromList: [
         {
           label: 'H&H Bagels',
@@ -330,7 +330,7 @@ export const TRIP_DATA: TripData = {
       food: [],
       transport: ['Gåafstand + subway'],
       bookings: [
-        { label: 'Empire State Building', note: 'Aftenbillet anbefales' },
+        { label: 'Empire State Building', note: 'Aftenbillet anbefales', url: 'https://gocity.com/new-york/en-us/products/empire-state-building' },
       ],
       fromList: [
         {

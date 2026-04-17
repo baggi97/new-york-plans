@@ -27,4 +27,26 @@
     color: var(--color-text);
     font-weight: 500;
   }
+
+  &__arrow {
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  &--link {
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(201, 169, 110, 0.2), rgba(201, 169, 110, 0.12));
+      border-color: rgba(201, 169, 110, 0.5);
+
+      .badge__arrow {
+        opacity: 1;
+        transform: translate(1px, -1px);
+      }
+    }
+  }
 }
