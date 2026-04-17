@@ -134,7 +134,7 @@ export const TRIP_DATA: TripData = {
         'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.518079498!2d-73.9893421!3d40.7063095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a197c06b7cb%3A0x40a06c78f79e5de6!2sBrooklyn%20Bridge!5e0!3m2!1sen!2sus!4v1710000000000',
       images: [
         {
-          url: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&q=80',
+          url: 'https://images.unsplash.com/photo-1702146504040-80b20af1181c?w=1200&q=80',
           alt: 'DUMBO og Manhattan Bridge',
           hero: true,
         },
