@@ -51,7 +51,10 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
           </button>
         </div>
 
-        <div class="day__hero-image" (click)="openLightbox(heroImageIndex)">
+        <div class="day__hero-image"
+          (click)="openLightbox(heroImageIndex)"
+          (touchstart)="onHeroTouchStart($event)"
+          (touchend)="onHeroTouchEnd($event)">
           <img [src]="activeHeroUrl()" [alt]="heroImage.alt" loading="lazy" />
           @if (day.images.length > 1) {
             <div class="day__hero-dots">
@@ -192,6 +195,8 @@ export class DaySectionComponent implements OnInit, OnDestroy {
   isVisible = signal(false);
   private observer?: IntersectionObserver;
   private heroInterval?: ReturnType<typeof setInterval>;
+  private touchStartX = 0;
+  private touchStartY = 0;
 
   ngOnInit() {
     this.heroInterval = setInterval(() => {
@@ -242,6 +247,25 @@ export class DaySectionComponent implements OnInit, OnDestroy {
     this.heroInterval = setInterval(() => {
       this.heroIdx.update(i => (i + 1) % this.day.images.length);
     }, 6000);
+  }
+
+  onHeroTouchStart(e: TouchEvent) {
+    this.touchStartX = e.touches[0].clientX;
+    this.touchStartY = e.touches[0].clientY;
+  }
+
+  onHeroTouchEnd(e: TouchEvent) {
+    const dx = this.touchStartX - e.changedTouches[0].clientX;
+    const dy = this.touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
+
+    e.preventDefault();
+    const total = this.day.images.length;
+    if (dx > 0) {
+      this.setHero((this.heroIdx() + 1) % total, e);
+    } else {
+      this.setHero((this.heroIdx() - 1 + total) % total, e);
+    }
   }
 
   openLightbox(index: number) {
