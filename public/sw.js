@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v2';
+const CACHE_VERSION = 'nyc-v3';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -10,9 +10,44 @@ const PRECACHE_URLS = [
   '/favicon.svg',
 ];
 
+const PRECACHE_IMAGES = [
+  'https://images.unsplash.com/photo-1539209826553-6d9178ca9089?w=1200&q=80',
+  'https://images.unsplash.com/photo-1518235506717-e1ed3306a89b?w=800&q=80',
+  'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80',
+  'https://images.unsplash.com/photo-1702146504040-80b20af1181c?w=1200&q=80',
+  'https://images.unsplash.com/photo-1512472102579-8a647ea3559f?w=800&q=80',
+  'https://images.unsplash.com/photo-1623169734436-513e344a62b3?w=800&q=80',
+  'https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=1200&q=80',
+  'https://images.unsplash.com/photo-1765908310201-21b4f73b9ea7?w=800&q=80',
+  'https://images.unsplash.com/photo-1693196506405-4c5ef5cbca03?w=800&q=80',
+  'https://images.unsplash.com/photo-1567529692333-de9fd6772897?w=1200&q=80',
+  'https://images.unsplash.com/photo-1746407757880-1d848208ca00?w=800&q=80',
+  'https://images.unsplash.com/photo-1759810743306-8727f3beab97?w=800&q=80',
+  'https://images.unsplash.com/photo-1555109307-f7d9da25c244?w=1200&q=80',
+  'https://images.unsplash.com/photo-1750077806370-806ba3ff2479?w=800&q=80',
+  'https://images.unsplash.com/photo-1624553348093-ed95c718f37b?w=800&q=80',
+  'https://images.unsplash.com/photo-1655301885279-2a83e9504154?w=1200&q=80',
+  'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80',
+  'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80',
+];
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
+    Promise.all([
+      caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS)),
+      caches.open(IMAGE_CACHE).then((cache) =>
+        Promise.all(
+          PRECACHE_IMAGES.map((url) =>
+            cache.match(url).then((existing) => {
+              if (existing) return;
+              return fetch(url, { mode: 'no-cors' })
+                .then((res) => cache.put(url, res))
+                .catch(() => {});
+            })
+          )
+        )
+      ),
+    ])
   );
   self.skipWaiting();
 });

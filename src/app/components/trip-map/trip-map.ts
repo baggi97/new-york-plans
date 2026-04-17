@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TRIP_DATA } from '../../data/trip-data';
 
@@ -22,7 +22,15 @@ import { TRIP_DATA } from '../../data/trip-data';
           }
         </div>
         <div class="trip-map__frame">
-          <iframe [src]="activeSafeUrl" width="100%" height="450" style="border:0; border-radius: var(--radius-md);" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          @if (isOnline()) {
+            <iframe [src]="activeSafeUrl" width="100%" height="450" style="border:0; border-radius: var(--radius-md);" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          } @else {
+            <div class="trip-map__offline">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span class="trip-map__offline-text">Kort ikke tilgængeligt offline</span>
+              <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="trip-map__offline-link">Åbn Google Maps</a>
+            </div>
+          }
         </div>
         <div class="trip-map__info">
           <span class="trip-map__day-title">{{ activeDayData.title }}</span>
@@ -38,16 +46,29 @@ import { TRIP_DATA } from '../../data/trip-data';
   `,
   styleUrl: './trip-map.scss',
 })
-export class TripMapComponent {
+export class TripMapComponent implements OnInit, OnDestroy {
   days = TRIP_DATA.days;
   activeDay = 1;
+  isOnline = signal(navigator.onLine);
 
   private safeUrls: Map<number, SafeResourceUrl>;
+  private onOnline = () => this.isOnline.set(true);
+  private onOffline = () => this.isOnline.set(false);
 
   constructor(private sanitizer: DomSanitizer) {
     this.safeUrls = new Map(
       this.days.map(d => [d.id, this.sanitizer.bypassSecurityTrustResourceUrl(d.mapEmbedUrl)])
     );
+  }
+
+  ngOnInit() {
+    window.addEventListener('online', this.onOnline);
+    window.addEventListener('offline', this.onOffline);
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('online', this.onOnline);
+    window.removeEventListener('offline', this.onOffline);
   }
 
   get activeSafeUrl(): SafeResourceUrl {

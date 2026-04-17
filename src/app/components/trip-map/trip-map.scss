@@ -71,6 +71,42 @@
     box-shadow: var(--shadow-md);
   }
 
+  &__offline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    height: 300px;
+    background: var(--color-bg-card);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+  }
+
+  &__offline-text {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &__offline-link {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-accent-navy);
+    padding: 0.4em 1em;
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--color-accent-navy);
+      border-color: var(--color-accent-navy);
+      color: #fff;
+    }
+  }
+
   &__info {
     display: flex;
     align-items: center;
