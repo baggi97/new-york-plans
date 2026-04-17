@@ -27,7 +27,8 @@ import { TripStatusService } from '../../services/trip-status.service';
         </div>
         <div class="nav__tools">
           <span class="nav__timezone" title="New York tid">
-            🕐 {{ tripStatus.nycTime() }}
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {{ tripStatus.nycTime() }}
           </span>
           <button class="nav__darkmode" (click)="darkMode.toggle()" [attr.aria-label]="darkMode.isDark() ? 'Lys tilstand' : 'Mørk tilstand'">
             @if (darkMode.isDark()) {
@@ -62,6 +63,7 @@ export class StickyNavComponent implements AfterViewInit {
     { id: 'dag-5', label: 'Dag 5' },
     { id: 'dag-6', label: 'Dag 6' },
     { id: 'mad', label: 'Mad' },
+    { id: 'kort', label: 'Kort' },
     { id: 'praktisk', label: 'Praktisk' },
   ];
 

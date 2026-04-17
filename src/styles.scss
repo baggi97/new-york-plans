@@ -127,3 +127,28 @@ a {
   margin: var(--space-xl) auto;
   opacity: 0.6;
 }
+
+.day,
+.food,
+.trip-map,
+.practical,
+.summary {
+  animation: section-reveal 0.6s ease both;
+}
+
+@keyframes section-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day, .food, .trip-map, .practical, .summary {
+    animation: none;
+  }
+}

@@ -125,9 +125,11 @@
     color: var(--color-text-muted);
     white-space: nowrap;
     display: none;
+    align-items: center;
+    gap: 0.3em;
 
     @media (min-width: 768px) {
-      display: block;
+      display: inline-flex;
     }
   }
 

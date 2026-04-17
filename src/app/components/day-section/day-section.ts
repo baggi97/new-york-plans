@@ -1,18 +1,20 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { TripDay } from '../../data/trip.interfaces';
 import { BookingBadgeComponent } from '../booking-badge/booking-badge';
 import { FromListComponent } from '../from-list/from-list';
 import { MapEmbedComponent } from '../map-embed/map-embed';
+import { PhotoJournalComponent } from '../photo-journal/photo-journal';
 import { TripStatusService } from '../../services/trip-status.service';
 import { LightboxService } from '../../services/lightbox.service';
 import { WeatherService } from '../../services/weather.service';
+import { ItineraryCheckService } from '../../services/itinerary-check.service';
 
 @Component({
   selector: 'app-day-section',
   standalone: true,
-  imports: [BookingBadgeComponent, FromListComponent, MapEmbedComponent],
+  imports: [BookingBadgeComponent, FromListComponent, MapEmbedComponent, PhotoJournalComponent],
   template: `
-    <section [id]="'dag-' + day.id" class="day" [class.day--even]="day.id % 2 === 0" [class.day--today]="isToday">
+    <section [id]="'dag-' + day.id" class="day" [class.day--even]="day.id % 2 === 0" [class.day--today]="isToday" [class.day--visible]="isVisible()">
       <div class="container">
         <div class="day__header">
           @if (isToday) {
@@ -49,13 +51,27 @@ import { WeatherService } from '../../services/weather.service';
           </button>
         </div>
 
-        <div class="day__hero-image" (click)="openLightbox(0)">
-          <img [src]="heroImage.url" [alt]="heroImage.alt" loading="lazy" />
+        <div class="day__hero-image" (click)="openLightbox(heroImageIndex)">
+          <img [src]="activeHeroUrl()" [alt]="heroImage.alt" loading="lazy" />
+          @if (day.images.length > 1) {
+            <div class="day__hero-dots">
+              @for (img of day.images; track img.url; let i = $index) {
+                <button class="day__hero-dot" [class.day__hero-dot--active]="heroIdx() === i" (click)="setHero(i, $event)" aria-label="Billede {{ i + 1 }}"></button>
+              }
+            </div>
+          }
         </div>
 
         <div class="day__body">
           <div class="day__content">
             <p class="day__intro">{{ day.intro }}</p>
+
+            @if (day.funFact) {
+              <div class="day__fun-fact">
+                <span class="day__fun-fact-icon">💡</span>
+                <p class="day__fun-fact-text">{{ day.funFact }}</p>
+              </div>
+            }
 
             @if (day.tips && day.tips.length > 0) {
               <div class="day__tips">
@@ -72,10 +88,29 @@ import { WeatherService } from '../../services/weather.service';
             }
 
             <div class="day__highlights">
-              <h3 class="day__section-title">Dagens program</h3>
+              <div class="day__section-header">
+                <h3 class="day__section-title">Dagens program</h3>
+                <span class="day__progress-label">{{ itineraryProgress.done }} / {{ itineraryProgress.total }}</span>
+              </div>
+              <div class="day__progress-bar">
+                <div class="day__progress-fill" [style.width.%]="itineraryPercent"></div>
+              </div>
               <ul class="day__list">
-                @for (item of day.highlights; track item) {
-                  <li>{{ item }}</li>
+                @for (item of day.highlights; track item.label; let i = $index) {
+                  <li [class.day__list-item--checked]="itinerary.isChecked(day.id, i)">
+                    <label class="day__check-label">
+                      <input type="checkbox" [checked]="itinerary.isChecked(day.id, i)" (change)="itinerary.toggle(day.id, i)" />
+                      <span class="day__checkbox">
+                        @if (itinerary.isChecked(day.id, i)) {
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        }
+                      </span>
+                      <span class="day__item-label">{{ item.label }}</span>
+                      @if (item.duration) {
+                        <span class="day__item-duration">{{ item.duration }}</span>
+                      }
+                    </label>
+                  </li>
                 }
               </ul>
             </div>
@@ -87,7 +122,12 @@ import { WeatherService } from '../../services/weather.service';
                   @for (spot of day.food; track spot.name) {
                     @if (spot.url) {
                       <a [href]="spot.url" target="_blank" rel="noopener" class="day__food-item day__food-item--link">
-                        <span class="day__food-name">{{ spot.name }}</span>
+                        <span class="day__food-name">
+                          {{ spot.name }}
+                          @if (spot.price) {
+                            <span class="day__food-price">{{ spot.price }}</span>
+                          }
+                        </span>
                         @if (spot.note) {
                           <span class="day__food-note">{{ spot.note }}</span>
                         }
@@ -95,7 +135,12 @@ import { WeatherService } from '../../services/weather.service';
                       </a>
                     } @else {
                       <div class="day__food-item">
-                        <span class="day__food-name">{{ spot.name }}</span>
+                        <span class="day__food-name">
+                          {{ spot.name }}
+                          @if (spot.price) {
+                            <span class="day__food-price">{{ spot.price }}</span>
+                          }
+                        </span>
                         @if (spot.note) {
                           <span class="day__food-note">{{ spot.note }}</span>
                         }
@@ -126,6 +171,8 @@ import { WeatherService } from '../../services/weather.service';
             <app-map-embed [url]="day.mapEmbedUrl" />
 
             <app-from-list [items]="day.fromList" />
+
+            <app-photo-journal [dayId]="day.id" />
           </div>
         </div>
       </div>
@@ -133,12 +180,29 @@ import { WeatherService } from '../../services/weather.service';
   `,
   styleUrl: './day-section.scss',
 })
-export class DaySectionComponent {
+export class DaySectionComponent implements OnInit, OnDestroy {
   @Input({ required: true }) day!: TripDay;
 
   private tripStatus = inject(TripStatusService);
   private lightbox = inject(LightboxService);
   weatherService = inject(WeatherService);
+  itinerary = inject(ItineraryCheckService);
+
+  heroIdx = signal(0);
+  isVisible = signal(false);
+  private observer?: IntersectionObserver;
+  private heroInterval?: ReturnType<typeof setInterval>;
+
+  ngOnInit() {
+    this.heroInterval = setInterval(() => {
+      this.heroIdx.update(i => (i + 1) % this.day.images.length);
+    }, 6000);
+  }
+
+  ngOnDestroy() {
+    if (this.heroInterval) clearInterval(this.heroInterval);
+    this.observer?.disconnect();
+  }
 
   get isToday(): boolean {
     return this.tripStatus.currentDayNumber() === this.day.id;
@@ -152,8 +216,32 @@ export class DaySectionComponent {
     return this.day.images.find(i => i.hero) ?? this.day.images[0];
   }
 
+  get heroImageIndex(): number {
+    return this.heroIdx();
+  }
+
+  activeHeroUrl = () => this.day.images[this.heroIdx()]?.url ?? this.heroImage.url;
+
   get supportingImages() {
     return this.day.images.filter(i => !i.hero);
+  }
+
+  get itineraryProgress() {
+    return this.itinerary.dayProgress(this.day.id);
+  }
+
+  get itineraryPercent() {
+    const p = this.itineraryProgress;
+    return p.total > 0 ? (p.done / p.total) * 100 : 0;
+  }
+
+  setHero(idx: number, event: Event) {
+    event.stopPropagation();
+    this.heroIdx.set(idx);
+    if (this.heroInterval) clearInterval(this.heroInterval);
+    this.heroInterval = setInterval(() => {
+      this.heroIdx.update(i => (i + 1) % this.day.images.length);
+    }, 6000);
   }
 
   openLightbox(index: number) {

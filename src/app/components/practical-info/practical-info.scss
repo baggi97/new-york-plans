@@ -171,6 +171,18 @@
     }
   }
 
+  &__extras {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+
+    @media (min-width: 600px) {
+      grid-template-columns: 1fr;
+      max-width: 500px;
+    }
+  }
+
   &__checklist-wrap {
     margin-top: var(--space-xl);
   }

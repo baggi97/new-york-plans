@@ -128,6 +128,16 @@
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  &__spot-price {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--color-accent-gold);
+    letter-spacing: 0.02em;
   }
 
   &__spot-note {

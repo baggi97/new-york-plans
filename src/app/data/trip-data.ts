@@ -15,18 +15,19 @@ export const TRIP_DATA: TripData = {
       isoDate: '2026-04-22',
       theme: 'Rolig start',
       walkingDistance: '~4 km',
+      funFact: 'Times Square hed oprindeligt Longacre Square — det blev omdøbt i 1904 da New York Times flyttede sit hovedkvarter hertil.',
       intro:
         'Ankomst til New York med SAS SK909 til Newark ca. kl. 14:55. Efter en lang flytur venter en rolig aften med check-in og de første skridt gennem Midtowns neonlys.',
       highlights: [
-        'Ankomst med SAS SK909 til Newark ca. 14:55',
-        'Transport fra Newark til Manhattan',
-        'Check-in på Millennium Hotel Times Square',
-        'Gåtur i nærområdet',
-        'Times Square',
-        'Bryant Park',
-        'New York Public Library',
-        "M&M's Store",
-        "Hershey's Chocolate World",
+        { label: 'Ankomst med SAS SK909 til Newark ca. 14:55' },
+        { label: 'Transport fra Newark til Manhattan', duration: '~1 time' },
+        { label: 'Check-in på Millennium Hotel Times Square' },
+        { label: 'Gåtur i nærområdet', duration: '~30 min' },
+        { label: 'Times Square', duration: '~45 min' },
+        { label: 'Bryant Park', duration: '~20 min' },
+        { label: 'New York Public Library', duration: '~15 min' },
+        { label: "M&M's Store", duration: '~15 min' },
+        { label: "Hershey's Chocolate World", duration: '~15 min' },
       ],
       tips: [
         'Tag AirTrain + NJ Transit fra Newark — billigere end taxi',
@@ -34,54 +35,24 @@ export const TRIP_DATA: TripData = {
         'Køb en OMNY-kompatibel MetroCard med det samme',
       ],
       food: [
-        { name: "Tony's Di Napoli", note: 'Klassisk italiensk familierestaurant', url: 'https://www.tonysnyc.com/' },
-        { name: 'The Smith', note: 'Moderne amerikansk brasserie', url: 'https://thesmithrestaurant.com/' },
+        { name: "Tony's Di Napoli", note: 'Klassisk italiensk familierestaurant', url: 'https://www.tonysnyc.com/', price: '$$' },
+        { name: 'The Smith', note: 'Moderne amerikansk brasserie', url: 'https://thesmithrestaurant.com/', price: '$$' },
       ],
       transport: ['Newark → Manhattan (AirTrain + NJ Transit)', 'Hotel som udgangspunkt'],
       bookings: [],
       fromList: [
-        {
-          label: 'Brooklyn Diner',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York',
-        },
-        {
-          label: '7th Street Burger Bryant Park',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=7th+Street+Burger+Bryant+Park+New+York',
-        },
-        {
-          label: "John's Pizzeria of Times Square",
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Johns+Pizzeria+Times+Square+New+York',
-        },
-        {
-          label: 'Gordon Ramsay Fish & Chips',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Gordon+Ramsay+Fish+and+Chips+Times+Square+New+York',
-        },
-        {
-          label: 'S&P Lunch',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=S%26P+Lunch+New+York',
-        },
+        { label: 'Brooklyn Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York' },
+        { label: '7th Street Burger Bryant Park', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=7th+Street+Burger+Bryant+Park+New+York' },
+        { label: "John's Pizzeria of Times Square", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Johns+Pizzeria+Times+Square+New+York' },
+        { label: 'Gordon Ramsay Fish & Chips', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Gordon+Ramsay+Fish+and+Chips+Times+Square+New+York' },
+        { label: 'S&P Lunch', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=S%26P+Lunch+New+York' },
       ],
-      mapEmbedUrl:
-        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.183792036255!2d-73.9871078!3d40.7579747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.183792036255!2d-73.9871078!3d40.7579747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.758,-73.987&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C40.758,-73.987&key=',
       images: [
-        {
-          url: 'https://images.unsplash.com/photo-1539209826553-6d9178ca9089?w=1200&q=80',
-          alt: 'Times Square neonlys om aftenen',
-          hero: true,
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1518235506717-e1ed3306a89b?w=800&q=80',
-          alt: 'Yellow cabs ved Times Square',
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80',
-          alt: 'New York Public Library',
-        },
+        { url: 'https://images.unsplash.com/photo-1539209826553-6d9178ca9089?w=1200&q=80', alt: 'Times Square neonlys om aftenen', hero: true },
+        { url: 'https://images.unsplash.com/photo-1518235506717-e1ed3306a89b?w=800&q=80', alt: 'Yellow cabs ved Times Square' },
+        { url: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80', alt: 'New York Public Library' },
       ],
     },
     {
@@ -91,23 +62,24 @@ export const TRIP_DATA: TripData = {
       isoDate: '2026-04-23',
       theme: 'Ikonisk NYC dag',
       walkingDistance: '~14 km',
+      funFact: 'Brooklyn Bridge tog 14 år at bygge (1869–1883) og var den første stålwire-hængebro i verden. Over 150.000 mennesker krydsede den på åbningsdagen.',
       intro:
         'En dag der starter med Brooklyns bedste udsigt, fortsætter over den ikoniske bro, dykker ned i historien ved Ground Zero og slutter med baseball under lysene på Citi Field.',
       highlights: [
-        'Start fra Millennium Hotel Times Square',
-        'Subway til DUMBO',
-        'DUMBO Manhattan Bridge View',
-        'Gå over Brooklyn Bridge mod Manhattan',
-        'Golden Diner',
-        'Ground Zero',
-        '9/11 Museum',
-        'Oculus',
-        'One World Trade Center',
-        'New York Stock Exchange',
-        '504 Battery Pl (Men in Black)',
-        'NYC Ferry: Battery Park → St. George → Pier 11',
-        'Tilbage mod hotel',
-        'Mets kamp på Citi Field',
+        { label: 'Start fra Millennium Hotel Times Square' },
+        { label: 'Subway til DUMBO', duration: '~25 min' },
+        { label: 'DUMBO Manhattan Bridge View', duration: '~20 min' },
+        { label: 'Gå over Brooklyn Bridge mod Manhattan', duration: '~40 min' },
+        { label: 'Golden Diner', duration: '~45 min' },
+        { label: 'Ground Zero', duration: '~20 min' },
+        { label: '9/11 Museum', duration: '~2 timer' },
+        { label: 'Oculus', duration: '~15 min' },
+        { label: 'One World Trade Center', duration: '~10 min' },
+        { label: 'New York Stock Exchange', duration: '~10 min' },
+        { label: '504 Battery Pl (Men in Black)', duration: '~5 min' },
+        { label: 'NYC Ferry: Battery Park → St. George → Pier 11', duration: '~1 time' },
+        { label: 'Tilbage mod hotel' },
+        { label: 'Mets kamp på Citi Field', duration: '~3 timer' },
       ],
       tips: [
         'Start Brooklyn Bridge-turen tidligt om morgenen for færre turister',
@@ -116,7 +88,7 @@ export const TRIP_DATA: TripData = {
         'Citi Field: Tag 7-toget direkte fra Times Sq–42 St',
       ],
       food: [
-        { name: 'Golden Diner', note: 'Moderne diner i Lower Manhattan', url: 'https://www.goldendinerny.com/' },
+        { name: 'Golden Diner', note: 'Moderne diner i Lower Manhattan', url: 'https://www.goldendinerny.com/', price: '$$' },
       ],
       transport: [
         'Subway: N/R fra Times Sq → Court St (DUMBO)',
@@ -127,43 +99,17 @@ export const TRIP_DATA: TripData = {
       ],
       bookings: [{ label: '9/11 Museum', note: 'Husk at booke billet på forhånd', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
       fromList: [
-        {
-          label: 'Golden Diner',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Golden+Diner+New+York',
-        },
-        {
-          label: "Katz's Delicatessen",
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Katzs+Delicatessen+New+York',
-        },
-        {
-          label: 'LOS TACOS No.1',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=LOS+TACOS+No.1+New+York',
-        },
-        {
-          label: 'Pier 17',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Pier+17+New+York',
-        },
+        { label: 'Golden Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Golden+Diner+New+York' },
+        { label: "Katz's Delicatessen", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Katzs+Delicatessen+New+York' },
+        { label: 'LOS TACOS No.1', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=LOS+TACOS+No.1+New+York' },
+        { label: 'Pier 17', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pier+17+New+York' },
       ],
-      mapEmbedUrl:
-        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.518079498!2d-73.9893421!3d40.7063095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a197c06b7cb%3A0x40a06c78f79e5de6!2sBrooklyn%20Bridge!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.518079498!2d-73.9893421!3d40.7063095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a197c06b7cb%3A0x40a06c78f79e5de6!2sBrooklyn%20Bridge!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.706,-73.997&zoom=13&size=600x300&scale=2&maptype=roadmap&key=',
       images: [
-        {
-          url: 'https://images.unsplash.com/photo-1702146504040-80b20af1181c?w=1200&q=80',
-          alt: 'DUMBO og Manhattan Bridge',
-          hero: true,
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1512472102579-8a647ea3559f?w=800&q=80',
-          alt: 'Gående på Brooklyn Bridge',
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1623169734436-513e344a62b3?w=800&q=80',
-          alt: 'Baseball stadion i New York',
-        },
+        { url: 'https://images.unsplash.com/photo-1702146504040-80b20af1181c?w=1200&q=80', alt: 'DUMBO og Manhattan Bridge', hero: true },
+        { url: 'https://images.unsplash.com/photo-1512472102579-8a647ea3559f?w=800&q=80', alt: 'Gående på Brooklyn Bridge' },
+        { url: 'https://images.unsplash.com/photo-1623169734436-513e344a62b3?w=800&q=80', alt: 'Baseball stadion i New York' },
       ],
     },
     {
@@ -173,21 +119,22 @@ export const TRIP_DATA: TripData = {
       isoDate: '2026-04-24',
       theme: 'Natur + klassisk NYC',
       walkingDistance: '~10 km',
+      funFact: 'Central Park blev designet i 1858 og er større end fyrstendømmet Monaco. Parkens "vilde" natur er 100% kunstigt anlagt — hver sten, sø og bakke er menneskeskabt.',
       intro:
         'En dag i forårets Central Park med ikoniske broer og fontæner, efterfulgt af Midtowns glans og en uforglemmelig solnedgang fra Top of the Rock.',
       highlights: [
-        'Start fra hotel',
-        'Ess-a-Bagel eller H&H Bagels',
-        'Central Park: Gapstow Bridge',
-        'Central Park: Bow Bridge',
-        'Central Park: Bethesda Fountain',
-        'Central Park: Bethesda Terrace',
-        'Central Park: Dipway Arch',
-        'Plaza Hotel',
-        'Nintendo Store',
-        'Rockefeller Center',
-        'Radio City Music Hall',
-        'Top of the Rock',
+        { label: 'Start fra hotel' },
+        { label: 'Ess-a-Bagel eller H&H Bagels', duration: '~20 min' },
+        { label: 'Central Park: Gapstow Bridge', duration: '~15 min' },
+        { label: 'Central Park: Bow Bridge', duration: '~10 min' },
+        { label: 'Central Park: Bethesda Fountain', duration: '~15 min' },
+        { label: 'Central Park: Bethesda Terrace', duration: '~10 min' },
+        { label: 'Central Park: Dipway Arch', duration: '~10 min' },
+        { label: 'Plaza Hotel', duration: '~10 min' },
+        { label: 'Nintendo Store', duration: '~30 min' },
+        { label: 'Rockefeller Center', duration: '~20 min' },
+        { label: 'Radio City Music Hall', duration: '~10 min' },
+        { label: 'Top of the Rock', duration: '~1 time' },
       ],
       tips: [
         'Book Top of the Rock til ca. 1 time før solnedgang',
@@ -195,49 +142,23 @@ export const TRIP_DATA: TripData = {
         'Nintendo Store har ofte kø — gå tidligt eller sent',
       ],
       food: [
-        { name: 'Quality Italian', note: 'Upscale italiensk i Midtown', url: 'https://www.qualityitalian.com/' },
-        { name: 'Osteria La Baia', note: 'Elegant italiensk', url: 'https://www.labaianyc.com/' },
+        { name: 'Quality Italian', note: 'Upscale italiensk i Midtown', url: 'https://www.qualityitalian.com/', price: '$$$' },
+        { name: 'Osteria La Baia', note: 'Elegant italiensk', url: 'https://www.labaianyc.com/', price: '$$$' },
       ],
       transport: ['Primært gåafstand fra hotel'],
       bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
       fromList: [
-        {
-          label: 'H&H Bagels',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=H%26H+Bagels+New+York',
-        },
-        {
-          label: "Leon's Bagels",
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Leons+Bagels+New+York',
-        },
-        {
-          label: 'Brooklyn Diner',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York',
-        },
-        {
-          label: '230 Fifth',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=230+Fifth+Rooftop+Bar+New+York',
-        },
+        { label: 'H&H Bagels', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=H%26H+Bagels+New+York' },
+        { label: "Leon's Bagels", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Leons+Bagels+New+York' },
+        { label: 'Brooklyn Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York' },
+        { label: '230 Fifth', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=230+Fifth+Rooftop+Bar+New+York' },
       ],
-      mapEmbedUrl:
-        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.3!2d-73.9654!3d40.7812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2589a018531e3%3A0xb9df1f7387a94119!2sCentral%20Park!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.3!2d-73.9654!3d40.7812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2589a018531e3%3A0xb9df1f7387a94119!2sCentral%20Park!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.775,-73.970&zoom=14&size=600x300&scale=2&maptype=roadmap&key=',
       images: [
-        {
-          url: 'https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=1200&q=80',
-          alt: 'Central Park om foråret',
-          hero: true,
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1765908310201-21b4f73b9ea7?w=800&q=80',
-          alt: 'Bethesda Fountain i Central Park',
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1693196506405-4c5ef5cbca03?w=800&q=80',
-          alt: 'Solnedgang fra Top of the Rock',
-        },
+        { url: 'https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=1200&q=80', alt: 'Central Park om foråret', hero: true },
+        { url: 'https://images.unsplash.com/photo-1765908310201-21b4f73b9ea7?w=800&q=80', alt: 'Bethesda Fountain i Central Park' },
+        { url: 'https://images.unsplash.com/photo-1693196506405-4c5ef5cbca03?w=800&q=80', alt: 'Solnedgang fra Top of the Rock' },
       ],
     },
     {
@@ -247,28 +168,29 @@ export const TRIP_DATA: TripData = {
       isoDate: '2026-04-25',
       theme: 'Mad + kvarterer + Brooklyn + filmspots',
       walkingDistance: '~12 km',
+      funFact: 'SoHo står for "South of Houston Street". Kvarteret var tæt på at blive revet ned i 1960\'erne for en motorvej, men blev reddet af lokale aktivister — i dag er det et af NYCs dyreste områder.',
       intro:
         'En dag dedikeret til New Yorks mest karakterfulde kvarterer — fra Chinatowns dufte og SoHos boutiques til Brooklyns waterfront og Greenwichs filmlocations.',
       highlights: [
-        'Start fra hotel',
-        'Tompkins Square Bagels eller Apollo Bagels',
-        'Chinatown',
-        'Little Italy',
-        'LOS TACOS No.1',
-        "Katz's Delicatessen",
-        'SoHo',
-        'Prince Street Pizza',
-        'Ceres',
-        'Urban Outfitters',
-        'Subway til Brooklyn',
-        'DUMBO',
-        'Squibb Park Bridge',
-        'Time Out Market',
-        'Tilbage til Manhattan',
-        'Washington Square Park',
-        "Monica's Apartment",
-        '66 Perry St',
-        'Ghostbusters HQ',
+        { label: 'Start fra hotel' },
+        { label: 'Tompkins Square Bagels eller Apollo Bagels', duration: '~20 min' },
+        { label: 'Chinatown', duration: '~45 min' },
+        { label: 'Little Italy', duration: '~20 min' },
+        { label: 'LOS TACOS No.1', duration: '~20 min' },
+        { label: "Katz's Delicatessen", duration: '~30 min' },
+        { label: 'SoHo', duration: '~1 time' },
+        { label: 'Prince Street Pizza', duration: '~15 min' },
+        { label: 'Ceres', duration: '~15 min' },
+        { label: 'Urban Outfitters', duration: '~20 min' },
+        { label: 'Subway til Brooklyn', duration: '~15 min' },
+        { label: 'DUMBO', duration: '~30 min' },
+        { label: 'Squibb Park Bridge', duration: '~10 min' },
+        { label: 'Time Out Market', duration: '~30 min' },
+        { label: 'Tilbage til Manhattan', duration: '~20 min' },
+        { label: 'Washington Square Park', duration: '~20 min' },
+        { label: "Monica's Apartment", duration: '~5 min' },
+        { label: '66 Perry St', duration: '~5 min' },
+        { label: 'Ghostbusters HQ', duration: '~5 min' },
       ],
       tips: [
         'Chinatown er bedst til frokost — prøv dim sum',
@@ -277,8 +199,8 @@ export const TRIP_DATA: TripData = {
         "Monica's Apartment (fra Friends) er på 90 Bedford St",
       ],
       food: [
-        { name: 'Don Angie', note: 'Kreativ italiensk i West Village', url: 'https://www.donangie.com/' },
-        { name: 'Via Carota', note: 'Populær italiensk trattoria', url: 'https://www.viacarota.com/' },
+        { name: 'Don Angie', note: 'Kreativ italiensk i West Village', url: 'https://www.donangie.com/', price: '$$$' },
+        { name: 'Via Carota', note: 'Populær italiensk trattoria', url: 'https://www.viacarota.com/', price: '$$$' },
       ],
       transport: [
         'Subway: N/Q/R fra Times Sq → Canal St (Chinatown)',
@@ -288,58 +210,20 @@ export const TRIP_DATA: TripData = {
       ],
       bookings: [],
       fromList: [
-        {
-          label: 'Time Out Market',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Time+Out+Market+New+York',
-        },
-        {
-          label: 'Prince Street Pizza',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Prince+Street+Pizza+New+York',
-        },
-        {
-          label: 'Ceres',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Ceres+New+York',
-        },
-        {
-          label: "L'industrie Pizzeria",
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Lindustrie+Pizzeria+New+York',
-        },
-        {
-          label: "Hani's Bakery + Café",
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Hanis+Bakery+Cafe+New+York',
-        },
-        {
-          label: 'Pookie Bakery',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Pookie+Bakery+New+York',
-        },
-        {
-          label: 'Glace NY',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Glace+NY+New+York',
-        },
+        { label: 'Time Out Market', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Time+Out+Market+New+York' },
+        { label: 'Prince Street Pizza', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Prince+Street+Pizza+New+York' },
+        { label: 'Ceres', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Ceres+New+York' },
+        { label: "L'industrie Pizzeria", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Lindustrie+Pizzeria+New+York' },
+        { label: "Hani's Bakery + Café", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Hanis+Bakery+Cafe+New+York' },
+        { label: 'Pookie Bakery', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pookie+Bakery+New+York' },
+        { label: 'Glace NY', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Glace+NY+New+York' },
       ],
-      mapEmbedUrl:
-        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.8!2d-73.9973!3d40.7158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25987b5a8a305%3A0x1481f4d5b6aaf50!2sSoHo%2C%20New%20York!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.8!2d-73.9973!3d40.7158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25987b5a8a305%3A0x1481f4d5b6aaf50!2sSoHo%2C%20New%20York!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.720,-73.998&zoom=13&size=600x300&scale=2&maptype=roadmap&key=',
       images: [
-        {
-          url: 'https://images.unsplash.com/photo-1567529692333-de9fd6772897?w=1200&q=80',
-          alt: 'Chinatown New York',
-          hero: true,
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1746407757880-1d848208ca00?w=800&q=80',
-          alt: 'Chinatown i Manhattan',
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1759810743306-8727f3beab97?w=800&q=80',
-          alt: 'Washington Square Arch',
-        },
+        { url: 'https://images.unsplash.com/photo-1567529692333-de9fd6772897?w=1200&q=80', alt: 'Chinatown New York', hero: true },
+        { url: 'https://images.unsplash.com/photo-1746407757880-1d848208ca00?w=800&q=80', alt: 'Chinatown i Manhattan' },
+        { url: 'https://images.unsplash.com/photo-1759810743306-8727f3beab97?w=800&q=80', alt: 'Washington Square Arch' },
       ],
     },
     {
@@ -349,23 +233,24 @@ export const TRIP_DATA: TripData = {
       isoDate: '2026-04-26',
       theme: 'Klassisk NYC + aftenoplevelse',
       walkingDistance: '~11 km',
+      funFact: 'Empire State Building blev bygget på kun 410 dage under Den Store Depression. Op til 3.400 arbejdere arbejdede på bygningen hver dag.',
       intro:
         'Den klassiske New York-dag — fra Grand Centrals majestætiske hal over Fifth Avenues shopping til High Lines grønne oase. Dagen afsluttes med et besøg på Empire State Building.',
       highlights: [
-        'Start fra hotel',
-        'Chelsea Square Diner eller Clinton St. Baking Company',
-        'Grand Central Terminal',
-        'Chrysler Building',
-        'One Vanderbilt',
-        'Fifth Avenue',
-        'Apple Store',
-        'FAO Schwarz',
-        'Salswee',
-        'High Line',
-        'Vessel',
-        'High Line View Point',
-        'Aftensmad',
-        'Empire State Building',
+        { label: 'Start fra hotel' },
+        { label: 'Chelsea Square Diner eller Clinton St. Baking Company', duration: '~30 min' },
+        { label: 'Grand Central Terminal', duration: '~30 min' },
+        { label: 'Chrysler Building', duration: '~10 min' },
+        { label: 'One Vanderbilt', duration: '~10 min' },
+        { label: 'Fifth Avenue', duration: '~45 min' },
+        { label: 'Apple Store', duration: '~15 min' },
+        { label: 'FAO Schwarz', duration: '~20 min' },
+        { label: 'Salswee', duration: '~15 min' },
+        { label: 'High Line', duration: '~45 min' },
+        { label: 'Vessel', duration: '~10 min' },
+        { label: 'High Line View Point', duration: '~10 min' },
+        { label: 'Aftensmad', duration: '~1 time' },
+        { label: 'Empire State Building', duration: '~1 time' },
       ],
       tips: [
         'Grand Central: Se op i loftet — stjernehimlen er malet omvendt',
@@ -384,53 +269,19 @@ export const TRIP_DATA: TripData = {
         { label: 'Empire State Building', note: 'Aftenbillet anbefales', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' },
       ],
       fromList: [
-        {
-          label: 'Salswee',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Salswee+New+York',
-        },
-        {
-          label: 'Chelsea Square Diner',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Chelsea+Square+Diner+New+York',
-        },
-        {
-          label: 'Clinton St. Baking Company',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Clinton+St+Baking+Company+New+York',
-        },
-        {
-          label: 'Gotham Burger Social Club',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Gotham+Burger+Social+Club+New+York',
-        },
-        {
-          label: "Danny & Coop's Cheesesteaks",
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Danny+and+Coops+Cheesesteaks+New+York',
-        },
-        {
-          label: 'Seven Sins Bar',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Seven+Sins+Bar+New+York',
-        },
+        { label: 'Salswee', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Salswee+New+York' },
+        { label: 'Chelsea Square Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Chelsea+Square+Diner+New+York' },
+        { label: 'Clinton St. Baking Company', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Clinton+St+Baking+Company+New+York' },
+        { label: 'Gotham Burger Social Club', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Gotham+Burger+Social+Club+New+York' },
+        { label: "Danny & Coop's Cheesesteaks", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Danny+and+Coops+Cheesesteaks+New+York' },
+        { label: 'Seven Sins Bar', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Seven+Sins+Bar+New+York' },
       ],
-      mapEmbedUrl:
-        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.5!2d-73.9857!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9aeb1c6b5%3A0x35b1cfbc89a6097f!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.5!2d-73.9857!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9aeb1c6b5%3A0x35b1cfbc89a6097f!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.748,-73.986&zoom=14&size=600x300&scale=2&maptype=roadmap&key=',
       images: [
-        {
-          url: 'https://images.unsplash.com/photo-1555109307-f7d9da25c244?w=1200&q=80',
-          alt: 'Empire State Building',
-          hero: true,
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1750077806370-806ba3ff2479?w=800&q=80',
-          alt: 'Grand Central Terminal',
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1624553348093-ed95c718f37b?w=800&q=80',
-          alt: 'The High Line, New York',
-        },
+        { url: 'https://images.unsplash.com/photo-1555109307-f7d9da25c244?w=1200&q=80', alt: 'Empire State Building', hero: true },
+        { url: 'https://images.unsplash.com/photo-1750077806370-806ba3ff2479?w=800&q=80', alt: 'Grand Central Terminal' },
+        { url: 'https://images.unsplash.com/photo-1624553348093-ed95c718f37b?w=800&q=80', alt: 'The High Line, New York' },
       ],
     },
     {
@@ -440,14 +291,15 @@ export const TRIP_DATA: TripData = {
       isoDate: '2026-04-27',
       theme: 'Rolig afslutning',
       walkingDistance: '~3 km',
+      funFact: 'New York City har over 27.000 restauranter — selv hvis du spiste på en ny restaurant hver dag, ville det tage over 74 år at prøve dem alle.',
       intro:
         'Den sidste morgen i New York. Tid til en langsom brunch, et sidste blik på byen og en stille afslutning på en uforglemmelig uge.',
       highlights: [
-        'Sunday Morning brunch',
-        'Sidste tur i området',
-        'Evt. Bryant Park',
-        'Afgang mod Newark',
-        'SAS SK910 kl. 17:15',
+        { label: 'Sunday Morning brunch', duration: '~1 time' },
+        { label: 'Sidste tur i området', duration: '~45 min' },
+        { label: 'Evt. Bryant Park', duration: '~20 min' },
+        { label: 'Afgang mod Newark', duration: '~1 time' },
+        { label: 'SAS SK910 kl. 17:15' },
       ],
       tips: [
         'Pak aftenen før så morgenen er stressfri',
@@ -458,38 +310,16 @@ export const TRIP_DATA: TripData = {
       transport: ['Penn Station → Newark (NJ Transit + AirTrain)', 'Hotel som udgangspunkt'],
       bookings: [],
       fromList: [
-        {
-          label: 'Sunday Morning',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Sunday+Morning+New+York',
-        },
-        {
-          label: 'Brooklyn Diner',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York',
-        },
-        {
-          label: 'Green Kitchen',
-          googleMapsUrl:
-            'https://www.google.com/maps/search/?api=1&query=Green+Kitchen+New+York',
-        },
+        { label: 'Sunday Morning', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Sunday+Morning+New+York' },
+        { label: 'Brooklyn Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York' },
+        { label: 'Green Kitchen', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Green+Kitchen+New+York' },
       ],
-      mapEmbedUrl:
-        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.183792036255!2d-73.9871078!3d40.7579747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.183792036255!2d-73.9871078!3d40.7579747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1710000000000',
+      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.758,-73.987&zoom=15&size=600x300&scale=2&maptype=roadmap&key=',
       images: [
-        {
-          url: 'https://images.unsplash.com/photo-1655301885279-2a83e9504154?w=1200&q=80',
-          alt: 'Morgen ved Brooklyn Bridge',
-          hero: true,
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80',
-          alt: 'Morgen i Manhattan',
-        },
-        {
-          url: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80',
-          alt: 'Farvel til New York skyline',
-        },
+        { url: 'https://images.unsplash.com/photo-1655301885279-2a83e9504154?w=1200&q=80', alt: 'Morgen ved Brooklyn Bridge', hero: true },
+        { url: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80', alt: 'Morgen i Manhattan' },
+        { url: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80', alt: 'Farvel til New York skyline' },
       ],
     },
   ],
@@ -521,6 +351,14 @@ export const TRIP_DATA: TripData = {
       { label: 'Millennium Hotel Times Square', number: '+1-212-768-4400' },
       { label: 'SAS kundeservice', number: '+45-70-10-20-00', note: 'Dansk support' },
       { label: 'Europæiske Rejseforsikring (SOS)', number: '+45-70-10-50-50', note: '24/7 nødhjælp' },
+    ],
+    tipping: [
+      { category: 'Restauranter', tip: '18-20% af regningen (før skat)' },
+      { category: 'Bar / drinks', tip: '$1-2 per drink' },
+      { category: 'Taxi / Uber', tip: '15-20% af turen' },
+      { category: 'Hotel (rengøring)', tip: '$2-5 per nat (læg på puden)' },
+      { category: 'Bagage-hjælp', tip: '$1-2 per kuffert' },
+      { category: 'Room service', tip: '15-20% (tjek om det er inkluderet)' },
     ],
     checklist: [
       { id: 'pas', label: 'Pas (gyldigt mindst 6 mdr.)', category: 'Dokumenter' },

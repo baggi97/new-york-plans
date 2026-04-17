@@ -8,6 +8,7 @@ export interface FoodSpot {
   name: string;
   note?: string;
   url?: string;
+  price?: '$' | '$$' | '$$$';
 }
 
 export interface FromListItem {
@@ -21,6 +22,11 @@ export interface Booking {
   url?: string;
 }
 
+export interface HighlightItem {
+  label: string;
+  duration?: string;
+}
+
 export interface TripDay {
   id: number;
   title: string;
@@ -28,15 +34,17 @@ export interface TripDay {
   isoDate: string;
   theme: string;
   intro: string;
-  highlights: string[];
+  highlights: HighlightItem[];
   food: FoodSpot[];
   transport: string[];
   bookings: Booking[];
   fromList: FromListItem[];
   mapEmbedUrl: string;
+  mapStaticUrl: string;
   images: TripImage[];
   walkingDistance?: string;
   tips?: string[];
+  funFact?: string;
 }
 
 export interface EmergencyContact {
@@ -51,6 +59,11 @@ export interface ChecklistItem {
   category: string;
 }
 
+export interface TippingRule {
+  category: string;
+  tip: string;
+}
+
 export interface PracticalInfo {
   flights: { code: string; route: string; time: string; url?: string }[];
   hotel: { name: string; note: string; url?: string };
@@ -58,6 +71,7 @@ export interface PracticalInfo {
   generalNotes: string[];
   emergencyContacts: EmergencyContact[];
   checklist: ChecklistItem[];
+  tipping: TippingRule[];
 }
 
 export interface TripData {

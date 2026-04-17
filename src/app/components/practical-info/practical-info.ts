@@ -3,11 +3,12 @@ import { TRIP_DATA } from '../../data/trip-data';
 import { CurrencyConverterComponent } from '../currency-converter/currency-converter';
 import { ChecklistComponent } from '../checklist/checklist';
 import { WeatherBadgeComponent } from '../weather-badge/weather-badge';
+import { TippingGuideComponent } from '../tipping-guide/tipping-guide';
 
 @Component({
   selector: 'app-practical-info',
   standalone: true,
-  imports: [CurrencyConverterComponent, ChecklistComponent, WeatherBadgeComponent],
+  imports: [CurrencyConverterComponent, ChecklistComponent, WeatherBadgeComponent, TippingGuideComponent],
   template: `
     <section id="praktisk" class="practical">
       <div class="container">
@@ -107,6 +108,10 @@ import { WeatherBadgeComponent } from '../weather-badge/weather-badge';
           </div>
 
           <app-currency-converter />
+        </div>
+
+        <div class="practical__extras">
+          <app-tipping-guide />
         </div>
 
         <div class="practical__checklist-wrap">
