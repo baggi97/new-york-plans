@@ -48,12 +48,22 @@ import { MapEmbedComponent } from '../map-embed/map-embed';
                 <h3 class="day__section-title">Mad & drikke</h3>
                 <div class="day__food-items">
                   @for (spot of day.food; track spot.name) {
-                    <div class="day__food-item">
-                      <span class="day__food-name">{{ spot.name }}</span>
-                      @if (spot.note) {
-                        <span class="day__food-note">{{ spot.note }}</span>
-                      }
-                    </div>
+                    @if (spot.url) {
+                      <a [href]="spot.url" target="_blank" rel="noopener" class="day__food-item day__food-item--link">
+                        <span class="day__food-name">{{ spot.name }}</span>
+                        @if (spot.note) {
+                          <span class="day__food-note">{{ spot.note }}</span>
+                        }
+                        <svg class="day__food-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+                      </a>
+                    } @else {
+                      <div class="day__food-item">
+                        <span class="day__food-name">{{ spot.name }}</span>
+                        @if (spot.note) {
+                          <span class="day__food-note">{{ spot.note }}</span>
+                        }
+                      </div>
+                    }
                   }
                 </div>
               </div>

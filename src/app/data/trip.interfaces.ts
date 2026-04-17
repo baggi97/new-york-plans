@@ -7,6 +7,7 @@ export interface TripImage {
 export interface FoodSpot {
   name: string;
   note?: string;
+  url?: string;
 }
 
 export interface FromListItem {

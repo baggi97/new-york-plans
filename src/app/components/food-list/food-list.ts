@@ -5,7 +5,7 @@ interface FoodDayGroup {
   dayId: number;
   dayTitle: string;
   date: string;
-  food: { name: string; note?: string }[];
+  food: { name: string; note?: string; url?: string }[];
   fromList: { label: string; googleMapsUrl: string }[];
 }
 
@@ -34,12 +34,22 @@ interface FoodDayGroup {
                 <div class="food__planned">
                   <span class="food__label">Planlagt</span>
                   @for (spot of group.food; track spot.name) {
-                    <div class="food__spot">
-                      <span class="food__spot-name">{{ spot.name }}</span>
-                      @if (spot.note) {
-                        <span class="food__spot-note">{{ spot.note }}</span>
-                      }
-                    </div>
+                    @if (spot.url) {
+                      <a [href]="spot.url" target="_blank" rel="noopener" class="food__spot food__spot--link">
+                        <span class="food__spot-name">{{ spot.name }}</span>
+                        @if (spot.note) {
+                          <span class="food__spot-note">{{ spot.note }}</span>
+                        }
+                        <svg class="food__spot-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+                      </a>
+                    } @else {
+                      <div class="food__spot">
+                        <span class="food__spot-name">{{ spot.name }}</span>
+                        @if (spot.note) {
+                          <span class="food__spot-note">{{ spot.note }}</span>
+                        }
+                      </div>
+                    }
                   }
                 </div>
               }

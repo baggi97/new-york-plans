@@ -25,8 +25,8 @@ export const TRIP_DATA: TripData = {
         "Hershey's Chocolate World",
       ],
       food: [
-        { name: "Tony's Di Napoli", note: 'Klassisk italiensk familierestaurant' },
-        { name: 'The Smith', note: 'Moderne amerikansk brasserie' },
+        { name: "Tony's Di Napoli", note: 'Klassisk italiensk familierestaurant', url: 'https://www.tonysnyc.com/' },
+        { name: 'The Smith', note: 'Moderne amerikansk brasserie', url: 'https://thesmithrestaurant.com/' },
       ],
       transport: ['Newark → Manhattan', 'Hotel som udgangspunkt'],
       bookings: [],
@@ -99,7 +99,7 @@ export const TRIP_DATA: TripData = {
         'Mets kamp på Citi Field',
       ],
       food: [
-        { name: 'Golden Diner', note: 'Moderne diner i Lower Manhattan' },
+        { name: 'Golden Diner', note: 'Moderne diner i Lower Manhattan', url: 'https://www.goldendinerny.com/' },
       ],
       transport: [
         'Subway fra hotel til Brooklyn',
@@ -170,8 +170,8 @@ export const TRIP_DATA: TripData = {
         'Top of the Rock',
       ],
       food: [
-        { name: 'Quality Italian', note: 'Upscale italiensk i Midtown' },
-        { name: 'Osteria La Baia', note: 'Elegant italiensk' },
+        { name: 'Quality Italian', note: 'Upscale italiensk i Midtown', url: 'https://www.qualityitalian.com/' },
+        { name: 'Osteria La Baia', note: 'Elegant italiensk', url: 'https://www.labaianyc.com/' },
       ],
       transport: ['Primært gåafstand'],
       bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
@@ -244,8 +244,8 @@ export const TRIP_DATA: TripData = {
         'Ghostbusters HQ',
       ],
       food: [
-        { name: 'Don Angie', note: 'Kreativ italiensk i West Village' },
-        { name: 'Via Carota', note: 'Populær italiensk trattoria' },
+        { name: 'Don Angie', note: 'Kreativ italiensk i West Village', url: 'https://www.donangie.com/' },
+        { name: 'Via Carota', note: 'Populær italiensk trattoria', url: 'https://www.viacarota.com/' },
       ],
       transport: ['Subway + gåafstand'],
       bookings: [],
