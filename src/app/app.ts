@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { HeroSectionComponent } from './components/hero-section/hero-section';
 import { StickyNavComponent } from './components/sticky-nav/sticky-nav';
 import { TripSummaryComponent } from './components/trip-summary/trip-summary';
@@ -15,6 +15,7 @@ import { CurrencyFabComponent } from './components/currency-fab/currency-fab';
 import { UpdateToastComponent } from './components/update-toast/update-toast';
 import { DarkModeService } from './services/dark-mode.service';
 import { PhotoJournalService } from './services/photo-journal.service';
+import { NotificationService } from './services/notification.service';
 import { TRIP_DATA } from './data/trip-data';
 
 @Component({
@@ -62,13 +63,25 @@ import { TRIP_DATA } from './data/trip-data';
     }
   `,
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   days = TRIP_DATA.days;
   private darkMode = inject(DarkModeService);
   private journal = inject(PhotoJournalService);
+  private notifications = inject(NotificationService);
+  private visibilityHandler = () => {
+    if (document.visibilityState === 'visible') {
+      this.notifications.checkAndNotify();
+    }
+  };
 
   ngOnInit() {
     this.darkMode.init();
     this.journal.init();
+    this.notifications.init();
+    document.addEventListener('visibilitychange', this.visibilityHandler);
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('visibilitychange', this.visibilityHandler);
   }
 }

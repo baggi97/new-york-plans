@@ -1,0 +1,88 @@
+import { Injectable } from '@angular/core';
+
+interface TripNotification {
+  id: string;
+  date: string;
+  afterHour: number;
+  beforeHour: number;
+  title: string;
+  body: string;
+}
+
+const NOTIFICATIONS: TripNotification[] = [
+  // Aften-notifikationer (18-23)
+  { id: 'eve-0421', date: '2026-04-21', afterHour: 18, beforeHour: 23, title: 'Klar til New York?', body: 'Tjek pakkelisten og hav boardingpass klar. SAS SK909 afgår i morgen!' },
+  { id: 'eve-0422', date: '2026-04-22', afterHour: 18, beforeHour: 23, title: 'I morgen: Brooklyn + 9/11', body: 'Husk GoCity-appen til 9/11 Museum' },
+  { id: 'eve-0423', date: '2026-04-23', afterHour: 18, beforeHour: 23, title: 'I morgen: Central Park + Top of the Rock', body: 'Top of the Rock er booket kl. 19 — perfekt til solnedgang' },
+  { id: 'eve-0424', date: '2026-04-24', afterHour: 18, beforeHour: 23, title: 'I morgen: Chinatown + SoHo + DUMBO', body: "Katz's: Bestil ved disken og mist IKKE din billet!" },
+  { id: 'eve-0425', date: '2026-04-25', afterHour: 18, beforeHour: 23, title: 'I morgen: Midtown + Empire State', body: 'Empire State Building kl. 21:15 — magisk udsigt over byen om aftenen' },
+  { id: 'eve-0426', date: '2026-04-26', afterHour: 18, beforeHour: 23, title: 'Sidste morgen i NYC', body: 'Pak aftenen før så morgenen er stressfri. Vær i lufthavnen senest kl. 14:15' },
+
+  // Morgen-notifikationer (5-12)
+  { id: 'morn-0422', date: '2026-04-22', afterHour: 5, beforeHour: 12, title: 'God rejse!', body: 'SAS SK909 lander i Newark ca. 14:55' },
+  { id: 'morn-0423', date: '2026-04-23', afterHour: 5, beforeHour: 12, title: 'God morgen, dag 2!', body: 'Start med subway til DUMBO og nyd Manhattan Bridge-udsigten' },
+  { id: 'morn-0424', date: '2026-04-24', afterHour: 5, beforeHour: 12, title: 'God morgen, dag 3!', body: 'Ess-a-Bagel eller H&H Bagels til morgenmad, derefter Central Park' },
+  { id: 'morn-0425', date: '2026-04-25', afterHour: 5, beforeHour: 12, title: 'God morgen, dag 4!', body: "Bubby's i TriBeCa venter med brunch!" },
+  { id: 'morn-0426', date: '2026-04-26', afterHour: 5, beforeHour: 12, title: 'God morgen, dag 5!', body: 'Grand Central Terminal og Fifth Avenue i dag' },
+  { id: 'morn-0427', date: '2026-04-27', afterHour: 5, beforeHour: 12, title: 'Sidste dag!', body: 'Nyd Sunday Morning brunch. Penn Station → Newark med NJ Transit + AirTrain' },
+];
+
+@Injectable({ providedIn: 'root' })
+export class NotificationService {
+  private permissionGranted = false;
+
+  init() {
+    if (!('Notification' in window)) return;
+    this.permissionGranted = Notification.permission === 'granted';
+    this.checkAndNotify();
+  }
+
+  checkAndNotify() {
+    if (!('Notification' in window)) return;
+
+    const now = new Date();
+    const nyFormatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/New_York',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+    });
+    const nyHourFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      hour: 'numeric', hour12: false,
+    });
+
+    const nyDate = nyFormatter.format(now);
+    const nyHour = parseInt(nyHourFormatter.format(now), 10);
+
+    const pending = NOTIFICATIONS.filter(n =>
+      n.date === nyDate &&
+      nyHour >= n.afterHour &&
+      nyHour < n.beforeHour &&
+      !localStorage.getItem(`nyc-notif-${n.id}`)
+    );
+
+    if (pending.length === 0) return;
+
+    if (this.permissionGranted) {
+      pending.forEach(n => this.show(n));
+      return;
+    }
+
+    if (Notification.permission === 'denied') return;
+
+    Notification.requestPermission().then(perm => {
+      this.permissionGranted = perm === 'granted';
+      if (this.permissionGranted) {
+        pending.forEach(n => this.show(n));
+      }
+    });
+  }
+
+  private show(n: TripNotification) {
+    new Notification(n.title, {
+      body: n.body,
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-192x192.png',
+    });
+    localStorage.setItem(`nyc-notif-${n.id}`, '1');
+  }
+}
