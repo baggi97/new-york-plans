@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v3';
+const CACHE_VERSION = 'nyc-v6';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -30,6 +30,22 @@ const PRECACHE_IMAGES = [
   'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80',
   'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80',
   'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1600&q=80',
+  'https://images.unsplash.com/photo-1569186273859-0a3cf0a68568?w=800&q=80',
+  'https://images.unsplash.com/photo-1762856900967-5156a5cb5035?w=800&q=80',
+  'https://images.unsplash.com/photo-1497483475853-22e199da5d7b?w=800&q=80',
+  'https://images.unsplash.com/photo-1757047149689-665c456c882a?w=800&q=80',
+  'https://images.unsplash.com/photo-1509819749506-0289e9eed3cf?w=800&q=80',
+  'https://images.unsplash.com/photo-1715566758856-7df8030f6b61?w=800&q=80',
+  'https://images.unsplash.com/photo-1662994016973-e8b45cb9ac8d?w=800&q=80',
+  'https://images.unsplash.com/photo-1680549170814-63e21317d0b5?w=800&q=80',
+  'https://images.unsplash.com/photo-1582775188649-ea053500cc78?w=800&q=80',
+  'https://images.unsplash.com/photo-1700580384425-8e08d34ceb94?w=800&q=80',
+  'https://images.unsplash.com/photo-1753558335152-31fae9d9f173?w=800&q=80',
+  'https://images.unsplash.com/photo-1485368647436-ff0fb9990605?w=800&q=80',
+  'https://images.unsplash.com/photo-1578714084994-880247cd2573?w=800&q=80',
+  'https://images.unsplash.com/photo-1741979162497-e080dd39c7dd?w=800&q=80',
+  'https://images.unsplash.com/photo-1540567233509-b1256189865d?w=800&q=80',
+  'https://images.unsplash.com/photo-1741107787836-ab65b9b25d61?w=800&q=80',
 ];
 
 self.addEventListener('install', (event) => {

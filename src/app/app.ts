@@ -12,6 +12,7 @@ import { OfflineIndicatorComponent } from './components/offline-indicator/offlin
 import { BackToTopComponent } from './components/back-to-top/back-to-top';
 import { NextUpWidgetComponent } from './components/next-up-widget/next-up-widget';
 import { CurrencyFabComponent } from './components/currency-fab/currency-fab';
+import { UpdateToastComponent } from './components/update-toast/update-toast';
 import { DarkModeService } from './services/dark-mode.service';
 import { PhotoJournalService } from './services/photo-journal.service';
 import { TRIP_DATA } from './data/trip-data';
@@ -33,6 +34,7 @@ import { TRIP_DATA } from './data/trip-data';
     BackToTopComponent,
     NextUpWidgetComponent,
     CurrencyFabComponent,
+    UpdateToastComponent,
   ],
   template: `
     <div id="top">
@@ -51,6 +53,7 @@ import { TRIP_DATA } from './data/trip-data';
       <app-back-to-top />
       <app-next-up-widget />
       <app-currency-fab />
+      <app-update-toast />
     </div>
   `,
   styles: `

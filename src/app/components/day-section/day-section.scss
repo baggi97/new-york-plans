@@ -481,11 +481,11 @@
   &__images-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
 
     img {
       border-radius: var(--radius-md);
-      height: 180px;
+      height: 130px;
       object-fit: cover;
       width: 100%;
       box-shadow: var(--shadow-sm);

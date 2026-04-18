@@ -53,6 +53,8 @@ export const TRIP_DATA: TripData = {
         { url: 'https://images.unsplash.com/photo-1539209826553-6d9178ca9089?w=1200&q=80', alt: 'Times Square neonlys om aftenen', hero: true },
         { url: 'https://images.unsplash.com/photo-1518235506717-e1ed3306a89b?w=800&q=80', alt: 'Yellow cabs ved Times Square' },
         { url: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80', alt: 'New York Public Library' },
+        { url: 'https://images.unsplash.com/photo-1569186273859-0a3cf0a68568?w=800&q=80', alt: 'Bryant Park med skyskrabere' },
+        { url: 'https://images.unsplash.com/photo-1762856900967-5156a5cb5035?w=800&q=80', alt: 'Broadway neonreklamer om natten' },
       ],
     },
     {
@@ -111,6 +113,9 @@ export const TRIP_DATA: TripData = {
         { url: 'https://images.unsplash.com/photo-1702146504040-80b20af1181c?w=1200&q=80', alt: 'DUMBO og Manhattan Bridge', hero: true },
         { url: 'https://images.unsplash.com/photo-1512472102579-8a647ea3559f?w=800&q=80', alt: 'Gående på Brooklyn Bridge' },
         { url: 'https://images.unsplash.com/photo-1623169734436-513e344a62b3?w=800&q=80', alt: 'Baseball stadion i New York' },
+        { url: 'https://images.unsplash.com/photo-1497483475853-22e199da5d7b?w=800&q=80', alt: '9/11 Memorial reflecting pools' },
+        { url: 'https://images.unsplash.com/photo-1757047149689-665c456c882a?w=800&q=80', alt: 'Oculus ved World Trade Center' },
+        { url: 'https://images.unsplash.com/photo-1509819749506-0289e9eed3cf?w=800&q=80', alt: 'Manhattan skyline fra færgen' },
       ],
     },
     {
@@ -151,7 +156,6 @@ export const TRIP_DATA: TripData = {
       transport: ['Primært gåafstand fra hotel', 'Roosevelt Island Tram fra 59th St & 2nd Ave'],
       bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
       fromList: [
-        { label: 'Roosevelt Island Tram', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Roosevelt+Island+Tramway+New+York' },
         { label: 'H&H Bagels', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=H%26H+Bagels+New+York' },
         { label: "Leon's Bagels", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Leons+Bagels+New+York' },
         { label: 'Brooklyn Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York' },
@@ -163,6 +167,9 @@ export const TRIP_DATA: TripData = {
         { url: 'https://images.unsplash.com/photo-1568515387631-8b650bbcdb90?w=1200&q=80', alt: 'Central Park om foråret', hero: true },
         { url: 'https://images.unsplash.com/photo-1765908310201-21b4f73b9ea7?w=800&q=80', alt: 'Bethesda Fountain i Central Park' },
         { url: 'https://images.unsplash.com/photo-1693196506405-4c5ef5cbca03?w=800&q=80', alt: 'Solnedgang fra Top of the Rock' },
+        { url: 'https://images.unsplash.com/photo-1715566758856-7df8030f6b61?w=800&q=80', alt: 'Bow Bridge i Central Park' },
+        { url: 'https://images.unsplash.com/photo-1662994016973-e8b45cb9ac8d?w=800&q=80', alt: 'Rockefeller Center' },
+        { url: 'https://images.unsplash.com/photo-1680549170814-63e21317d0b5?w=800&q=80', alt: 'Roosevelt Island Tram og Queensboro Bridge' },
       ],
     },
     {
@@ -230,6 +237,9 @@ export const TRIP_DATA: TripData = {
         { url: 'https://images.unsplash.com/photo-1567529692333-de9fd6772897?w=1200&q=80', alt: 'Chinatown New York', hero: true },
         { url: 'https://images.unsplash.com/photo-1746407757880-1d848208ca00?w=800&q=80', alt: 'Chinatown i Manhattan' },
         { url: 'https://images.unsplash.com/photo-1759810743306-8727f3beab97?w=800&q=80', alt: 'Washington Square Arch' },
+        { url: 'https://images.unsplash.com/photo-1582775188649-ea053500cc78?w=800&q=80', alt: 'SoHo gader med cast-iron bygninger' },
+        { url: 'https://images.unsplash.com/photo-1700580384425-8e08d34ceb94?w=800&q=80', alt: 'Little Italy skilt' },
+        { url: 'https://images.unsplash.com/photo-1753558335152-31fae9d9f173?w=800&q=80', alt: 'Time Out Market i DUMBO' },
       ],
     },
     {
@@ -288,6 +298,9 @@ export const TRIP_DATA: TripData = {
         { url: 'https://images.unsplash.com/photo-1555109307-f7d9da25c244?w=1200&q=80', alt: 'Empire State Building', hero: true },
         { url: 'https://images.unsplash.com/photo-1750077806370-806ba3ff2479?w=800&q=80', alt: 'Grand Central Terminal' },
         { url: 'https://images.unsplash.com/photo-1624553348093-ed95c718f37b?w=800&q=80', alt: 'The High Line, New York' },
+        { url: 'https://images.unsplash.com/photo-1485368647436-ff0fb9990605?w=800&q=80', alt: 'Chrysler Building' },
+        { url: 'https://images.unsplash.com/photo-1578714084994-880247cd2573?w=800&q=80', alt: 'Fifth Avenue' },
+        { url: 'https://images.unsplash.com/photo-1741979162497-e080dd39c7dd?w=800&q=80', alt: 'Vessel ved Hudson Yards' },
       ],
     },
     {
@@ -326,6 +339,8 @@ export const TRIP_DATA: TripData = {
         { url: 'https://images.unsplash.com/photo-1655301885279-2a83e9504154?w=1200&q=80', alt: 'Morgen ved Brooklyn Bridge', hero: true },
         { url: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80', alt: 'Morgen i Manhattan' },
         { url: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=80', alt: 'Farvel til New York skyline' },
+        { url: 'https://images.unsplash.com/photo-1540567233509-b1256189865d?w=800&q=80', alt: 'Bryant Park om morgenen' },
+        { url: 'https://images.unsplash.com/photo-1741107787836-ab65b9b25d61?w=800&q=80', alt: 'SAS fly letter' },
       ],
     },
   ],
