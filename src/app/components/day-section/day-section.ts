@@ -65,6 +65,12 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
           }
         </div>
 
+        <button class="day__toggle" (click)="toggleCollapse()">
+          <span>{{ collapsed() ? 'Vis program' : 'Skjul program' }}</span>
+          <svg [class.day__toggle-icon--up]="!collapsed()" class="day__toggle-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        @if (!collapsed()) {
         <div class="day__body">
           <div class="day__content">
             <p class="day__intro">{{ day.intro }}</p>
@@ -178,6 +184,7 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
             <app-photo-journal [dayId]="day.id" />
           </div>
         </div>
+        }
       </div>
     </section>
   `,
@@ -193,15 +200,24 @@ export class DaySectionComponent implements OnInit, OnDestroy {
 
   heroIdx = signal(0);
   isVisible = signal(false);
+  collapsed = signal(false);
   private observer?: IntersectionObserver;
   private heroInterval?: ReturnType<typeof setInterval>;
   private touchStartX = 0;
   private touchStartY = 0;
 
   ngOnInit() {
+    const stored = localStorage.getItem(`nyc-collapsed-${this.day.id}`);
+    if (stored === 'true') this.collapsed.set(true);
+
     this.heroInterval = setInterval(() => {
       this.heroIdx.update(i => (i + 1) % this.day.images.length);
     }, 6000);
+  }
+
+  toggleCollapse() {
+    this.collapsed.update(v => !v);
+    localStorage.setItem(`nyc-collapsed-${this.day.id}`, String(this.collapsed()));
   }
 
   ngOnDestroy() {
