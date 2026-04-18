@@ -20,9 +20,17 @@
   <app-root></app-root>
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
+      window.addEventListener('load', function () {
         var hadController = !!navigator.serviceWorker.controller;
-        navigator.serviceWorker.register('/sw.js');
+        var lastCheck = 0;
+        navigator.serviceWorker.register('/sw.js').then(function (reg) {
+          document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible' && Date.now() - lastCheck > 60000) {
+              lastCheck = Date.now();
+              reg.update();
+            }
+          });
+        });
         if (hadController) {
           navigator.serviceWorker.addEventListener('controllerchange', function () {
             document.dispatchEvent(new CustomEvent('sw-updated'));
