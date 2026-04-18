@@ -9,6 +9,18 @@ interface TripNotification {
   body: string;
 }
 
+const TEASE_MESSAGES: { title: string; body: string }[] = [
+  { title: 'Igen allerede?', body: 'New York løber ikke væk — men vi forstår dig!' },
+  { title: 'Kunne du ikke vente?', body: 'Rolig nu, der er stadig et par dage til afgang' },
+  { title: 'Hov hov!', body: 'Du har allerede tjekket planen — men vi elsker entusiasmen!' },
+  { title: 'Tålmodig er du ikke...', body: 'Men det er også en fed rejse, så fair nok' },
+  { title: 'Du igen?', body: 'Tip: Scroll ned til pakkelisten og få styr på kufferten' },
+  { title: 'Så utålmodig!', body: 'Slap af — planen ændrer sig ikke før I lander' },
+];
+
+const TEASE_DEADLINE = new Date('2026-04-21T18:00:00+02:00');
+const TEASE_THROTTLE_MS = 60 * 60 * 1000;
+
 const NOTIFICATIONS: TripNotification[] = [
   // Aften-notifikationer (18-23)
   { id: 'eve-0421', date: '2026-04-21', afterHour: 18, beforeHour: 23, title: 'Klar til New York?', body: 'Tjek pakkelisten og hav boardingpass klar. SAS SK909 afgår i morgen!' },
@@ -60,7 +72,10 @@ export class NotificationService {
       !localStorage.getItem(`nyc-notif-${n.id}`)
     );
 
-    if (pending.length === 0) return;
+    if (pending.length === 0) {
+      this.checkTeaseNotification();
+      return;
+    }
 
     if (this.permissionGranted) {
       pending.forEach(n => this.show(n));
@@ -75,6 +90,39 @@ export class NotificationService {
         pending.forEach(n => this.show(n));
       }
     });
+  }
+
+  private checkTeaseNotification() {
+    const now = new Date();
+    if (now >= TEASE_DEADLINE) return;
+
+    const last = localStorage.getItem('nyc-tease-last');
+    if (last && now.getTime() - new Date(last).getTime() < TEASE_THROTTLE_MS) return;
+
+    const msg = TEASE_MESSAGES[Math.floor(Math.random() * TEASE_MESSAGES.length)];
+
+    if (this.permissionGranted) {
+      this.showTease(msg);
+      return;
+    }
+
+    if (Notification.permission === 'denied') return;
+
+    Notification.requestPermission().then(perm => {
+      this.permissionGranted = perm === 'granted';
+      if (this.permissionGranted) {
+        this.showTease(msg);
+      }
+    });
+  }
+
+  private showTease(msg: { title: string; body: string }) {
+    new Notification(msg.title, {
+      body: msg.body,
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-192x192.png',
+    });
+    localStorage.setItem('nyc-tease-last', new Date().toISOString());
   }
 
   private show(n: TripNotification) {
