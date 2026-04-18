@@ -132,6 +132,7 @@ export const TRIP_DATA: TripData = {
         { label: 'Central Park: Bethesda Terrace', duration: '~10 min' },
         { label: 'Central Park: Dipway Arch', duration: '~10 min' },
         { label: 'Plaza Hotel', duration: '~10 min' },
+        { label: 'Roosevelt Island Tram', duration: '~25 min' },
         { label: 'Nintendo Store', duration: '~30 min' },
         { label: 'Rockefeller Center', duration: '~20 min' },
         { label: 'Radio City Music Hall', duration: '~10 min' },
@@ -140,15 +141,17 @@ export const TRIP_DATA: TripData = {
       tips: [
         'Book Top of the Rock til ca. 1 time før solnedgang',
         'Central Park er enorm — hold dig til den sydlige halvdel',
+        'Roosevelt Island Tram koster kun et MetroCard-swipe og giver en fantastisk udsigt',
         'Nintendo Store har ofte kø — gå tidligt eller sent',
       ],
       food: [
         { name: 'Quality Italian', note: 'Upscale italiensk i Midtown', url: 'https://www.qualityitalian.com/', price: '$$$' },
         { name: 'Osteria La Baia', note: 'Elegant italiensk', url: 'https://www.labaianyc.com/', price: '$$$' },
       ],
-      transport: ['Primært gåafstand fra hotel'],
+      transport: ['Primært gåafstand fra hotel', 'Roosevelt Island Tram fra 59th St & 2nd Ave'],
       bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
       fromList: [
+        { label: 'Roosevelt Island Tram', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Roosevelt+Island+Tramway+New+York' },
         { label: 'H&H Bagels', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=H%26H+Bagels+New+York' },
         { label: "Leon's Bagels", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Leons+Bagels+New+York' },
         { label: 'Brooklyn Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York' },
@@ -174,7 +177,7 @@ export const TRIP_DATA: TripData = {
         'En dag dedikeret til New Yorks mest karakterfulde kvarterer — fra Chinatowns dufte og SoHos boutiques til Brooklyns waterfront og Greenwichs filmlocations.',
       highlights: [
         { label: 'Start fra hotel' },
-        { label: 'Tompkins Square Bagels eller Apollo Bagels', duration: '~20 min' },
+        { label: "Bubby's", duration: '~30 min' },
         { label: 'Chinatown', duration: '~45 min' },
         { label: 'Little Italy', duration: '~20 min' },
         { label: 'LOS TACOS No.1', duration: '~20 min' },
@@ -200,6 +203,7 @@ export const TRIP_DATA: TripData = {
         "Monica's Apartment (fra Friends) er på 90 Bedford St",
       ],
       food: [
+        { name: "Bubby's", note: 'Klassisk amerikansk brunch i TriBeCa', url: 'https://www.bubbys.com/', price: '$$' },
         { name: 'Don Angie', note: 'Kreativ italiensk i West Village', url: 'https://www.donangie.com/', price: '$$$' },
         { name: 'Via Carota', note: 'Populær italiensk trattoria', url: 'https://www.viacarota.com/', price: '$$$' },
       ],
@@ -211,6 +215,7 @@ export const TRIP_DATA: TripData = {
       ],
       bookings: [],
       fromList: [
+        { label: "Bubby's", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Bubbys+New+York' },
         { label: 'Time Out Market', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Time+Out+Market+New+York' },
         { label: 'Prince Street Pizza', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Prince+Street+Pizza+New+York' },
         { label: 'Ceres', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Ceres+New+York' },
