@@ -1,5 +1,5 @@
 [build]
-  command = "sed -i \"s/MAPBOX_TOKEN_PLACEHOLDER/$MAPBOX_TOKEN/g\" src/environments/environment.ts && npm run build"
+  command = "node -e \"const f='src/environments/environment.ts';require('fs').writeFileSync(f,require('fs').readFileSync(f,'utf8').replace('MAPBOX_TOKEN_PLACEHOLDER',process.env.MAPBOX_TOKEN||''))\" && npm run build"
   publish = "dist/nyc-magazine/browser"
 
 [build.environment]
