@@ -27,6 +27,13 @@ export interface HighlightItem {
   duration?: string;
 }
 
+export interface MapMarker {
+  label: string;
+  lat: number;
+  lng: number;
+  category: 'highlight' | 'food' | 'hotel';
+}
+
 export interface TripDay {
   id: number;
   title: string;
@@ -41,6 +48,7 @@ export interface TripDay {
   fromList: FromListItem[];
   mapEmbedUrl: string;
   mapStaticUrl: string;
+  markers: MapMarker[];
   images: TripImage[];
   walkingDistance?: string;
   tips?: string[];

@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "sed -i \"s/MAPBOX_TOKEN_PLACEHOLDER/$MAPBOX_TOKEN/g\" src/environments/environment.ts && npm run build"
   publish = "dist/nyc-magazine/browser"
 
 [build.environment]

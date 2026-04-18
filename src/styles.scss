@@ -152,3 +152,19 @@ a {
     animation: none;
   }
 }
+
+.mapboxgl-popup-content {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text);
+  background: var(--color-bg-card);
+}
+
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip { border-top-color: var(--color-bg-card); }
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip { border-bottom-color: var(--color-bg-card); }
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip { border-right-color: var(--color-bg-card); }
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip { border-left-color: var(--color-bg-card); }

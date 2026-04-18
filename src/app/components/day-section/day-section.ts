@@ -177,7 +177,7 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
               }
             </div>
 
-            <app-map-embed [url]="day.mapEmbedUrl" />
+            <app-map-embed [markers]="day.markers" />
 
             <app-from-list [items]="day.fromList" />
 

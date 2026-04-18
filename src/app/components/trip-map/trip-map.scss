@@ -71,6 +71,15 @@
     box-shadow: var(--shadow-md);
   }
 
+  &__canvas {
+    width: 100%;
+    height: 400px;
+
+    @media (min-width: 768px) {
+      height: 500px;
+    }
+  }
+
   &__offline {
     display: flex;
     flex-direction: column;
@@ -90,28 +99,42 @@
     font-weight: 500;
   }
 
-  &__offline-link {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--color-accent-navy);
-    padding: 0.4em 1em;
-    border: 1px solid var(--color-border);
-    border-radius: 100px;
-    transition: all 0.2s ease;
+  &__legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+  }
 
-    &:hover {
-      background: var(--color-accent-navy);
-      border-color: var(--color-accent-navy);
-      color: #fff;
-    }
+  &__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
+  }
+
+  &__legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--color-bg-card);
+    box-shadow: 0 0 0 1px var(--color-border);
+
+    &--highlight { background: var(--color-accent-navy); }
+    &--food { background: var(--color-accent-gold); }
+    &--hotel { background: var(--color-accent-sage); }
   }
 
   &__info {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    margin-top: var(--space-md);
+    margin-top: var(--space-sm);
     justify-content: center;
   }
 

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v10';
+const CACHE_VERSION = 'nyc-v12';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -108,6 +108,13 @@ function isGoogleMapsEmbed(url) {
   return url.hostname === 'www.google.com' && url.pathname.startsWith('/maps');
 }
 
+function isMapboxTileRequest(url) {
+  return (
+    url.hostname === 'api.mapbox.com' ||
+    url.hostname.endsWith('.tiles.mapbox.com')
+  );
+}
+
 function isApiRequest(url) {
   return (
     url.hostname === 'api.open-meteo.com' ||
@@ -171,6 +178,13 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   if (isGoogleMapsEmbed(url)) return;
+
+  if (url.hostname === 'events.mapbox.com') return;
+
+  if (isMapboxTileRequest(url)) {
+    event.respondWith(staleWhileRevalidate(event.request, IMAGE_CACHE));
+    return;
+  }
 
   if (isApiRequest(url)) {
     event.respondWith(staleWhileRevalidate(event.request, STATIC_CACHE));
