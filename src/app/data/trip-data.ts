@@ -244,7 +244,7 @@ export const TRIP_DATA: TripData = {
         { label: 'Tilbage til Manhattan', duration: '~20 min' },
         { label: 'Washington Square Park', duration: '~20 min' },
         { label: "Monica's Apartment", duration: '~5 min' },
-        { label: '66 Perry St', duration: '~5 min' },
+        { label: "Carrie Bradshaw's Apartment", duration: '~5 min' },
         { label: 'Ghostbusters HQ', duration: '~5 min' },
       ],
       tips: [
@@ -290,7 +290,7 @@ export const TRIP_DATA: TripData = {
         { label: 'Time Out Market', lat: 40.7024, lng: -73.9896, category: 'food' },
         { label: 'Washington Square Park', lat: 40.7308, lng: -73.9973, category: 'highlight' },
         { label: "Monica's Apartment", lat: 40.7325, lng: -74.0025, category: 'highlight' },
-        { label: '66 Perry St (Carrie)', lat: 40.7356, lng: -74.0028, category: 'highlight' },
+        { label: "Carrie Bradshaw's Apartment", lat: 40.7356, lng: -74.0028, category: 'highlight' },
         { label: 'Ghostbusters HQ', lat: 40.7198, lng: -74.0070, category: 'highlight' },
         { label: "L'industrie Pizzeria", lat: 40.7110, lng: -73.9612, category: 'food' },
       ],
