@@ -26,6 +26,8 @@
     text-align: center;
     color: #fff;
     padding: var(--space-lg);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
 
   &__countdown {
@@ -40,6 +42,7 @@
     padding: 0.45em 1.4em;
     border-radius: 100px;
     text-shadow: none;
+    will-change: contents;
   }
 
   &__eyebrow {

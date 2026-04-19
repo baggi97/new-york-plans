@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { TripStatusService } from '../../services/trip-status.service';
 
 @Component({
@@ -23,6 +23,11 @@ import { TripStatusService } from '../../services/trip-status.service';
   `,
   styleUrl: './hero-section.scss',
 })
-export class HeroSectionComponent {
+export class HeroSectionComponent implements AfterViewInit {
   tripStatus = inject(TripStatusService);
+  private cdr = inject(ChangeDetectorRef);
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
 }
