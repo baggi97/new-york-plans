@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <title>Push Admin — NYC 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --text: #2c2825;
+      --muted: #7a7068;
+      --border: #e8e2da;
+      --navy: #3d4f6f;
+      --gold: #c9a96e;
+      --sage: #7a9a7e;
+      --radius: 12px;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Playfair Display', Georgia, serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 16px rgba(44, 40, 37, 0.08);
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.3rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--bg);
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--navy);
+    }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 100px;
+      background: var(--navy);
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:hover { background: var(--sage); }
+    button:active { transform: scale(0.98); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .status {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      text-align: center;
+      display: none;
+    }
+
+    .status--ok {
+      display: block;
+      background: rgba(122, 154, 126, 0.12);
+      color: var(--sage);
+    }
+
+    .status--err {
+      display: block;
+      background: rgba(180, 60, 60, 0.1);
+      color: #b43c3c;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Push Notification</h1>
+    <p class="subtitle">Send en besked til alle subscribers</p>
+
+    <label for="secret">Hemmelig kode</label>
+    <input id="secret" type="password" placeholder="Indtast kode" autocomplete="off">
+
+    <label for="title">Titel</label>
+    <input id="title" type="text" placeholder="F.eks. Planændring!">
+
+    <label for="body">Besked</label>
+    <textarea id="body" placeholder="F.eks. Vi mødes ved hotellet kl. 18 i stedet"></textarea>
+
+    <button id="send">Send notifikation</button>
+    <div id="status"></div>
+  </div>
+
+  <script>
+    var btn = document.getElementById('send');
+    var status = document.getElementById('status');
+
+    btn.addEventListener('click', async function () {
+      var secret = document.getElementById('secret').value.trim();
+      var title = document.getElementById('title').value.trim();
+      var body = document.getElementById('body').value.trim();
+
+      if (!secret || !title || !body) {
+        status.className = 'status status--err';
+        status.textContent = 'Alle felter skal udfyldes';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sender...';
+      status.className = 'status';
+
+      try {
+        var res = await fetch('/.netlify/functions/broadcast', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: title, body: body, secret: secret }),
+        });
+
+        var data = await res.json();
+
+        if (!res.ok) {
+          status.className = 'status status--err';
+          status.textContent = data.error || 'Fejl ' + res.status;
+        } else {
+          status.className = 'status status--ok';
+          status.textContent = 'Sendt til ' + data.sent + ' enhed(er)' + (data.failed ? ' (' + data.failed + ' fejlede)' : '');
+          document.getElementById('title').value = '';
+          document.getElementById('body').value = '';
+        }
+      } catch (e) {
+        status.className = 'status status--err';
+        status.textContent = 'Netværksfejl — prøv igen';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Send notifikation';
+    });
+  </script>
+</body>
+</html>
