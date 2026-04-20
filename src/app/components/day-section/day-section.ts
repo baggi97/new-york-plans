@@ -4,15 +4,18 @@ import { BookingBadgeComponent } from '../booking-badge/booking-badge';
 import { FromListComponent } from '../from-list/from-list';
 import { MapEmbedComponent } from '../map-embed/map-embed';
 import { PhotoJournalComponent } from '../photo-journal/photo-journal';
+import { DailyRecapComponent } from '../daily-recap/daily-recap';
 import { TripStatusService } from '../../services/trip-status.service';
 import { LightboxService } from '../../services/lightbox.service';
 import { WeatherService } from '../../services/weather.service';
 import { ItineraryCheckService } from '../../services/itinerary-check.service';
+import { hapticTap, hapticSuccess } from '../../utils/haptics';
+import { fireConfetti } from '../../utils/confetti';
 
 @Component({
   selector: 'app-day-section',
   standalone: true,
-  imports: [BookingBadgeComponent, FromListComponent, MapEmbedComponent, PhotoJournalComponent],
+  imports: [BookingBadgeComponent, FromListComponent, MapEmbedComponent, PhotoJournalComponent, DailyRecapComponent],
   template: `
     <section [id]="'dag-' + day.id" class="day" [class.day--even]="day.id % 2 === 0" [class.day--today]="isToday" [class.day--visible]="isVisible()">
       <div class="container">
@@ -99,7 +102,7 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
               </div>
             }
 
-            <div class="day__highlights">
+            <div class="day__highlights" [id]="'program-' + day.id">
               <div class="day__section-header">
                 <h3 class="day__section-title">Dagens program</h3>
                 <span class="day__progress-label">{{ itineraryProgress.done }} / {{ itineraryProgress.total }}</span>
@@ -111,7 +114,7 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
                 @for (item of day.highlights; track item.label; let i = $index) {
                   <li [class.day__list-item--checked]="itinerary.isChecked(day.id, i)">
                     <label class="day__check-label">
-                      <input type="checkbox" [checked]="itinerary.isChecked(day.id, i)" (change)="itinerary.toggle(day.id, i)" />
+                      <input type="checkbox" [checked]="itinerary.isChecked(day.id, i)" (change)="onToggle(day.id, i)" />
                       <span class="day__checkbox">
                         @if (itinerary.isChecked(day.id, i)) {
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
@@ -187,6 +190,8 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
             <app-photo-journal [dayId]="day.id" />
           </div>
         </div>
+
+        <app-daily-recap [day]="day" />
         }
       </div>
     </section>
@@ -208,6 +213,7 @@ export class DaySectionComponent implements OnInit, OnDestroy {
   private heroInterval?: ReturnType<typeof setInterval>;
   private touchStartX = 0;
   private touchStartY = 0;
+  private confettiFired = false;
 
   ngOnInit() {
     const stored = localStorage.getItem(`nyc-collapsed-${this.day.id}`);
@@ -289,6 +295,25 @@ export class DaySectionComponent implements OnInit, OnDestroy {
 
   openLightbox(index: number) {
     this.lightbox.open(this.day.images, index);
+  }
+
+  onToggle(dayId: number, index: number) {
+    hapticTap();
+    this.itinerary.toggle(dayId, index);
+    this.checkCompletion();
+  }
+
+  private checkCompletion() {
+    const p = this.itineraryProgress;
+    if (p.total > 0 && p.done === p.total && !this.confettiFired) {
+      const key = `nyc-confetti-${this.day.id}`;
+      if (!localStorage.getItem(key)) {
+        hapticSuccess();
+        fireConfetti();
+        localStorage.setItem(key, '1');
+      }
+      this.confettiFired = true;
+    }
   }
 
   async shareDay() {

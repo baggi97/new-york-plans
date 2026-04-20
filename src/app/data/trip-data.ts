@@ -112,7 +112,7 @@ export const TRIP_DATA: TripData = {
         'NYC Ferry: Battery Park → St. George → Pier 11',
         'Subway: 7 fra Times Sq–42 St → Mets-Willets Point',
       ],
-      bookings: [{ label: '9/11 Museum', note: 'Husk at booke billet på forhånd', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
+      bookings: [{ label: '9/11 Museum', note: 'Husk at booke billet på forhånd', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end', time: '2026-04-23T10:00' }],
       fromList: [
         { label: 'Golden Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Golden+Diner+New+York' },
         { label: "Katz's Delicatessen", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Katzs+Delicatessen+New+York' },
@@ -183,7 +183,7 @@ export const TRIP_DATA: TripData = {
         { name: 'Osteria La Baia', note: 'Elegant italiensk', url: 'https://www.labaianyc.com/', price: '$$$' },
       ],
       transport: ['Primært gåafstand fra hotel', 'Roosevelt Island Tram fra 59th St & 2nd Ave'],
-      bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' }],
+      bookings: [{ label: 'Top of the Rock', note: 'Book billet til solnedgang', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end', time: '2026-04-24T19:00' }],
       fromList: [
         { label: 'H&H Bagels', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=H%26H+Bagels+New+York' },
         { label: "Leon's Bagels", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Leons+Bagels+New+York' },
@@ -343,7 +343,7 @@ export const TRIP_DATA: TripData = {
         'Gåtur til Empire State Building',
       ],
       bookings: [
-        { label: 'Empire State Building', note: 'Aftenbillet anbefales', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end' },
+        { label: 'Empire State Building', note: 'Aftenbillet anbefales', url: 'intent://scan/#Intent;scheme=gocity;package=com.gocitypass;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.gocitypass;end', time: '2026-04-26T21:15' },
       ],
       fromList: [
         { label: 'Salswee', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Salswee+New+York' },

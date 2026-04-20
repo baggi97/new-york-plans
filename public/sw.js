@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v36';
+const CACHE_VERSION = 'nyc-v37';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -114,7 +114,7 @@ function isGoogleMapsEmbed(url) {
 
 function isMapboxTileRequest(url) {
   return (
-    url.hostname === 'api.mapbox.com' ||
+    (url.hostname === 'api.mapbox.com' && !url.pathname.includes('/directions/')) ||
     url.hostname.endsWith('.tiles.mapbox.com')
   );
 }
@@ -124,6 +124,10 @@ function isApiRequest(url) {
     url.hostname === 'api.open-meteo.com' ||
     url.hostname === 'open.er-api.com'
   );
+}
+
+function isNetlifyFunction(url) {
+  return url.pathname.startsWith('/.netlify/functions/');
 }
 
 async function staleWhileRevalidate(request, cacheName) {
@@ -190,7 +194,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  if (isApiRequest(url)) {
+  if (isApiRequest(url) || isNetlifyFunction(url)) {
     event.respondWith(staleWhileRevalidate(event.request, STATIC_CACHE));
     return;
   }

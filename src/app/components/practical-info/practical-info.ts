@@ -4,11 +4,13 @@ import { CurrencyConverterComponent } from '../currency-converter/currency-conve
 import { ChecklistComponent } from '../checklist/checklist';
 import { WeatherBadgeComponent } from '../weather-badge/weather-badge';
 import { TippingGuideComponent } from '../tipping-guide/tipping-guide';
+import { FlightTrackerComponent } from '../flight-tracker/flight-tracker';
+import { SubwayStatusComponent } from '../subway-status/subway-status';
 
 @Component({
   selector: 'app-practical-info',
   standalone: true,
-  imports: [CurrencyConverterComponent, ChecklistComponent, WeatherBadgeComponent, TippingGuideComponent],
+  imports: [CurrencyConverterComponent, ChecklistComponent, WeatherBadgeComponent, TippingGuideComponent, FlightTrackerComponent, SubwayStatusComponent],
   template: `
     <section id="praktisk" class="practical">
       <div class="container">
@@ -18,6 +20,8 @@ import { TippingGuideComponent } from '../tipping-guide/tipping-guide';
         </div>
 
         <app-weather-badge />
+        <app-flight-tracker />
+        <app-subway-status />
 
         <div class="practical__grid">
           <div class="practical__card">

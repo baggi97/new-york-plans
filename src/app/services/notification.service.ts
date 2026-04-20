@@ -81,6 +81,11 @@ export class NotificationService {
     localStorage.setItem('nyc-notif-dismissed', '1');
   }
 
+  showGeofence(title: string, body: string) {
+    if (!this.permissionGranted) return;
+    this.displayNotification(title, body);
+  }
+
   private async subscribeToPush() {
     const vapidKey = environment.vapidPublicKey;
     if (!vapidKey || vapidKey === 'VAPID_PUBLIC_KEY_PLACEHOLDER') return;

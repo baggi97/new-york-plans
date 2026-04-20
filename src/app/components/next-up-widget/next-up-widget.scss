@@ -1,6 +1,6 @@
 .next-up {
   position: fixed;
-  bottom: 5rem;
+  bottom: 9rem;
   right: 1.5rem;
   z-index: 89;
   display: flex;
@@ -12,9 +12,17 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   text-decoration: none;
+  text-align: left;
   max-width: 240px;
+  cursor: pointer;
   animation: next-up-slide 0.4s ease;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+
+  &--hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+  }
 
   &:hover {
     transform: translateY(-2px);

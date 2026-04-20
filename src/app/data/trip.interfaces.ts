@@ -20,6 +20,7 @@ export interface Booking {
   label: string;
   note?: string;
   url?: string;
+  time?: string;
 }
 
 export interface HighlightItem {

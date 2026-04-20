@@ -1,0 +1,115 @@
+.nearby-fab {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.25rem;
+  z-index: 90;
+
+  &__btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    color: var(--color-accent-navy);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover, &--active {
+      background: var(--color-accent-navy);
+      color: #fff;
+      border-color: var(--color-accent-navy);
+    }
+  }
+
+  &__panel {
+    position: absolute;
+    bottom: 52px;
+    right: 0;
+    width: 280px;
+    max-height: 350px;
+    overflow-y: auto;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    animation: nearby-in 0.2s ease-out;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  &__title {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent-sage);
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 0;
+  }
+
+  &__loading, &__error, &__empty {
+    padding: 1.25rem 1rem;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    text-align: center;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0.5rem 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--highlight { background: var(--color-accent-navy); }
+    &--food { background: var(--color-accent-gold); }
+    &--hotel { background: var(--color-accent-sage); }
+  }
+
+  &__label {
+    flex: 1;
+    font-size: 0.82rem;
+    color: var(--color-text);
+  }
+
+  &__dist {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+}
+
+@keyframes nearby-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

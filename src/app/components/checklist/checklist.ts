@@ -1,6 +1,7 @@
 import { Component, signal, computed } from '@angular/core';
 import { TRIP_DATA } from '../../data/trip-data';
 import { ChecklistItem } from '../../data/trip.interfaces';
+import { hapticTap } from '../../utils/haptics';
 
 @Component({
   selector: 'app-checklist',
@@ -55,6 +56,7 @@ export class ChecklistComponent {
   }
 
   toggle(id: string) {
+    hapticTap();
     const next = new Set(this.checked());
     if (next.has(id)) {
       next.delete(id);

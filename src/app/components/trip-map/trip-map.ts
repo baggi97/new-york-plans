@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, inject, signal } from '@angular/core';
 import { TRIP_DATA } from '../../data/trip-data';
 import { MapMarker } from '../../data/trip.interfaces';
+import { GeolocationService, haversineMeters } from '../../services/geolocation.service';
 
 const MARKER_COLORS = {
   light: { highlight: '#3d4f6f', food: '#c9a96e', hotel: '#7a9a7e' },
@@ -38,6 +39,12 @@ import { environment } from '../../../environments/environment';
           } @else {
             <div #mapContainer class="trip-map__canvas"></div>
           }
+          @if (routeInfo()) {
+            <div class="trip-map__route-bar">
+              <span>{{ routeInfo() }}</span>
+              <button class="trip-map__route-close" (click)="clearRoute()">✕ Luk</button>
+            </div>
+          }
         </div>
         <div class="trip-map__legend">
           <span class="trip-map__legend-item"><span class="trip-map__legend-dot trip-map__legend-dot--highlight"></span>Seværdighed</span>
@@ -63,14 +70,17 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
 
   private connectivity = inject(ConnectivityService);
   private darkMode = inject(DarkModeService);
+  private geo = inject(GeolocationService);
   days = TRIP_DATA.days;
   activeDay = 1;
   showOffline = signal(!navigator.onLine);
+  routeInfo = signal<string | null>(null);
 
   private mapboxgl: any;
   private map: any;
   private markers: any[] = [];
   private resizeObserver?: ResizeObserver;
+  private userMarker: any;
 
   constructor() {
     this.connectivity.onReconnect(() => {
@@ -141,15 +151,20 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
     const palette = this.darkMode.isDark() ? MARKER_COLORS.dark : MARKER_COLORS.light;
 
     for (const point of dayData.markers) {
+      const popup = new this.mapboxgl.Popup({ offset: 20, closeButton: false, maxWidth: '220px' })
+        .setHTML(`<span class="map-popup__label">${point.label}</span><button class="map-popup__nav" data-marker-label="${point.label}">Vis vej</button>`);
+
+      popup.on('open', () => {
+        const btn = popup.getElement()?.querySelector('.map-popup__nav') as HTMLElement;
+        btn?.addEventListener('click', () => this.navigateTo(point));
+      });
+
       const marker = new this.mapboxgl.Marker({
           color: palette[point.category],
           scale: 0.7,
         })
         .setLngLat([point.lng, point.lat])
-        .setPopup(
-          new this.mapboxgl.Popup({ offset: 20, closeButton: false, maxWidth: '200px' })
-            .setHTML(`<span class="map-popup__label">${point.label}</span>`)
-        )
+        .setPopup(popup)
         .addTo(this.map);
 
       this.markers.push(marker);
@@ -157,6 +172,108 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
     }
 
     this.map.fitBounds(bounds, { padding: 50, maxZoom: 15, duration: 600 });
+  }
+
+  async navigateTo(marker: MapMarker) {
+    this.geo.start();
+    const pos = this.geo.position();
+    if (!pos) {
+      await new Promise<void>(resolve => {
+        const check = setInterval(() => {
+          if (this.geo.position()) { clearInterval(check); resolve(); }
+        }, 500);
+        setTimeout(() => { clearInterval(check); resolve(); }, 5000);
+      });
+    }
+    const from = this.geo.position();
+    if (!from || !this.map) return;
+
+    try {
+      const url = `https://api.mapbox.com/directions/v5/mapbox/walking/${from.lng},${from.lat};${marker.lng},${marker.lat}?geometries=geojson&access_token=${environment.mapboxToken}`;
+      const res = await fetch(url);
+
+      this.clearRoute();
+
+      if (!res.ok) {
+        const distM = Math.round(
+          haversineMeters(from, { lat: marker.lat, lng: marker.lng }),
+        );
+        this.routeInfo.set(`${marker.label} — ~${(distM / 1000).toFixed(1)} km (fugleflugt)`);
+        this.showStraightLine(from, marker);
+        return;
+      }
+
+      const data = await res.json();
+      const route = data.routes?.[0];
+      if (!route) return;
+
+      const distKm = (route.distance / 1000).toFixed(1);
+      const durMin = Math.round(route.duration / 60);
+      this.routeInfo.set(`${marker.label} — ${distKm} km · ~${durMin} min`);
+
+      if (this.map.getSource('route')) {
+        (this.map.getSource('route') as any).setData(route.geometry);
+      } else {
+        this.map.addSource('route', { type: 'geojson', data: route.geometry });
+        this.map.addLayer({
+          id: 'route',
+          type: 'line',
+          source: 'route',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: { 'line-color': '#3d4f6f', 'line-width': 4, 'line-opacity': 0.7 },
+        });
+      }
+
+      this.userMarker?.remove();
+      this.userMarker = new this.mapboxgl.Marker({ color: '#e8635a', scale: 0.6 })
+        .setLngLat([from.lng, from.lat])
+        .addTo(this.map);
+
+      const bounds = new this.mapboxgl.LngLatBounds();
+      bounds.extend([from.lng, from.lat]);
+      bounds.extend([marker.lng, marker.lat]);
+      this.map.fitBounds(bounds, { padding: 60, maxZoom: 16, duration: 600 });
+    } catch { /* offline or API error */ }
+  }
+
+  private showStraightLine(from: { lat: number; lng: number }, marker: MapMarker) {
+    if (!this.map || !this.mapboxgl) return;
+
+    const geojson = {
+      type: 'LineString' as const,
+      coordinates: [[from.lng, from.lat], [marker.lng, marker.lat]],
+    };
+
+    if (this.map.getSource('route')) {
+      (this.map.getSource('route') as any).setData(geojson);
+    } else {
+      this.map.addSource('route', { type: 'geojson', data: geojson });
+      this.map.addLayer({
+        id: 'route',
+        type: 'line',
+        source: 'route',
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: { 'line-color': '#3d4f6f', 'line-width': 3, 'line-opacity': 0.5, 'line-dasharray': [2, 2] },
+      });
+    }
+
+    this.userMarker?.remove();
+    this.userMarker = new this.mapboxgl.Marker({ color: '#e8635a', scale: 0.6 })
+      .setLngLat([from.lng, from.lat])
+      .addTo(this.map);
+
+    const bounds = new this.mapboxgl.LngLatBounds();
+    bounds.extend([from.lng, from.lat]);
+    bounds.extend([marker.lng, marker.lat]);
+    this.map.fitBounds(bounds, { padding: 60, maxZoom: 16, duration: 600 });
+  }
+
+  clearRoute() {
+    this.routeInfo.set(null);
+    if (this.map?.getLayer('route')) this.map.removeLayer('route');
+    if (this.map?.getSource('route')) this.map.removeSource('route');
+    this.userMarker?.remove();
+    this.userMarker = null;
   }
 
   private switchStyle(dark: boolean) {

@@ -161,6 +161,20 @@ a {
   box-shadow: var(--shadow-sm);
   color: var(--color-text);
   background: var(--color-bg-card);
+
+  .map-popup__nav {
+    display: block;
+    margin-top: 4px;
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--color-accent-navy);
+    cursor: pointer;
+    padding: 0;
+    &:hover { text-decoration: underline; }
+  }
 }
 
 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip { border-top-color: var(--color-bg-card); }

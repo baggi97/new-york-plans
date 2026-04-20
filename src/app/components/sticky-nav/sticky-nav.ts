@@ -2,6 +2,7 @@ import { Component, HostListener, signal, ElementRef, ViewChild, AfterViewInit, 
 import { NgClass } from '@angular/common';
 import { DarkModeService } from '../../services/dark-mode.service';
 import { TripStatusService } from '../../services/trip-status.service';
+import { hapticTap } from '../../utils/haptics';
 
 @Component({
   selector: 'app-sticky-nav',
@@ -16,6 +17,7 @@ import { TripStatusService } from '../../services/trip-status.service';
           @for (link of links; track link.id) {
             <a [href]="'#' + link.id"
                class="nav__link"
+               (click)="onNavClick()"
                [class.nav__link--active]="activeSection() === link.id"
                [class.nav__link--today]="isTodayLink(link.id)">
               {{ link.label }}
@@ -71,6 +73,10 @@ export class StickyNavComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.updateActiveSection();
+  }
+
+  onNavClick() {
+    hapticTap();
   }
 
   isTodayLink(id: string): boolean {

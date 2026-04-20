@@ -34,6 +34,19 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
+  &__countdown {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-accent-navy);
+    opacity: 0.8;
+
+    &--soon {
+      color: var(--color-accent-gold);
+      animation: pulse-countdown 1.5s ease-in-out infinite;
+    }
+  }
+
   &--link {
     text-decoration: none;
     cursor: pointer;
@@ -49,4 +62,9 @@
       }
     }
   }
+}
+
+@keyframes pulse-countdown {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; transform: scale(1.05); }
 }

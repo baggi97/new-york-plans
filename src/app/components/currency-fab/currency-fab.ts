@@ -1,5 +1,6 @@
 import { Component, signal, HostListener, ElementRef, inject } from '@angular/core';
 import { CurrencyConverterComponent } from '../currency-converter/currency-converter';
+import { hapticTap } from '../../utils/haptics';
 
 @Component({
   selector: 'app-currency-fab',
@@ -29,6 +30,7 @@ export class CurrencyFabComponent {
 
   toggle(event: Event) {
     event.stopPropagation();
+    hapticTap();
     this.isOpen.update(v => !v);
   }
 

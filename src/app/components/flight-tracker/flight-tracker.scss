@@ -1,0 +1,104 @@
+.flight-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-top: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: var(--space-sm);
+    color: var(--color-accent-navy);
+  }
+
+  &__ident {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  &__status {
+    margin-left: auto;
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25em 0.6em;
+    border-radius: 100px;
+
+    &--scheduled { background: rgba(61, 79, 111, 0.1); color: var(--color-accent-navy); }
+    &--inflight { background: rgba(122, 154, 126, 0.15); color: var(--color-accent-sage); }
+    &--landed { background: rgba(122, 154, 126, 0.2); color: var(--color-accent-sage); }
+    &--delayed { background: rgba(201, 169, 110, 0.2); color: #b5873a; }
+    &--unknown { background: rgba(0, 0, 0, 0.05); color: var(--color-text-muted); }
+  }
+
+  &__route {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__airport {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    min-width: 50px;
+  }
+
+  &__code {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__time {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+  }
+
+  &__gate {
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+  }
+
+  &__progress-track {
+    flex: 1;
+    height: 3px;
+    background: var(--color-border-light);
+    border-radius: 3px;
+    position: relative;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: var(--color-accent-sage);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+
+  &__plane-icon {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-accent-navy);
+    transition: left 0.5s ease;
+  }
+
+  &__delay {
+    margin-top: var(--space-sm);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #b5873a;
+    text-align: center;
+  }
+}

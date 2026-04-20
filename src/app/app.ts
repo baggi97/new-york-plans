@@ -14,10 +14,12 @@ import { NextUpWidgetComponent } from './components/next-up-widget/next-up-widge
 import { CurrencyFabComponent } from './components/currency-fab/currency-fab';
 import { UpdateToastComponent } from './components/update-toast/update-toast';
 import { NotificationPromptComponent } from './components/notification-prompt/notification-prompt';
+import { NearbyPanelComponent } from './components/nearby-panel/nearby-panel';
 import { DarkModeService } from './services/dark-mode.service';
 import { PhotoJournalService } from './services/photo-journal.service';
 import { NotificationService } from './services/notification.service';
 import { ItineraryCheckService } from './services/itinerary-check.service';
+import { GeofenceService } from './services/geofence.service';
 import { TRIP_DATA } from './data/trip-data';
 
 @Component({
@@ -39,6 +41,7 @@ import { TRIP_DATA } from './data/trip-data';
     CurrencyFabComponent,
     UpdateToastComponent,
     NotificationPromptComponent,
+    NearbyPanelComponent,
   ],
   template: `
     <div id="top">
@@ -59,6 +62,7 @@ import { TRIP_DATA } from './data/trip-data';
       <app-currency-fab />
       <app-update-toast />
       <app-notification-prompt />
+      <app-nearby-panel />
     </div>
   `,
   styles: `
@@ -73,6 +77,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private journal = inject(PhotoJournalService);
   private notifications = inject(NotificationService);
   private itineraryCheck = inject(ItineraryCheckService);
+  private geofence = inject(GeofenceService);
   private visibilityHandler = () => {
     if (document.visibilityState === 'visible') {
       this.notifications.checkAndNotify();
@@ -84,6 +89,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.journal.init();
     this.notifications.init();
     this.itineraryCheck.init();
+    this.geofence.init();
     document.addEventListener('visibilitychange', this.visibilityHandler);
   }
 
