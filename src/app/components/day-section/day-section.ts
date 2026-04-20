@@ -51,6 +51,12 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
           </button>
         </div>
 
+        <button class="day__toggle" (click)="toggleCollapse()">
+          <span>{{ collapsed() ? 'Vis program' : 'Skjul program' }}</span>
+          <svg [class.day__toggle-icon--up]="!collapsed()" class="day__toggle-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        @if (!collapsed()) {
         <div class="day__hero-image"
           (click)="openLightbox(heroImageIndex)"
           (touchstart)="onHeroTouchStart($event)"
@@ -65,12 +71,6 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
           }
         </div>
 
-        <button class="day__toggle" (click)="toggleCollapse()">
-          <span>{{ collapsed() ? 'Vis program' : 'Skjul program' }}</span>
-          <svg [class.day__toggle-icon--up]="!collapsed()" class="day__toggle-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        @if (!collapsed()) {
         <div class="day__body">
           <div class="day__content">
             <p class="day__intro">{{ day.intro }}</p>
