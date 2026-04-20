@@ -117,20 +117,31 @@ export class NotificationService {
   }
 
   private showTease(msg: { title: string; body: string }) {
-    new Notification(msg.title, {
-      body: msg.body,
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/icon-192x192.png',
-    });
+    this.displayNotification(msg.title, msg.body);
     localStorage.setItem('nyc-tease-last', new Date().toISOString());
   }
 
   private show(n: TripNotification) {
-    new Notification(n.title, {
-      body: n.body,
+    this.displayNotification(n.title, n.body);
+    localStorage.setItem(`nyc-notif-${n.id}`, '1');
+  }
+
+  private displayNotification(title: string, body: string) {
+    const opts = {
+      body,
       icon: '/icons/icon-192x192.png',
       badge: '/icons/icon-192x192.png',
-    });
-    localStorage.setItem(`nyc-notif-${n.id}`, '1');
+    };
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(reg => reg.showNotification(title, opts))
+        .catch(() => this.fallbackNotification(title, opts));
+    } else {
+      this.fallbackNotification(title, opts);
+    }
+  }
+
+  private fallbackNotification(title: string, opts: NotificationOptions) {
+    try { new Notification(title, opts); } catch { /* unsupported */ }
   }
 }

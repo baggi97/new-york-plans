@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v14';
+const CACHE_VERSION = 'nyc-v15';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -207,4 +207,16 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(networkFirstWithCache(event.request));
+});
+
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clientList) {
+      for (var i = 0; i < clientList.length; i++) {
+        if (clientList[i].visibilityState === 'visible') return clientList[i].focus();
+      }
+      return clients.openWindow('/');
+    })
+  );
 });
