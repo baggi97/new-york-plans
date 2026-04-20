@@ -5,8 +5,8 @@ import { TRIP_DATA } from '../data/trip-data';
 export class TripStatusService {
   private now = signal(new Date());
 
-  private tripStart = new Date(TRIP_DATA.tripStart + 'T00:00:00-04:00');
-  private tripEnd = new Date(TRIP_DATA.tripEnd + 'T23:59:59-04:00');
+  private tripStart = this.parseLocalDate(TRIP_DATA.tripStart);
+  private tripEnd = this.parseLocalDate(TRIP_DATA.tripEnd, true);
 
   status = computed(() => {
     const now = this.now();
@@ -16,9 +16,23 @@ export class TripStatusService {
   });
 
   daysUntil = computed(() => {
-    const diff = this.tripStart.getTime() - this.now().getTime();
-    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+    const now = this.now();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(
+      parseInt(TRIP_DATA.tripStart.slice(0, 4)),
+      parseInt(TRIP_DATA.tripStart.slice(5, 7)) - 1,
+      parseInt(TRIP_DATA.tripStart.slice(8, 10)),
+    );
+    const diff = start.getTime() - today.getTime();
+    return Math.max(0, Math.round(diff / (1000 * 60 * 60 * 24)));
   });
+
+  private parseLocalDate(iso: string, endOfDay = false): Date {
+    const [y, m, d] = iso.split('-').map(Number);
+    return endOfDay
+      ? new Date(y, m - 1, d, 23, 59, 59)
+      : new Date(y, m - 1, d);
+  }
 
   currentDayNumber = computed(() => {
     if (this.status() !== 'during') return 0;
