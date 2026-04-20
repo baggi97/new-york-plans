@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v25';
+const CACHE_VERSION = 'nyc-v26';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
