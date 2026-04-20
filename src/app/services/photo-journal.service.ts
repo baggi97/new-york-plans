@@ -8,6 +8,7 @@ export interface JournalEntry {
   timestamp: number;
 }
 
+const API = '/.netlify/functions/photos';
 const DB_NAME = 'nyc-journal';
 const STORE_NAME = 'entries';
 const DB_VERSION = 1;
@@ -29,8 +30,22 @@ export class PhotoJournalService {
 
   async init() {
     this.db = await this.openDB();
-    const all = await this.getAll();
-    this.entries.set(all);
+    const cached = await this.getAllLocal();
+    if (cached.length) {
+      this.entries.set(cached);
+    }
+    this.syncFromServer();
+  }
+
+  private async syncFromServer() {
+    if (!navigator.onLine) return;
+    try {
+      const res = await fetch(API);
+      if (!res.ok) return;
+      const remote: JournalEntry[] = await res.json();
+      this.entries.set(remote);
+      await this.replaceAllLocal(remote);
+    } catch { /* offline or server error -- use cache */ }
   }
 
   async addEntry(dayId: number, imageData: string, caption: string): Promise<JournalEntry> {
@@ -41,22 +56,59 @@ export class PhotoJournalService {
       caption,
       timestamp: Date.now(),
     };
-    await this.put(entry);
+
     this.entries.update(list => [...list, entry]);
+    await this.putLocal(entry);
+
+    if (navigator.onLine) {
+      try {
+        const res = await fetch(API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dayId, imageData, caption }),
+        });
+        if (res.ok) {
+          const serverEntry: JournalEntry = await res.json();
+          await this.deleteLocal(entry.id);
+          await this.putLocal(serverEntry);
+          this.entries.update(list =>
+            list.map(e => e.id === entry.id ? serverEntry : e)
+          );
+          return serverEntry;
+        }
+      } catch { /* keep local version */ }
+    }
+
     return entry;
   }
 
   async removeEntry(id: string) {
-    await this.delete(id);
     this.entries.update(list => list.filter(e => e.id !== id));
+    await this.deleteLocal(id);
+
+    if (navigator.onLine) {
+      try {
+        await fetch(`${API}?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+      } catch { /* best effort */ }
+    }
   }
 
   async updateCaption(id: string, caption: string) {
     const entry = this.entries().find(e => e.id === id);
     if (!entry) return;
     const updated = { ...entry, caption };
-    await this.put(updated);
     this.entries.update(list => list.map(e => e.id === id ? updated : e));
+    await this.putLocal(updated);
+
+    if (navigator.onLine) {
+      try {
+        await fetch(API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, caption }),
+        });
+      } catch { /* best effort */ }
+    }
   }
 
   private openDB(): Promise<IDBDatabase> {
@@ -73,7 +125,7 @@ export class PhotoJournalService {
     });
   }
 
-  private getAll(): Promise<JournalEntry[]> {
+  private getAllLocal(): Promise<JournalEntry[]> {
     return new Promise((resolve, reject) => {
       if (!this.db) return resolve([]);
       const tx = this.db.transaction(STORE_NAME, 'readonly');
@@ -84,7 +136,7 @@ export class PhotoJournalService {
     });
   }
 
-  private put(entry: JournalEntry): Promise<void> {
+  private putLocal(entry: JournalEntry): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.db) return resolve();
       const tx = this.db.transaction(STORE_NAME, 'readwrite');
@@ -95,7 +147,7 @@ export class PhotoJournalService {
     });
   }
 
-  private delete(id: string): Promise<void> {
+  private deleteLocal(id: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.db) return resolve();
       const tx = this.db.transaction(STORE_NAME, 'readwrite');
@@ -103,6 +155,20 @@ export class PhotoJournalService {
       const req = store.delete(id);
       req.onsuccess = () => resolve();
       req.onerror = () => reject(req.error);
+    });
+  }
+
+  private async replaceAllLocal(entries: JournalEntry[]): Promise<void> {
+    if (!this.db) return;
+    const tx = this.db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    store.clear();
+    for (const e of entries) {
+      store.put(e);
+    }
+    return new Promise((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
     });
   }
 }
