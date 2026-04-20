@@ -1,5 +1,5 @@
 [build]
-  command = "node -e \"const f='src/environments/environment.ts';require('fs').writeFileSync(f,require('fs').readFileSync(f,'utf8').replace('MAPBOX_TOKEN_PLACEHOLDER',process.env.MAPBOX_TOKEN||''))\" && npm run build"
+  command = "node -e \"const f='src/environments/environment.ts';let c=require('fs').readFileSync(f,'utf8');c=c.replace('MAPBOX_TOKEN_PLACEHOLDER',process.env.MAPBOX_TOKEN||'');c=c.replace('VAPID_PUBLIC_KEY_PLACEHOLDER',process.env.VAPID_PUBLIC_KEY||'');require('fs').writeFileSync(f,c)\" && npm run build"
   publish = "dist/nyc-magazine/browser"
 
 [build.environment]

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v19';
+const CACHE_VERSION = 'nyc-v20';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -211,6 +211,22 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(networkFirstWithCache(event.request));
+});
+
+self.addEventListener('push', function (event) {
+  if (!event.data) return;
+  try {
+    var data = event.data.json();
+    event.waitUntil(
+      self.registration.showNotification(data.title || 'NYC 2026', {
+        body: data.body || '',
+        icon: '/icons/icon-192x192.png',
+        badge: '/icons/icon-192x192.png',
+      })
+    );
+  } catch (e) {
+    console.error('Push parse error', e);
+  }
 });
 
 self.addEventListener('notificationclick', function (event) {
