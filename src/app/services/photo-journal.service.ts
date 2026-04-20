@@ -35,6 +35,12 @@ export class PhotoJournalService {
       this.entries.set(cached);
     }
     this.syncFromServer();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') this.syncFromServer();
+    });
+    setInterval(() => {
+      if (document.visibilityState === 'visible') this.syncFromServer();
+    }, 20_000);
   }
 
   private async syncFromServer() {
