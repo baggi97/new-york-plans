@@ -6,6 +6,7 @@ interface TripNotification {
   date: string;
   afterHour: number;
   beforeHour: number;
+  tz: string;
   title: string;
   body: string;
 }
@@ -22,22 +23,26 @@ const TEASE_MESSAGES: { title: string; body: string }[] = [
 const TEASE_DEADLINE = new Date('2026-04-21T18:00:00+02:00');
 const TEASE_THROTTLE_MS = 60 * 60 * 1000;
 
-const NOTIFICATIONS: TripNotification[] = [
-  // Aften-notifikationer (18-23)
-  { id: 'eve-0421', date: '2026-04-21', afterHour: 18, beforeHour: 23, title: 'Klar til New York?', body: 'Tjek pakkelisten og hav boardingpass klar. SAS SK909 afgår i morgen!' },
-  { id: 'eve-0422', date: '2026-04-22', afterHour: 18, beforeHour: 23, title: 'I morgen: Brooklyn + 9/11', body: 'Husk GoCity-appen til 9/11 Museum' },
-  { id: 'eve-0423', date: '2026-04-23', afterHour: 18, beforeHour: 23, title: 'I morgen: Central Park + Top of the Rock', body: 'Top of the Rock er booket kl. 19 — perfekt til solnedgang' },
-  { id: 'eve-0424', date: '2026-04-24', afterHour: 18, beforeHour: 23, title: 'I morgen: Chinatown + SoHo + DUMBO', body: "Katz's: Bestil ved disken og mist IKKE din billet!" },
-  { id: 'eve-0425', date: '2026-04-25', afterHour: 18, beforeHour: 23, title: 'I morgen: Midtown + Empire State', body: 'Empire State Building kl. 21:15 — magisk udsigt over byen om aftenen' },
-  { id: 'eve-0426', date: '2026-04-26', afterHour: 18, beforeHour: 23, title: 'Sidste morgen i NYC', body: 'Pak aftenen før så morgenen er stressfri. Vær i lufthavnen senest kl. 14:15' },
+const DK = 'Europe/Copenhagen';
+const NY = 'America/New_York';
 
-  // Morgen-notifikationer (5-12)
-  { id: 'morn-0422', date: '2026-04-22', afterHour: 5, beforeHour: 12, title: 'God rejse!', body: 'SAS SK909 lander i Newark ca. 14:55' },
-  { id: 'morn-0423', date: '2026-04-23', afterHour: 5, beforeHour: 12, title: 'God morgen, dag 2!', body: 'Start med subway til DUMBO og nyd Manhattan Bridge-udsigten' },
-  { id: 'morn-0424', date: '2026-04-24', afterHour: 5, beforeHour: 12, title: 'God morgen, dag 3!', body: 'Ess-a-Bagel eller H&H Bagels til morgenmad, derefter Central Park' },
-  { id: 'morn-0425', date: '2026-04-25', afterHour: 5, beforeHour: 12, title: 'God morgen, dag 4!', body: "Bubby's i TriBeCa venter med brunch!" },
-  { id: 'morn-0426', date: '2026-04-26', afterHour: 5, beforeHour: 12, title: 'God morgen, dag 5!', body: 'Grand Central Terminal og Fifth Avenue i dag' },
-  { id: 'morn-0427', date: '2026-04-27', afterHour: 5, beforeHour: 12, title: 'Sidste dag!', body: 'Nyd Sunday Morning brunch. Penn Station → Newark med NJ Transit + AirTrain' },
+const NOTIFICATIONS: TripNotification[] = [
+  // Aften d. 20-21 apr: dansk tid (brugeren er i DK)
+  { id: 'eve-0420', date: '2026-04-20', afterHour: 21, beforeHour: 23, tz: DK, title: 'Om 2 dage!', body: 'I overmorgen letter SAS SK909 mod New York. Tjek pakkelisten og glæd dig — snart står I i Times Square!' },
+  { id: 'eve-0421', date: '2026-04-21', afterHour: 21, beforeHour: 23, tz: DK, title: 'Klar til New York?', body: 'Tjek pakkelisten og hav boardingpass klar. SAS SK909 afgår i morgen kl. 10:25. Husk pas, GoCity-app og komfortable sko!' },
+  // Aften d. 22-26 apr: NY-tid (brugeren er i NY)
+  { id: 'eve-0422', date: '2026-04-22', afterHour: 18, beforeHour: 23, tz: NY, title: 'I morgen: DUMBO, Brooklyn Bridge og 9/11', body: 'Start i DUMBO med udsigt til Manhattan Bridge. Gå over Brooklyn Bridge, besøg 9/11 Museum (husk GoCity) og afslut med Mets-kamp på Citi Field. ~14 km' },
+  { id: 'eve-0423', date: '2026-04-23', afterHour: 18, beforeHour: 23, tz: NY, title: 'I morgen: Central Park og Top of the Rock', body: 'Morgenmad på Ess-a-Bagel, derefter Central Park (Bethesda Fountain, Bow Bridge). Roosevelt Island Tram om eftermiddagen. Top of the Rock kl. 19 — perfekt til solnedgang' },
+  { id: 'eve-0424', date: '2026-04-24', afterHour: 18, beforeHour: 23, tz: NY, title: 'I morgen: Chinatown, SoHo og DUMBO', body: "Brunch på Bubby's, så Chinatown og Little Italy. Katz's Delicatessen til frokost (bestil ved disken — mist IKKE din billet!). SoHo-shopping og afslut i DUMBO ved solnedgang" },
+  { id: 'eve-0425', date: '2026-04-25', afterHour: 18, beforeHour: 23, tz: NY, title: 'I morgen: Midtown og Empire State', body: 'Grand Central Terminal, Fifth Avenue, High Line og Chelsea Market. Empire State Building kl. 21:15 — magisk udsigt om aftenen. ~12 km' },
+  { id: 'eve-0426', date: '2026-04-26', afterHour: 18, beforeHour: 23, tz: NY, title: 'Sidste morgen i NYC', body: 'Pak i aften så morgenen er stressfri. Sunday brunch, sidste gåtur, så Penn Station til Newark. Vær i lufthavnen senest kl. 14:15. SAS SK910 kl. 17:15' },
+  // Morgen d. 22-27 apr: NY-tid
+  { id: 'morn-0422', date: '2026-04-22', afterHour: 5, beforeHour: 12, tz: NY, title: 'God rejse!', body: 'SAS SK909 lander i Newark ca. 14:55. Tag AirTrain + NJ Transit til Penn Station (~1 time). Check-in på Millennium Hotel og nyd Times Square i aftenlyset' },
+  { id: 'morn-0423', date: '2026-04-23', afterHour: 5, beforeHour: 12, tz: NY, title: 'God morgen, dag 2!', body: 'Subway N/R til DUMBO for Manhattan Bridge-udsigten. Gå over Brooklyn Bridge og besøg 9/11 Museum. I aften: Mets på Citi Field — tag 7-toget fra Times Sq' },
+  { id: 'morn-0424', date: '2026-04-24', afterHour: 5, beforeHour: 12, tz: NY, title: 'God morgen, dag 3!', body: 'Ess-a-Bagel til morgenmad, derefter Central Park. Prøv Roosevelt Island Tram — fantastisk udsigt! Husk Top of the Rock kl. 19' },
+  { id: 'morn-0425', date: '2026-04-25', afterHour: 5, beforeHour: 12, tz: NY, title: 'God morgen, dag 4!', body: "Bubby's i TriBeCa venter med brunch! Derefter Chinatown, Katz's og SoHo. Afslut i DUMBO med Brooklyn Bridge-udsigt" },
+  { id: 'morn-0426', date: '2026-04-26', afterHour: 5, beforeHour: 12, tz: NY, title: 'God morgen, dag 5!', body: 'Grand Central Terminal og Fifth Avenue i dag. Slut af med High Line og Chelsea Market. Empire State Building kl. 21:15 — tag kameraet med!' },
+  { id: 'morn-0427', date: '2026-04-27', afterHour: 5, beforeHour: 12, tz: NY, title: 'Sidste dag!', body: 'Nyd brunch på Sunday Morning. Pak de sidste ting og tag NJ Transit + AirTrain til Newark. SAS SK910 afgår kl. 17:15 — vær der senest kl. 14:15' },
 ];
 
 @Injectable({ providedIn: 'root' })
@@ -98,24 +103,27 @@ export class NotificationService {
     if (!('Notification' in window)) return;
 
     const now = new Date();
-    const nyFormatter = new Intl.DateTimeFormat('en-CA', {
-      timeZone: 'America/New_York',
-      year: 'numeric', month: '2-digit', day: '2-digit',
-    });
-    const nyHourFormatter = new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/New_York',
-      hour: 'numeric', hour12: false,
-    });
+    const tzCache = new Map<string, { date: string; hour: number }>();
+    const getLocalTime = (tz: string) => {
+      if (!tzCache.has(tz)) {
+        const date = new Intl.DateTimeFormat('en-CA', {
+          timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+        }).format(now);
+        const hour = parseInt(new Intl.DateTimeFormat('en-US', {
+          timeZone: tz, hour: 'numeric', hour12: false,
+        }).format(now), 10);
+        tzCache.set(tz, { date, hour });
+      }
+      return tzCache.get(tz)!;
+    };
 
-    const nyDate = nyFormatter.format(now);
-    const nyHour = parseInt(nyHourFormatter.format(now), 10);
-
-    const pending = NOTIFICATIONS.filter(n =>
-      n.date === nyDate &&
-      nyHour >= n.afterHour &&
-      nyHour < n.beforeHour &&
-      !localStorage.getItem(`nyc-notif-${n.id}`)
-    );
+    const pending = NOTIFICATIONS.filter(n => {
+      const { date, hour } = getLocalTime(n.tz);
+      return n.date === date &&
+        hour >= n.afterHour &&
+        hour < n.beforeHour &&
+        !localStorage.getItem(`nyc-notif-${n.id}`);
+    });
 
     if (pending.length === 0) {
       this.checkTeaseNotification();

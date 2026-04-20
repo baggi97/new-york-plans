@@ -4,43 +4,37 @@ import webpush from 'web-push';
 
 interface TripNotification {
   id: string;
-  date: string;
-  sendHour: number;
+  date: string;        // UTC date when the cron fires
+  sendUtcHour: number; // UTC hour to match
   title: string;
   body: string;
 }
 
 const NOTIFICATIONS: TripNotification[] = [
-  // Aften kl. 22 NY-tid
-  { id: 'eve-0421', date: '2026-04-21', sendHour: 22, title: 'Klar til New York?', body: 'Tjek pakkelisten og hav boardingpass klar. SAS SK909 afgår i morgen!' },
-  { id: 'eve-0422', date: '2026-04-22', sendHour: 22, title: 'I morgen: Brooklyn + 9/11', body: 'Husk GoCity-appen til 9/11 Museum' },
-  { id: 'eve-0423', date: '2026-04-23', sendHour: 22, title: 'I morgen: Central Park + Top of the Rock', body: 'Top of the Rock er booket kl. 19 — perfekt til solnedgang' },
-  { id: 'eve-0424', date: '2026-04-24', sendHour: 22, title: 'I morgen: Chinatown + SoHo + DUMBO', body: "Katz's: Bestil ved disken og mist IKKE din billet!" },
-  { id: 'eve-0425', date: '2026-04-25', sendHour: 22, title: 'I morgen: Midtown + Empire State', body: 'Empire State Building kl. 21:15 — magisk udsigt over byen om aftenen' },
-  { id: 'eve-0426', date: '2026-04-26', sendHour: 22, title: 'Sidste morgen i NYC', body: 'Pak aftenen før så morgenen er stressfri. Vær i lufthavnen senest kl. 14:15' },
-  // Morgen kl. 5 NY-tid
-  { id: 'morn-0422', date: '2026-04-22', sendHour: 5, title: 'God rejse!', body: 'SAS SK909 lander i Newark ca. 14:55' },
-  { id: 'morn-0423', date: '2026-04-23', sendHour: 5, title: 'God morgen, dag 2!', body: 'Start med subway til DUMBO og nyd Manhattan Bridge-udsigten' },
-  { id: 'morn-0424', date: '2026-04-24', sendHour: 5, title: 'God morgen, dag 3!', body: 'Ess-a-Bagel eller H&H Bagels til morgenmad, derefter Central Park' },
-  { id: 'morn-0425', date: '2026-04-25', sendHour: 5, title: 'God morgen, dag 4!', body: "Bubby's i TriBeCa venter med brunch!" },
-  { id: 'morn-0426', date: '2026-04-26', sendHour: 5, title: 'God morgen, dag 5!', body: 'Grand Central Terminal og Fifth Avenue i dag' },
-  { id: 'morn-0427', date: '2026-04-27', sendHour: 5, title: 'Sidste dag!', body: 'Nyd Sunday Morning brunch. Penn Station → Newark med NJ Transit + AirTrain' },
+  // Aften d. 20-21 apr: kl. 21:00 dansk tid (CEST) = 19:00 UTC
+  { id: 'eve-0420', date: '2026-04-20', sendUtcHour: 19, title: 'Om 2 dage!', body: 'I overmorgen letter SAS SK909 mod New York. Tjek pakkelisten og glæd dig — snart står I i Times Square!' },
+  { id: 'eve-0421', date: '2026-04-21', sendUtcHour: 19, title: 'Klar til New York?', body: 'Tjek pakkelisten og hav boardingpass klar. SAS SK909 afgår i morgen kl. 10:25. Husk pas, GoCity-app og komfortable sko!' },
+  // Aften d. 22-26 apr: kl. 22:00 NY-tid (EDT) = 02:00 UTC næste dag
+  { id: 'eve-0422', date: '2026-04-23', sendUtcHour: 2, title: 'I morgen: DUMBO, Brooklyn Bridge og 9/11', body: 'Start i DUMBO med udsigt til Manhattan Bridge. Gå over Brooklyn Bridge, besøg 9/11 Museum (husk GoCity) og afslut med Mets-kamp på Citi Field. ~14 km' },
+  { id: 'eve-0423', date: '2026-04-24', sendUtcHour: 2, title: 'I morgen: Central Park og Top of the Rock', body: 'Morgenmad på Ess-a-Bagel, derefter Central Park (Bethesda Fountain, Bow Bridge). Roosevelt Island Tram om eftermiddagen. Top of the Rock kl. 19 — perfekt til solnedgang' },
+  { id: 'eve-0424', date: '2026-04-25', sendUtcHour: 2, title: 'I morgen: Chinatown, SoHo og DUMBO', body: "Brunch på Bubby's, så Chinatown og Little Italy. Katz's Delicatessen til frokost (bestil ved disken — mist IKKE din billet!). SoHo-shopping og afslut i DUMBO ved solnedgang" },
+  { id: 'eve-0425', date: '2026-04-26', sendUtcHour: 2, title: 'I morgen: Midtown og Empire State', body: 'Grand Central Terminal, Fifth Avenue, High Line og Chelsea Market. Empire State Building kl. 21:15 — magisk udsigt om aftenen. ~12 km' },
+  { id: 'eve-0426', date: '2026-04-27', sendUtcHour: 2, title: 'Sidste morgen i NYC', body: 'Pak i aften så morgenen er stressfri. Sunday brunch, sidste gåtur, så Penn Station til Newark. Vær i lufthavnen senest kl. 14:15. SAS SK910 kl. 17:15' },
+  // Morgen: kl. 05:00 NY-tid (EDT) = 09:00 UTC
+  { id: 'morn-0422', date: '2026-04-22', sendUtcHour: 9, title: 'God rejse!', body: 'SAS SK909 lander i Newark ca. 14:55. Tag AirTrain + NJ Transit til Penn Station (~1 time). Check-in på Millennium Hotel og nyd Times Square i aftenlyset' },
+  { id: 'morn-0423', date: '2026-04-23', sendUtcHour: 9, title: 'God morgen, dag 2!', body: 'Subway N/R til DUMBO for Manhattan Bridge-udsigten. Gå over Brooklyn Bridge og besøg 9/11 Museum. I aften: Mets på Citi Field — tag 7-toget fra Times Sq' },
+  { id: 'morn-0424', date: '2026-04-24', sendUtcHour: 9, title: 'God morgen, dag 3!', body: 'Ess-a-Bagel til morgenmad, derefter Central Park. Prøv Roosevelt Island Tram — fantastisk udsigt! Husk Top of the Rock kl. 19' },
+  { id: 'morn-0425', date: '2026-04-25', sendUtcHour: 9, title: 'God morgen, dag 4!', body: "Bubby's i TriBeCa venter med brunch! Derefter Chinatown, Katz's og SoHo. Afslut i DUMBO med Brooklyn Bridge-udsigt" },
+  { id: 'morn-0426', date: '2026-04-26', sendUtcHour: 9, title: 'God morgen, dag 5!', body: 'Grand Central Terminal og Fifth Avenue i dag. Slut af med High Line og Chelsea Market. Empire State Building kl. 21:15 — tag kameraet med!' },
+  { id: 'morn-0427', date: '2026-04-27', sendUtcHour: 9, title: 'Sidste dag!', body: 'Nyd brunch på Sunday Morning. Pak de sidste ting og tag NJ Transit + AirTrain til Newark. SAS SK910 afgår kl. 17:15 — vær der senest kl. 14:15' },
 ];
 
-function getNYTime(): { date: string; hour: number } {
+function getUtcTime(): { date: string; hour: number } {
   const now = new Date();
-  const nyDate = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'America/New_York',
-    year: 'numeric', month: '2-digit', day: '2-digit',
-  }).format(now);
-  const nyHour = parseInt(
-    new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/New_York',
-      hour: 'numeric', hour12: false,
-    }).format(now),
-    10,
-  );
-  return { date: nyDate, hour: nyHour };
+  const y = now.getUTCFullYear();
+  const m = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(now.getUTCDate()).padStart(2, '0');
+  return { date: `${y}-${m}-${d}`, hour: now.getUTCHours() };
 }
 
 export default async () => {
@@ -52,20 +46,20 @@ export default async () => {
 
   webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
 
-  const { date, hour } = getNYTime();
+  const { date, hour } = getUtcTime();
   const sentStore = getStore('push-sent');
   const subsStore = getStore('push-subs');
 
   const pending: TripNotification[] = [];
   for (const n of NOTIFICATIONS) {
-    if (n.date === date && hour === n.sendHour) {
+    if (n.date === date && hour === n.sendUtcHour) {
       const alreadySent = await sentStore.get(n.id);
       if (!alreadySent) pending.push(n);
     }
   }
 
   if (pending.length === 0) {
-    console.log(`No notifications to send (NY: ${date} ${hour}:00)`);
+    console.log(`No notifications to send (UTC: ${date} ${hour}:00)`);
     return;
   }
 
@@ -102,5 +96,5 @@ export default async () => {
 };
 
 export const config: Config = {
-  schedule: '0 2,9 * * *',
+  schedule: '0 2,9,19 * * *',
 };
