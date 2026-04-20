@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v22';
+const CACHE_VERSION = 'nyc-v23';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -222,6 +222,7 @@ self.addEventListener('push', function (event) {
         body: data.body || '',
         icon: '/icons/icon-192x192.png',
         badge: '/icons/icon-192x192.png',
+        data: { url: data.url || '/' },
       })
     );
   } catch (e) {
@@ -231,12 +232,17 @@ self.addEventListener('push', function (event) {
 
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
+  var targetUrl = (event.notification.data && event.notification.data.url) || '/';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clientList) {
       for (var i = 0; i < clientList.length; i++) {
-        if (clientList[i].visibilityState === 'visible') return clientList[i].focus();
+        var client = clientList[i];
+        if (client.visibilityState === 'visible') {
+          client.navigate(targetUrl);
+          return client.focus();
+        }
       }
-      return clients.openWindow('/');
+      return clients.openWindow(targetUrl);
     })
   );
 });
