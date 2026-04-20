@@ -13,6 +13,7 @@ import { BackToTopComponent } from './components/back-to-top/back-to-top';
 import { NextUpWidgetComponent } from './components/next-up-widget/next-up-widget';
 import { CurrencyFabComponent } from './components/currency-fab/currency-fab';
 import { UpdateToastComponent } from './components/update-toast/update-toast';
+import { NotificationPromptComponent } from './components/notification-prompt/notification-prompt';
 import { DarkModeService } from './services/dark-mode.service';
 import { PhotoJournalService } from './services/photo-journal.service';
 import { NotificationService } from './services/notification.service';
@@ -37,6 +38,7 @@ import { TRIP_DATA } from './data/trip-data';
     NextUpWidgetComponent,
     CurrencyFabComponent,
     UpdateToastComponent,
+    NotificationPromptComponent,
   ],
   template: `
     <div id="top">
@@ -56,6 +58,7 @@ import { TRIP_DATA } from './data/trip-data';
       <app-next-up-widget />
       <app-currency-fab />
       <app-update-toast />
+      <app-notification-prompt />
     </div>
   `,
   styles: `

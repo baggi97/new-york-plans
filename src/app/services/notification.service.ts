@@ -53,27 +53,45 @@ export class NotificationService {
   init() {
     if (!('Notification' in window)) return;
     this.permissionGranted = Notification.permission === 'granted';
-    this.subscribeToPush();
+    if (this.permissionGranted) {
+      this.subscribeToPush();
+    }
     this.checkAndNotify();
+  }
+
+  needsPermission(): boolean {
+    if (!('Notification' in window)) return false;
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return false;
+    if (localStorage.getItem('nyc-notif-dismissed')) return false;
+    return Notification.permission === 'default';
+  }
+
+  async requestAndSubscribe(): Promise<boolean> {
+    if (!('Notification' in window)) return false;
+    const perm = await Notification.requestPermission();
+    this.permissionGranted = perm === 'granted';
+    if (this.permissionGranted) {
+      await this.subscribeToPush();
+      return true;
+    }
+    return false;
+  }
+
+  dismissPrompt() {
+    localStorage.setItem('nyc-notif-dismissed', '1');
   }
 
   private async subscribeToPush() {
     const vapidKey = environment.vapidPublicKey;
     if (!vapidKey || vapidKey === 'VAPID_PUBLIC_KEY_PLACEHOLDER') return;
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    if (Notification.permission !== 'granted') return;
 
     try {
       const reg = await navigator.serviceWorker.ready;
       let sub = await reg.pushManager.getSubscription();
 
       if (!sub) {
-        if (Notification.permission === 'denied') return;
-        if (Notification.permission === 'default') {
-          const perm = await Notification.requestPermission();
-          if (perm !== 'granted') return;
-          this.permissionGranted = true;
-        }
-
         const applicationServerKey = this.urlBase64ToUint8Array(vapidKey);
         sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
@@ -133,20 +151,12 @@ export class NotificationService {
 
     if (this.permissionGranted) {
       pending.forEach(n => this.show(n));
-      return;
     }
-
-    if (Notification.permission === 'denied') return;
-
-    Notification.requestPermission().then(perm => {
-      this.permissionGranted = perm === 'granted';
-      if (this.permissionGranted) {
-        pending.forEach(n => this.show(n));
-      }
-    });
   }
 
   private checkTeaseNotification() {
+    if (!this.permissionGranted) return;
+
     const now = new Date();
     if (now >= TEASE_DEADLINE) return;
 
@@ -154,20 +164,7 @@ export class NotificationService {
     if (last && now.getTime() - new Date(last).getTime() < TEASE_THROTTLE_MS) return;
 
     const msg = TEASE_MESSAGES[Math.floor(Math.random() * TEASE_MESSAGES.length)];
-
-    if (this.permissionGranted) {
-      this.showTease(msg);
-      return;
-    }
-
-    if (Notification.permission === 'denied') return;
-
-    Notification.requestPermission().then(perm => {
-      this.permissionGranted = perm === 'granted';
-      if (this.permissionGranted) {
-        this.showTease(msg);
-      }
-    });
+    this.showTease(msg);
   }
 
   private showTease(msg: { title: string; body: string }) {
