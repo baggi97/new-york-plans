@@ -39,6 +39,9 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
               <span class="day__weather-icon">{{ weatherService.icon(w.code) }}</span>
               <span class="day__weather-temp">{{ w.tempMax }}°</span>
               <span class="day__weather-label">{{ weatherService.label(w.code) }}</span>
+              @if (w.precipitation > 0) {
+                <span class="day__weather-rain">💧 {{ w.precipitation }} mm</span>
+              }
             </div>
           }
           @if (day.bookings.length > 0) {

@@ -17,6 +17,21 @@ import { WeatherService } from '../../services/weather.service';
               <span class="weather__icon">{{ weather.icon(w.code) }}</span>
               <span class="weather__date">{{ formatDate(w.date) }}</span>
               <span class="weather__temp">{{ w.tempMin }}° / {{ w.tempMax }}°</span>
+              <span class="weather__feels">Føles: {{ w.feelsMax }}°</span>
+              <hr class="weather__separator" />
+              <span class="weather__detail">
+                @if (w.precipProbability > 0) {
+                  💧 {{ w.precipProbability }}%
+                  @if (w.precipitation > 0) {
+                    ({{ w.precipitation }} mm)
+                  }
+                } @else {
+                  💧 0%
+                }
+              </span>
+              <span class="weather__detail">💨 {{ w.windSpeed }} m/s</span>
+              <span class="weather__detail">☀️ UV {{ w.uvIndex }} · {{ weather.uvLabel(w.uvIndex) }}</span>
+              <span class="weather__sun">🌅 {{ w.sunrise }} / {{ w.sunset }}</span>
             </div>
           }
         </div>

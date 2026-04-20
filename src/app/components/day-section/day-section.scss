@@ -116,6 +116,14 @@
     color: var(--color-text-muted);
   }
 
+  &__weather-rain {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--color-accent-navy);
+    opacity: 0.7;
+  }
+
   &__bookings {
     margin-top: var(--space-md);
     display: flex;
