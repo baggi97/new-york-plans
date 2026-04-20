@@ -21,7 +21,7 @@ export default async (req: Request, _context: Context) => {
   }
 
   try {
-    const { title, body, secret } = await req.json();
+    const { title, body, secret, url } = await req.json();
 
     if (!secret || secret !== PUSH_SECRET) {
       return new Response(JSON.stringify({ error: 'Forkert kode' }), {
@@ -49,7 +49,7 @@ export default async (req: Request, _context: Context) => {
       });
     }
 
-    const payload = JSON.stringify({ title, body });
+    const payload = JSON.stringify({ title, body, url: url || '/' });
     let sent = 0;
     let failed = 0;
 

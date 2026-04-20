@@ -69,7 +69,7 @@
       margin-bottom: 0.3rem;
     }
 
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 0.6rem 0.75rem;
       border: 1px solid var(--border);
@@ -82,7 +82,7 @@
       transition: border-color 0.2s;
     }
 
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
       outline: none;
       border-color: var(--navy);
     }
@@ -144,6 +144,21 @@
     <label for="body">Besked</label>
     <textarea id="body" placeholder="F.eks. Vi mødes ved hotellet kl. 18 i stedet"></textarea>
 
+    <label for="section">Åbn sektion</label>
+    <select id="section">
+      <option value="">Ingen (åbn forsiden)</option>
+      <option value="/#overblik">Overblik</option>
+      <option value="/#dag-1">Dag 1</option>
+      <option value="/#dag-2">Dag 2</option>
+      <option value="/#dag-3">Dag 3</option>
+      <option value="/#dag-4">Dag 4</option>
+      <option value="/#dag-5">Dag 5</option>
+      <option value="/#dag-6">Dag 6</option>
+      <option value="/#mad">Mad</option>
+      <option value="/#kort">Kort</option>
+      <option value="/#praktisk">Praktisk</option>
+    </select>
+
     <button id="send">Send notifikation</button>
     <div id="status"></div>
   </div>
@@ -156,6 +171,7 @@
       var secret = document.getElementById('secret').value.trim();
       var title = document.getElementById('title').value.trim();
       var body = document.getElementById('body').value.trim();
+      var url = document.getElementById('section').value || '/';
 
       if (!secret || !title || !body) {
         status.className = 'status status--err';
@@ -171,7 +187,7 @@
         var res = await fetch('/.netlify/functions/broadcast', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title: title, body: body, secret: secret }),
+          body: JSON.stringify({ title: title, body: body, secret: secret, url: url }),
         });
 
         var data = await res.json();
