@@ -16,6 +16,7 @@ import { UpdateToastComponent } from './components/update-toast/update-toast';
 import { DarkModeService } from './services/dark-mode.service';
 import { PhotoJournalService } from './services/photo-journal.service';
 import { NotificationService } from './services/notification.service';
+import { ItineraryCheckService } from './services/itinerary-check.service';
 import { TRIP_DATA } from './data/trip-data';
 
 @Component({
@@ -68,6 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private darkMode = inject(DarkModeService);
   private journal = inject(PhotoJournalService);
   private notifications = inject(NotificationService);
+  private itineraryCheck = inject(ItineraryCheckService);
   private visibilityHandler = () => {
     if (document.visibilityState === 'visible') {
       this.notifications.checkAndNotify();
@@ -78,6 +80,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.darkMode.init();
     this.journal.init();
     this.notifications.init();
+    this.itineraryCheck.init();
     document.addEventListener('visibilitychange', this.visibilityHandler);
   }
 
