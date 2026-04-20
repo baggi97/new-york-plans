@@ -37,10 +37,10 @@
     position: absolute;
     bottom: calc(100% + 0.75rem);
     left: 0;
-    width: 280px;
+    width: 300px;
     animation: fab-popup-in 0.25s ease;
 
-    @media (max-width: 360px) {
+    @media (max-width: 380px) {
       width: calc(100vw - 3rem);
     }
   }
