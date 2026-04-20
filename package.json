@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "env:inject": "node -e \"try{require('fs').readFileSync('.env','utf8').split('\\n').forEach(l=>{const[k,...v]=l.split('=');if(k&&v.length)process.env[k.trim()]=v.join('=').trim()});const f='src/environments/environment.ts';let c=require('fs').readFileSync(f,'utf8');c=c.replace('MAPBOX_TOKEN_PLACEHOLDER',process.env.MAPBOX_TOKEN||'');c=c.replace('VAPID_PUBLIC_KEY_PLACEHOLDER',process.env.VAPID_PUBLIC_KEY||'');require('fs').writeFileSync(f,c);console.log('Injected env tokens')}catch(e){console.log('No .env file, skipping')}\"",
+    "env:restore": "node -e \"const f='src/environments/environment.ts';const c='export const environment = {\\n  mapboxToken: \\'MAPBOX_TOKEN_PLACEHOLDER\\',\\n  vapidPublicKey: \\'VAPID_PUBLIC_KEY_PLACEHOLDER\\',\\n};\\n';require('fs').writeFileSync(f,c);console.log('Restored placeholders')\"",
+    "start": "npm run env:inject && ng serve; npm run env:restore",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

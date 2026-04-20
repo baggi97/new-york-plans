@@ -87,6 +87,7 @@ export class MapEmbedComponent implements AfterViewInit, OnDestroy {
       center: [-73.985, 40.748],
       zoom: 12,
       attributionControl: false,
+      interactive: false,
     });
 
     this.map.addControl(new this.mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
