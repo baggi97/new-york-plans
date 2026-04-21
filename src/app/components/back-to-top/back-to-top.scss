@@ -5,7 +5,7 @@
   z-index: 90;
 
   @media (max-width: 767px) {
-    bottom: calc(var(--tab-bar-height) + 40px + var(--safe-bottom) + 1rem);
+    display: none;
   }
   width: 44px;
   height: 44px;

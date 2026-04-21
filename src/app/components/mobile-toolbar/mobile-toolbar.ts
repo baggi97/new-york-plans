@@ -25,7 +25,7 @@ import { hapticTap } from '../../utils/haptics';
         <div class="mtoolbar__sheet" (click)="nearbyOpen.set(false)">
           <div class="mtoolbar__sheet-body" (click)="$event.stopPropagation()">
             <div class="mtoolbar__nearby-header">
-              <span class="mtoolbar__nearby-title">Taettest pa dig</span>
+              <span class="mtoolbar__nearby-title">Tættest på dig</span>
             </div>
             @if (geo.error()) {
               <p class="mtoolbar__nearby-msg">{{ geo.error() }}</p>
@@ -63,7 +63,7 @@ import { hapticTap } from '../../utils/haptics';
 
         <button class="mtoolbar__pill" [class.mtoolbar__pill--active]="nearbyOpen()" (click)="toggleNearby()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-          Naerme
+          Tæt på
         </button>
       </div>
     </div>
