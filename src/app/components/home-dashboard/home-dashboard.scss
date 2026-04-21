@@ -37,8 +37,7 @@
   &__header,
   &__cards,
   &__main,
-  &__bookings,
-  &__quick {
+  &__bookings {
     position: relative;
     z-index: 2;
   }
@@ -371,6 +370,7 @@
     align-items: flex-start;
     gap: 0.15rem;
     padding: 0.5rem 0.6rem;
+    min-height: 72px;
     background: rgba(0, 0, 0, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-md);
@@ -386,6 +386,13 @@
     }
   }
 
+  &__day-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+  }
+
   &__day-date {
     font-family: var(--font-sans);
     font-size: 0.55rem;
@@ -398,9 +405,9 @@
 
   &__day-num {
     font-family: var(--font-serif);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.5);
     line-height: 1;
   }
 
@@ -410,12 +417,15 @@
     color: var(--color-accent-gold);
     font-weight: 500;
     line-height: 1.2;
+    flex: 1;
+    text-align: left;
+    margin: 0.25rem 0;
   }
 
   &__day-tags {
     display: flex;
     gap: 0.35rem;
-    margin-top: 0.1rem;
+    margin-top: auto;
   }
 
   &__day-tag {
@@ -485,48 +495,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  // Quick access
-  &__quick {
-    flex: 0 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-    padding: 0.5rem var(--space-md) 0.75rem;
-  }
-
-  &__quick-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.65rem 0.25rem;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    transition: transform 0.12s ease, background 0.12s ease;
-
-    &:active {
-      transform: scale(0.96);
-      background: rgba(0, 0, 0, 0.55);
-    }
-
-    svg {
-      opacity: 0.9;
-    }
-
-    span {
-      font-family: var(--font-sans);
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-  }
 }
 
 @keyframes booking-pulse {

@@ -60,7 +60,6 @@ import { TRIP_DATA } from './data/trip-data';
         @switch (activeTab()) {
           @case ('hjem') {
             <app-home-dashboard
-              (tabChange)="onTabChange($event)"
               (dayNavigate)="onNavigateDay($event)" />
           }
           @case ('dage') {

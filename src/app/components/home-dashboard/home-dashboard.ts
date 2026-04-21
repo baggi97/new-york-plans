@@ -6,8 +6,6 @@ import { TRIP_DATA } from '../../data/trip-data';
 import { Booking } from '../../data/trip.interfaces';
 import { hapticTap } from '../../utils/haptics';
 
-type QuickTab = 'dage' | 'kort' | 'mad';
-
 @Component({
   selector: 'app-home-dashboard',
   standalone: true,
@@ -96,8 +94,10 @@ type QuickTab = 'dage' | 'kort' | 'mad';
           <div class="dash__days">
             @for (day of trip.days; track day.id) {
               <button class="dash__day-pill" (click)="goToDay(day.id)">
-                <span class="dash__day-date">{{ day.date }}</span>
-                <span class="dash__day-num">Dag {{ day.id }}</span>
+                <div class="dash__day-top">
+                  <span class="dash__day-date">{{ day.date }}</span>
+                  <span class="dash__day-num">Dag {{ day.id }}</span>
+                </div>
                 <span class="dash__day-theme">{{ day.theme }}</span>
                 <div class="dash__day-tags">
                   @if (dayWeather(day.isoDate); as w) {
@@ -128,39 +128,11 @@ type QuickTab = 'dage' | 'kort' | 'mad';
         </div>
       }
 
-      <!-- Quick access -->
-      <div class="dash__quick">
-        <button class="dash__quick-btn" (click)="navigate('dage')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="4" width="18" height="18" rx="2"/>
-            <line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8" y1="2" x2="8" y2="6"/>
-            <line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-          <span>Program</span>
-        </button>
-        <button class="dash__quick-btn" (click)="navigate('kort')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          <span>Kort</span>
-        </button>
-        <button class="dash__quick-btn" (click)="navigate('mad')">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 002-2V2"/>
-            <path d="M7 2v20"/>
-            <path d="M21 15V2a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>
-          </svg>
-          <span>Mad</span>
-        </button>
-      </div>
     </div>
   `,
   styleUrl: './home-dashboard.scss',
 })
 export class HomeDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
-  tabChange = output<QuickTab>();
   dayNavigate = output<number>();
 
   tripStatus = inject(TripStatusService);
@@ -276,11 +248,6 @@ export class HomeDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   ngOnDestroy() {
     if (this.bookingInterval) clearInterval(this.bookingInterval);
     if (this.imageInterval) clearInterval(this.imageInterval);
-  }
-
-  navigate(tab: QuickTab) {
-    hapticTap();
-    this.tabChange.emit(tab);
   }
 
   goToDay(dayId: number) {
