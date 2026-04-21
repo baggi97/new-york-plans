@@ -2,6 +2,11 @@
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
+
+  @media (max-width: 767px) {
+    margin-top: calc(-1 * var(--nav-height));
+    padding-top: var(--nav-height);
+  }
   display: flex;
   align-items: center;
   justify-content: center;

@@ -28,9 +28,11 @@ import { hapticTap } from '../../utils/haptics';
           }
         </div>
         <div class="nav__tools">
-          <span class="nav__timezone" title="New York tid">
+          <span class="nav__timezone" title="New York / Danmark">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            {{ tripStatus.nycTime() }}
+            <span class="nav__tz-label">NYC</span> {{ tripStatus.nycTime() }}
+            <span class="nav__tz-sep">·</span>
+            <span class="nav__tz-label">DK</span> {{ tripStatus.dkTime() }}
           </span>
           <button class="nav__darkmode" (click)="darkMode.toggle()" [attr.aria-label]="darkMode.isDark() ? 'Lys tilstand' : 'Mørk tilstand'">
             @if (darkMode.isDark()) {

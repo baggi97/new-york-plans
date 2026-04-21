@@ -18,6 +18,7 @@ import { NotificationPromptComponent } from './components/notification-prompt/no
 import { NearbyPanelComponent } from './components/nearby-panel/nearby-panel';
 import { BottomTabsComponent, TabId } from './components/bottom-tabs/bottom-tabs';
 import { MobileToolbarComponent } from './components/mobile-toolbar/mobile-toolbar';
+import { HomeDashboardComponent } from './components/home-dashboard/home-dashboard';
 import { DarkModeService } from './services/dark-mode.service';
 import { PhotoJournalService } from './services/photo-journal.service';
 import { NotificationService } from './services/notification.service';
@@ -48,6 +49,7 @@ import { TRIP_DATA } from './data/trip-data';
     NearbyPanelComponent,
     BottomTabsComponent,
     MobileToolbarComponent,
+    HomeDashboardComponent,
   ],
   template: `
     <div id="top">
@@ -57,10 +59,9 @@ import { TRIP_DATA } from './data/trip-data';
         <!-- Mobile: view-based layout -->
         @switch (activeTab()) {
           @case ('hjem') {
-            <div class="view-enter">
-              <app-hero-section />
-              <app-trip-summary />
-            </div>
+            <app-home-dashboard
+              (tabChange)="onTabChange($event)"
+              (dayNavigate)="onNavigateDay($event)" />
           }
           @case ('dage') {
             <div class="view-enter">

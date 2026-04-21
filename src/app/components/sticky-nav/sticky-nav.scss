@@ -7,6 +7,14 @@
   transform: translateY(-100%);
   transition: transform 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease;
 
+  @media (max-width: 767px) {
+    transform: translateY(0);
+    background-color: var(--color-bg-nav, rgba(250, 248, 245, 0.95));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 1px 8px rgba(44, 40, 37, 0.06);
+  }
+
   &__progress {
     position: absolute;
     top: 0;
@@ -121,6 +129,7 @@
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
+    margin-left: auto;
   }
 
   &__timezone {
@@ -131,6 +140,18 @@
     display: inline-flex;
     align-items: center;
     gap: 0.3em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__tz-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    opacity: 0.7;
+    letter-spacing: 0.03em;
+  }
+
+  &__tz-sep {
+    opacity: 0.4;
   }
 
   &__darkmode {

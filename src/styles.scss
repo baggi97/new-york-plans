@@ -84,6 +84,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 
   @media (max-width: 767px) {
+    padding-top: var(--nav-height);
     padding-bottom: calc(var(--tab-bar-height) + 40px + var(--safe-bottom));
   }
 }
