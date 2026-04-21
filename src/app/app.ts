@@ -17,6 +17,7 @@ import { UpdateToastComponent } from './components/update-toast/update-toast';
 import { NotificationPromptComponent } from './components/notification-prompt/notification-prompt';
 import { NearbyPanelComponent } from './components/nearby-panel/nearby-panel';
 import { BottomTabsComponent, TabId } from './components/bottom-tabs/bottom-tabs';
+import { MobileToolbarComponent } from './components/mobile-toolbar/mobile-toolbar';
 import { DarkModeService } from './services/dark-mode.service';
 import { PhotoJournalService } from './services/photo-journal.service';
 import { NotificationService } from './services/notification.service';
@@ -46,6 +47,7 @@ import { TRIP_DATA } from './data/trip-data';
     NotificationPromptComponent,
     NearbyPanelComponent,
     BottomTabsComponent,
+    MobileToolbarComponent,
   ],
   template: `
     <div id="top">
@@ -82,6 +84,7 @@ import { TRIP_DATA } from './data/trip-data';
             </div>
           }
         }
+        <app-mobile-toolbar (navigateDay)="onNavigateDay($event)" />
         <app-bottom-tabs (tabChange)="onTabChange($event)" />
       } @else {
         <!-- Desktop: full scroll layout -->
@@ -135,6 +138,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onTabChange(tab: TabId) {
     this.activeTab.set(tab);
+  }
+
+  onNavigateDay(_dayId: number) {
+    this.activeTab.set('dage');
   }
 
   ngOnInit() {
