@@ -81,8 +81,8 @@
 
   &__dates {
     font-family: var(--font-sans);
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
     letter-spacing: 0.03em;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
   }
@@ -134,8 +134,8 @@
 
   &__card-label {
     font-family: var(--font-sans);
-    font-size: 0.58rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.75);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     line-height: 1.2;
@@ -172,9 +172,9 @@
 
   &__weather-low {
     font-family: var(--font-sans);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.65);
     line-height: 1;
   }
 
@@ -191,17 +191,17 @@
 
   &__weather-desc {
     font-family: var(--font-sans);
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
     line-height: 1.1;
     text-align: center;
   }
 
   &__weather-stat {
     font-family: var(--font-sans);
-    font-size: 0.52rem;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.58rem;
+    color: rgba(255, 255, 255, 0.7);
     line-height: 1;
   }
 
@@ -229,19 +229,19 @@
     }
 
     &--secondary .dash__clock-label {
-      color: rgba(255, 255, 255, 0.45);
+      color: rgba(255, 255, 255, 0.6);
     }
 
     &--secondary .dash__clock-time {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.8);
     }
   }
 
   &__clock-label {
     font-family: var(--font-sans);
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -337,21 +337,21 @@
 
   &__progress-theme {
     font-family: var(--font-sans);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--color-accent-gold);
     font-weight: 500;
   }
 
   &__progress-detail {
     font-family: var(--font-sans);
-    font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.75);
   }
 
   &__progress-next {
     font-family: var(--font-sans);
-    font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.9);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -388,9 +388,9 @@
 
   &__day-date {
     font-family: var(--font-sans);
-    font-size: 0.5rem;
+    font-size: 0.55rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     line-height: 1;
@@ -398,7 +398,7 @@
 
   &__day-num {
     font-family: var(--font-serif);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #fff;
     line-height: 1;
@@ -406,7 +406,7 @@
 
   &__day-theme {
     font-family: var(--font-sans);
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     color: var(--color-accent-gold);
     font-weight: 500;
     line-height: 1.2;
@@ -420,13 +420,13 @@
 
   &__day-tag {
     font-family: var(--font-sans);
-    font-size: 0.5rem;
-    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.7);
     line-height: 1;
     white-space: nowrap;
 
     &--booking {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.85);
     }
   }
 
@@ -438,11 +438,11 @@
 
   &__section-label {
     font-family: var(--font-sans);
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.75);
     margin-bottom: 0.35rem;
     display: block;
   }
@@ -521,7 +521,7 @@
 
     span {
       font-family: var(--font-sans);
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
