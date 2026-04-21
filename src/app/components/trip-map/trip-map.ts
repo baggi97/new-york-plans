@@ -11,6 +11,22 @@ import { ConnectivityService } from '../../services/connectivity.service';
 import { DarkModeService } from '../../services/dark-mode.service';
 import { environment } from '../../../environments/environment';
 
+interface RouteSegment {
+  mode: 'WALK' | 'TRANSIT';
+  geojson: any;
+  color?: string;
+  line?: string;
+}
+
+interface RouteOption {
+  mode: 'walk' | 'transit';
+  label: string;
+  durationMin: number;
+  geometry: any;
+  transitSteps?: { line: string; color: string; departure: string; arrival: string; stops: number }[];
+  segments?: RouteSegment[];
+}
+
 @Component({
   selector: 'app-trip-map',
   standalone: true,
@@ -41,7 +57,21 @@ import { environment } from '../../../environments/environment';
           }
           @if (routeInfo()) {
             <div class="trip-map__route-bar">
-              <span>{{ routeInfo() }}</span>
+              @if (hasWalkRoute() && hasTransitRoute()) {
+                <div class="trip-map__route-toggle">
+                  <button class="trip-map__mode-btn"
+                    [class.trip-map__mode-btn--active]="activeMode() === 'walk'"
+                    (click)="showMode('walk')" title="Gang">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1.5"/><path d="M9 20l3-8 3 8M9.5 14h5"/></svg>
+                  </button>
+                  <button class="trip-map__mode-btn"
+                    [class.trip-map__mode-btn--active]="activeMode() === 'transit'"
+                    (click)="showMode('transit')" title="Metro">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="14" rx="2"/><path d="M4 11h16"/><circle cx="8.5" cy="20" r="1"/><circle cx="15.5" cy="20" r="1"/><path d="M7.5 17l-1 3M16.5 17l1 3"/></svg>
+                  </button>
+                </div>
+              }
+              <span class="trip-map__route-label">{{ routeInfo() }}</span>
               <button class="trip-map__route-close" (click)="clearRoute()">✕ Luk</button>
             </div>
           }
@@ -75,12 +105,20 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
   activeDay = 1;
   showOffline = signal(!navigator.onLine);
   routeInfo = signal<string | null>(null);
+  activeMode = signal<'walk' | 'transit'>('walk');
+  hasWalkRoute = signal(false);
+  hasTransitRoute = signal(false);
 
   private mapboxgl: any;
   private map: any;
   private markers: any[] = [];
   private resizeObserver?: ResizeObserver;
   private userMarker: any;
+  private walkRoute: RouteOption | null = null;
+  private transitRoute: RouteOption | null = null;
+  private routeFrom: { lat: number; lng: number } | null = null;
+  private routeMarker: MapMarker | null = null;
+  private activeSegmentCount = 0;
 
   constructor() {
     this.connectivity.onReconnect(() => {
@@ -188,74 +226,167 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
     const from = this.geo.position();
     if (!from || !this.map) return;
 
-    try {
-      const url = `https://api.mapbox.com/directions/v5/mapbox/walking/${from.lng},${from.lat};${marker.lng},${marker.lat}?geometries=geojson&access_token=${environment.mapboxToken}`;
-      const res = await fetch(url);
+    this.clearRoute();
+    this.routeFrom = from;
+    this.routeMarker = marker;
+    this.routeInfo.set(`${marker.label} — henter ruter…`);
 
-      this.clearRoute();
+    const [walkResult, transitResult] = await Promise.allSettled([
+      this.fetchWalkingRoute(from, marker),
+      this.fetchTransitRoute(from, marker),
+    ]);
 
-      if (!res.ok) {
-        const distM = Math.round(
-          haversineMeters(from, { lat: marker.lat, lng: marker.lng }),
-        );
-        this.routeInfo.set(`${marker.label} — ~${(distM / 1000).toFixed(1)} km (fugleflugt)`);
-        this.showStraightLine(from, marker);
-        return;
-      }
+    this.walkRoute = walkResult.status === 'fulfilled' ? walkResult.value : null;
+    this.transitRoute = transitResult.status === 'fulfilled' ? transitResult.value : null;
+    this.hasWalkRoute.set(!!this.walkRoute);
+    this.hasTransitRoute.set(!!this.transitRoute);
 
-      const data = await res.json();
-      const route = data.routes?.[0];
-      if (!route) return;
+    if (!this.walkRoute && !this.transitRoute) {
+      const distM = Math.round(haversineMeters(from, { lat: marker.lat, lng: marker.lng }));
+      this.routeInfo.set(`${marker.label} — ~${(distM / 1000).toFixed(1)} km (fugleflugt)`);
+      this.showStraightLine(from, marker);
+      return;
+    }
 
-      const distKm = (route.distance / 1000).toFixed(1);
-      const durMin = Math.round(route.duration / 60);
-      this.routeInfo.set(`${marker.label} — ${distKm} km · ~${durMin} min`);
+    const best = this.transitRoute && this.walkRoute
+      ? (this.transitRoute.durationMin < this.walkRoute.durationMin ? 'transit' : 'walk')
+      : this.transitRoute ? 'transit' : 'walk';
 
-      if (this.map.getSource('route')) {
-        (this.map.getSource('route') as any).setData(route.geometry);
-      } else {
-        this.map.addSource('route', { type: 'geojson', data: route.geometry });
-        this.map.addLayer({
-          id: 'route',
-          type: 'line',
-          source: 'route',
-          layout: { 'line-join': 'round', 'line-cap': 'round' },
-          paint: { 'line-color': '#3d4f6f', 'line-width': 4, 'line-opacity': 0.7 },
-        });
-      }
+    this.showMode(best);
+  }
 
-      this.userMarker?.remove();
-      this.userMarker = new this.mapboxgl.Marker({ color: '#e8635a', scale: 0.6 })
-        .setLngLat([from.lng, from.lat])
-        .addTo(this.map);
+  showMode(mode: 'walk' | 'transit') {
+    const route = mode === 'transit' ? this.transitRoute : this.walkRoute;
+    if (!route) return;
+    this.activeMode.set(mode);
+    this.drawRoute(route);
+  }
 
-      const bounds = new this.mapboxgl.LngLatBounds();
-      bounds.extend([from.lng, from.lat]);
-      bounds.extend([marker.lng, marker.lat]);
-      this.map.fitBounds(bounds, { padding: 60, maxZoom: 16, duration: 600 });
-    } catch { /* offline or API error */ }
+  private drawRoute(route: RouteOption) {
+    const from = this.routeFrom;
+    const marker = this.routeMarker;
+    if (!from || !marker || !this.map) return;
+
+    this.removeRouteLayers();
+    this.routeInfo.set(route.label);
+
+    if (route.mode === 'transit' && route.segments?.length) {
+      this.drawSegmentedRoute(route.segments);
+    } else {
+      this.drawSingleRoute(route);
+    }
+
+    this.userMarker?.remove();
+    this.userMarker = new this.mapboxgl.Marker({ color: '#e8635a', scale: 0.6 })
+      .setLngLat([from.lng, from.lat])
+      .addTo(this.map);
+
+    const bounds = new this.mapboxgl.LngLatBounds();
+    bounds.extend([from.lng, from.lat]);
+    bounds.extend([marker.lng, marker.lat]);
+    this.map.fitBounds(bounds, { padding: 60, maxZoom: 16, duration: 600 });
+  }
+
+  private drawSingleRoute(route: RouteOption) {
+    this.map.addSource('route', { type: 'geojson', data: route.geometry });
+    this.map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: 'route',
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': '#3d4f6f', 'line-width': 4, 'line-opacity': 0.75 },
+    });
+  }
+
+  private drawSegmentedRoute(segments: RouteSegment[]) {
+    this.activeSegmentCount = segments.length;
+    for (let i = 0; i < segments.length; i++) {
+      const seg = segments[i];
+      const srcId = `route-seg-${i}`;
+      const isTransit = seg.mode === 'TRANSIT';
+
+      this.map.addSource(srcId, { type: 'geojson', data: seg.geojson });
+      this.map.addLayer({
+        id: srcId,
+        type: 'line',
+        source: srcId,
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: {
+          'line-color': isTransit ? (seg.color || '#808080') : '#999',
+          'line-width': isTransit ? 5 : 3,
+          'line-opacity': isTransit ? 0.85 : 0.6,
+          'line-dasharray': isTransit ? [1] : [2, 2],
+        },
+      });
+    }
+  }
+
+  private removeRouteLayers() {
+    if (!this.map) return;
+    if (this.map.getLayer('route')) this.map.removeLayer('route');
+    if (this.map.getSource('route')) this.map.removeSource('route');
+    for (let i = 0; i < this.activeSegmentCount; i++) {
+      const id = `route-seg-${i}`;
+      if (this.map.getLayer(id)) this.map.removeLayer(id);
+      if (this.map.getSource(id)) this.map.removeSource(id);
+    }
+    this.activeSegmentCount = 0;
+  }
+
+  private async fetchWalkingRoute(from: { lat: number; lng: number }, marker: MapMarker): Promise<RouteOption | null> {
+    const url = `https://api.mapbox.com/directions/v5/mapbox/walking/${from.lng},${from.lat};${marker.lng},${marker.lat}?geometries=geojson&access_token=${environment.mapboxToken}`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const route = data.routes?.[0];
+    if (!route) return null;
+    const distKm = (route.distance / 1000).toFixed(1);
+    const durMin = Math.round(route.duration / 60);
+    return {
+      mode: 'walk',
+      label: `${marker.label} — 🚶 ${distKm} km · ~${durMin} min`,
+      durationMin: durMin,
+      geometry: route.geometry,
+    };
+  }
+
+  private async fetchTransitRoute(from: { lat: number; lng: number }, marker: MapMarker): Promise<RouteOption | null> {
+    const url = `/.netlify/functions/directions?olat=${from.lat}&olng=${from.lng}&dlat=${marker.lat}&dlng=${marker.lng}`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.geojson || data.durationSec <= 0) return null;
+    const durMin = Math.round(data.durationSec / 60);
+    const lines = (data.transitSteps || []).map((s: any) => s.line).filter(Boolean).join(' → ');
+    const transitLabel = lines ? `🚇 ${lines}` : '🚇 Transit';
+    return {
+      mode: 'transit',
+      label: `${marker.label} — ${transitLabel} · ~${durMin} min`,
+      durationMin: durMin,
+      geometry: data.geojson,
+      transitSteps: data.transitSteps,
+      segments: data.segments,
+    };
   }
 
   private showStraightLine(from: { lat: number; lng: number }, marker: MapMarker) {
     if (!this.map || !this.mapboxgl) return;
+
+    this.removeRouteLayers();
 
     const geojson = {
       type: 'LineString' as const,
       coordinates: [[from.lng, from.lat], [marker.lng, marker.lat]],
     };
 
-    if (this.map.getSource('route')) {
-      (this.map.getSource('route') as any).setData(geojson);
-    } else {
-      this.map.addSource('route', { type: 'geojson', data: geojson });
-      this.map.addLayer({
-        id: 'route',
-        type: 'line',
-        source: 'route',
-        layout: { 'line-join': 'round', 'line-cap': 'round' },
-        paint: { 'line-color': '#3d4f6f', 'line-width': 3, 'line-opacity': 0.5, 'line-dasharray': [2, 2] },
-      });
-    }
+    this.map.addSource('route', { type: 'geojson', data: geojson });
+    this.map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: 'route',
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': '#3d4f6f', 'line-width': 3, 'line-opacity': 0.5, 'line-dasharray': [2, 2] },
+    });
 
     this.userMarker?.remove();
     this.userMarker = new this.mapboxgl.Marker({ color: '#e8635a', scale: 0.6 })
@@ -270,8 +401,13 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
 
   clearRoute() {
     this.routeInfo.set(null);
-    if (this.map?.getLayer('route')) this.map.removeLayer('route');
-    if (this.map?.getSource('route')) this.map.removeSource('route');
+    this.walkRoute = null;
+    this.transitRoute = null;
+    this.routeFrom = null;
+    this.routeMarker = null;
+    this.hasWalkRoute.set(false);
+    this.hasTransitRoute.set(false);
+    this.removeRouteLayers();
     this.userMarker?.remove();
     this.userMarker = null;
   }
