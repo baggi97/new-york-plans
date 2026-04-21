@@ -3,6 +3,10 @@
   bottom: 9rem;
   right: 1.5rem;
   z-index: 89;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
