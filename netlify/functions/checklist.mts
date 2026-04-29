@@ -33,20 +33,21 @@ export default async (req: Request, _context: Context) => {
   if (req.method === 'GET') {
     let raw = await store.get(blobKey);
 
-    if (blobKey === 'checklist-new-york-2026') {
+    const migrated = await store.get('__checklist-migration-done');
+    if (!migrated) {
       const legacyRaw = await store.get('checklist');
       if (legacyRaw) {
         const legacy = parseStored(legacyRaw);
-        const current = parseStored(raw);
+        const current = parseStored(await store.get('checklist-new-york-2026'));
         const mergedChecked = [...new Set([...current.checked, ...legacy.checked])];
         const mergedSkipped = [...new Set([...current.skipped, ...legacy.skipped])];
-        if (mergedChecked.length > current.checked.length || mergedSkipped.length > current.skipped.length) {
-          const merged = JSON.stringify({ checked: mergedChecked, skipped: mergedSkipped });
-          await store.set(blobKey, merged);
-          raw = merged;
-        }
+        const merged = JSON.stringify({ checked: mergedChecked, skipped: mergedSkipped });
+        await store.set('checklist-new-york-2026', merged);
         await store.delete('checklist');
       }
+      await store.delete('checklist-barcelona-2026');
+      await store.set('__checklist-migration-done', 'true');
+      raw = await store.get(blobKey);
     }
 
     const data = parseStored(raw);

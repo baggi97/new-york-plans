@@ -124,30 +124,24 @@ export class ItineraryCheckService {
       if (!res.ok) return;
       const data = await res.json();
 
-      // Backward compat: server may return old plain array format
       const serverChecked = new Set<string>(Array.isArray(data) ? data : (data.checked ?? []));
       const serverSkipped = new Set<string>(Array.isArray(data) ? [] : (data.skipped ?? []));
 
       const localChecked = this.checked();
       const localSkipped = this.skipped();
 
-      const mergedChecked = new Set([...localChecked, ...serverChecked]);
-      const mergedSkipped = new Set([...localSkipped, ...serverSkipped]);
+      const checkedChanged = serverChecked.size !== localChecked.size ||
+        [...serverChecked].some(k => !localChecked.has(k));
+      const skippedChanged = serverSkipped.size !== localSkipped.size ||
+        [...serverSkipped].some(k => !localSkipped.has(k));
 
-      let changed = false;
-      if (mergedChecked.size !== localChecked.size) {
-        this.checked.set(mergedChecked);
-        this.saveSet(this.lsChecked, mergedChecked);
-        changed = true;
+      if (checkedChanged) {
+        this.checked.set(serverChecked);
+        this.saveSet(this.lsChecked, serverChecked);
       }
-      if (mergedSkipped.size !== localSkipped.size) {
-        this.skipped.set(mergedSkipped);
-        this.saveSet(this.lsSkipped, mergedSkipped);
-        changed = true;
-      }
-
-      if (changed) {
-        this.pushToServer();
+      if (skippedChanged) {
+        this.skipped.set(serverSkipped);
+        this.saveSet(this.lsSkipped, serverSkipped);
       }
     } catch { /* offline or server error -- use local cache */ }
   }
