@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { TripService } from './trip.service';
 import { ConnectivityService } from './connectivity.service';
 
@@ -23,6 +23,7 @@ export class WeatherService {
   private tripService = inject(TripService);
   private weatherData = signal<DayWeather[]>([]);
   private hasFetched = false;
+  private fetchedForTrip = '';
 
   private get tripDates() { return this.tripService.days().map(d => d.isoDate); }
 
@@ -38,6 +39,12 @@ export class WeatherService {
 
   constructor() {
     this.connectivity.onReconnect(() => this.reload());
+    effect(() => {
+      const id = this.tripService.tripId();
+      if (id !== this.fetchedForTrip && this.hasFetched) {
+        this.reload();
+      }
+    });
   }
 
   async load() {
@@ -52,6 +59,8 @@ export class WeatherService {
 
   private async fetchData() {
     this.hasFetched = true;
+    this.fetchedForTrip = this.tripService.tripId();
+    this.weatherData.set([]);
     try {
       const dest = this.tripService.destination();
       const res = await fetch(
