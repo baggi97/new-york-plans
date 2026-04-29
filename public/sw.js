@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'travel-1.1.3';
+const CACHE_VERSION = 'travel-1.1.4';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;

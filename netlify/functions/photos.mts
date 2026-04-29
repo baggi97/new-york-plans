@@ -39,19 +39,23 @@ export default async (req: Request, _context: Context) => {
   if (req.method === 'GET') {
     let ids = await getIndex(store, indexKey);
 
-    if (indexKey === '__index-new-york-2026') {
+    // One-time migration: move legacy __index to NYC, clear Barcelona pollution
+    const migrated = await store.get('__migration-done');
+    if (!migrated) {
       const legacyIds = await getIndex(store, '__index');
       if (legacyIds.length > 0) {
-        const existing = new Set(ids);
+        const nycIds = await getIndex(store, '__index-new-york-2026');
+        const existing = new Set(nycIds);
         const missing = legacyIds.filter(id => !existing.has(id));
         if (missing.length > 0) {
-          ids = [...ids, ...missing];
-          await setIndex(store, indexKey, ids);
+          await setIndex(store, '__index-new-york-2026', [...nycIds, ...missing]);
         }
         await setIndex(store, '__index', []);
-        // Clean up Barcelona index that was incorrectly polluted by earlier migration
-        await setIndex(store, '__index-barcelona-2026', []);
       }
+      await setIndex(store, '__index-barcelona-2026', []);
+      await store.set('__migration-done', 'true');
+      // Re-read after migration
+      ids = await getIndex(store, indexKey);
     }
 
     const entries: JournalEntry[] = [];
