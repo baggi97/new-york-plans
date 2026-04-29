@@ -1,6 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { TripData, TripDay, TripDestination, PracticalInfo } from '../data/trip.interfaces';
 import { TRIP_DATA } from '../data/trip-data';
+import { BARCELONA_DATA } from '../data/barcelona-data';
 
 export interface TripMeta {
   id: string;
@@ -39,16 +40,16 @@ export class TripService {
       const res = await fetch(API);
       if (!res.ok) return;
       const list: TripMeta[] = await res.json();
-      this.trips.set(list);
-      if (list.length === 0) {
-        await this.saveTrip(TRIP_DATA);
-        this.trips.set([{
-          id: TRIP_DATA.id,
-          title: TRIP_DATA.title,
-          city: TRIP_DATA.destination.city,
-          dates: TRIP_DATA.dates,
-        }]);
+      const seedTrips = [TRIP_DATA, BARCELONA_DATA];
+      const existingIds = new Set(list.map(t => t.id));
+      const missing = seedTrips.filter(t => !existingIds.has(t.id));
+      if (missing.length > 0) {
+        await Promise.all(missing.map(t => this.saveTrip(t)));
+        for (const t of missing) {
+          list.push({ id: t.id, title: t.title, city: t.destination.city, dates: t.dates });
+        }
       }
+      this.trips.set(list);
     } catch { /* offline -- use default */ }
   }
 
