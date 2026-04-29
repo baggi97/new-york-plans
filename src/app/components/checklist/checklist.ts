@@ -1,4 +1,4 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, signal, computed, inject, effect } from '@angular/core';
 import { TripService } from '../../services/trip.service';
 import { ChecklistItem } from '../../data/trip.interfaces';
 import { hapticTap } from '../../utils/haptics';
@@ -44,7 +44,18 @@ export class ChecklistComponent {
   get categories() { return [...new Set(this.items.map(i => i.category))]; }
   private get lsKey() { return this.tripService.tripId() + '-checklist'; }
 
-  private checked = signal<Set<string>>(this.loadChecked());
+  private checked = signal<Set<string>>(new Set());
+  private loadedForTrip = '';
+
+  constructor() {
+    effect(() => {
+      const id = this.tripService.tripId();
+      if (id !== this.loadedForTrip) {
+        this.loadedForTrip = id;
+        this.checked.set(this.loadChecked());
+      }
+    });
+  }
 
   checkedCount = computed(() => this.checked().size);
   progressPercent = computed(() => (this.checked().size / this.items.length) * 100);
