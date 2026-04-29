@@ -6,7 +6,6 @@ import { MapEmbedComponent } from '../map-embed/map-embed';
 import { PhotoJournalComponent } from '../photo-journal/photo-journal';
 import { DailyRecapComponent } from '../daily-recap/daily-recap';
 import { TripStatusService } from '../../services/trip-status.service';
-import { LightboxService } from '../../services/lightbox.service';
 import { WeatherService } from '../../services/weather.service';
 import { ItineraryCheckService } from '../../services/itinerary-check.service';
 import { hapticTap, hapticSuccess } from '../../utils/haptics';
@@ -63,20 +62,6 @@ import { fireConfetti } from '../../utils/confetti';
         </button>
 
         @if (!collapsed()) {
-        <div class="day__hero-image"
-          (click)="openLightbox(heroImageIndex)"
-          (touchstart)="onHeroTouchStart($event)"
-          (touchend)="onHeroTouchEnd($event)">
-          <img [src]="activeHeroUrl()" [alt]="heroImage.alt" loading="lazy" />
-          @if (day.images.length > 1) {
-            <div class="day__hero-dots">
-              @for (img of day.images; track img.url; let i = $index) {
-                <button class="day__hero-dot" [class.day__hero-dot--active]="heroIdx() === i" (click)="setHero(i, $event)" aria-label="Billede {{ i + 1 }}"></button>
-              }
-            </div>
-          }
-        </div>
-
         <div class="day__body">
           <div class="day__content">
             <p class="day__intro">{{ day.intro }}</p>
@@ -188,12 +173,6 @@ import { fireConfetti } from '../../utils/confetti';
           </div>
 
           <div class="day__sidebar">
-            <div class="day__images-grid">
-              @for (img of supportingImages; track img.url; let i = $index) {
-                <img [src]="img.url" [alt]="img.alt" loading="lazy" class="day__grid-image" (click)="openLightbox(i + 1)" />
-              }
-            </div>
-
             <app-map-embed [markers]="day.markers" />
 
             <app-from-list [items]="day.fromList" />
@@ -213,26 +192,17 @@ export class DaySectionComponent implements OnInit, OnDestroy {
   @Input({ required: true }) day!: TripDay;
 
   private tripStatus = inject(TripStatusService);
-  private lightbox = inject(LightboxService);
   weatherService = inject(WeatherService);
   itinerary = inject(ItineraryCheckService);
 
-  heroIdx = signal(0);
   isVisible = signal(false);
   collapsed = signal(false);
   private observer?: IntersectionObserver;
-  private heroInterval?: ReturnType<typeof setInterval>;
-  private touchStartX = 0;
-  private touchStartY = 0;
   private confettiFired = false;
 
   ngOnInit() {
     const stored = localStorage.getItem(`nyc-collapsed-${this.day.id}`);
     if (stored === 'true') this.collapsed.set(true);
-
-    this.heroInterval = setInterval(() => {
-      this.heroIdx.update(i => (i + 1) % this.day.images.length);
-    }, 6000);
   }
 
   toggleCollapse() {
@@ -241,7 +211,6 @@ export class DaySectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.heroInterval) clearInterval(this.heroInterval);
     this.observer?.disconnect();
   }
 
@@ -253,20 +222,6 @@ export class DaySectionComponent implements OnInit, OnDestroy {
     return this.weatherService.byDate().get(this.day.isoDate) ?? null;
   }
 
-  get heroImage(): { url: string; alt: string } {
-    return this.day.images.find(i => i.hero) ?? this.day.images[0];
-  }
-
-  get heroImageIndex(): number {
-    return this.heroIdx();
-  }
-
-  activeHeroUrl = () => this.day.images[this.heroIdx()]?.url ?? this.heroImage.url;
-
-  get supportingImages() {
-    return this.day.images.filter(i => !i.hero);
-  }
-
   get itineraryProgress() {
     return this.itinerary.dayProgress(this.day.id);
   }
@@ -274,38 +229,6 @@ export class DaySectionComponent implements OnInit, OnDestroy {
   get itineraryPercent() {
     const p = this.itineraryProgress;
     return p.total > 0 ? (p.done / p.total) * 100 : 0;
-  }
-
-  setHero(idx: number, event: Event) {
-    event.stopPropagation();
-    this.heroIdx.set(idx);
-    if (this.heroInterval) clearInterval(this.heroInterval);
-    this.heroInterval = setInterval(() => {
-      this.heroIdx.update(i => (i + 1) % this.day.images.length);
-    }, 6000);
-  }
-
-  onHeroTouchStart(e: TouchEvent) {
-    this.touchStartX = e.touches[0].clientX;
-    this.touchStartY = e.touches[0].clientY;
-  }
-
-  onHeroTouchEnd(e: TouchEvent) {
-    const dx = this.touchStartX - e.changedTouches[0].clientX;
-    const dy = this.touchStartY - e.changedTouches[0].clientY;
-    if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
-
-    e.preventDefault();
-    const total = this.day.images.length;
-    if (dx > 0) {
-      this.setHero((this.heroIdx() + 1) % total, e);
-    } else {
-      this.setHero((this.heroIdx() - 1 + total) % total, e);
-    }
-  }
-
-  openLightbox(index: number) {
-    this.lightbox.open(this.day.images, index);
   }
 
   onToggle(dayId: number, index: number) {
