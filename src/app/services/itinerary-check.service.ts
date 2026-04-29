@@ -1,4 +1,4 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject, effect } from '@angular/core';
 import { TripService } from './trip.service';
 
 const API = '/.netlify/functions/checklist';
@@ -10,11 +10,24 @@ export class ItineraryCheckService {
   private get lsChecked() { return this.tripService.tripId() + '-itinerary'; }
   private get lsSkipped() { return this.tripService.tripId() + '-itinerary-skipped'; }
 
-  private checked = signal<Set<string>>(this.loadSet(this.lsChecked));
-  private skipped = signal<Set<string>>(this.loadSet(this.lsSkipped));
+  private checked = signal<Set<string>>(new Set());
+  private skipped = signal<Set<string>>(new Set());
   private pushInFlight = false;
   private localDirtyAt = 0;
   private pushTimer?: ReturnType<typeof setTimeout>;
+  private loadedForTrip = '';
+
+  constructor() {
+    effect(() => {
+      const id = this.tripService.tripId();
+      if (id !== this.loadedForTrip) {
+        this.loadedForTrip = id;
+        this.checked.set(this.loadSet(this.lsChecked));
+        this.skipped.set(this.loadSet(this.lsSkipped));
+        this.syncFromServer();
+      }
+    });
+  }
 
   init() {
     this.syncFromServer();
