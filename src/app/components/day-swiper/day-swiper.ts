@@ -65,7 +65,6 @@ export class DaySwiperComponent {
       this.activeDayData.set(this.days[id - 1]);
       this.slideDir.set(null);
     }, 10);
-    window.scrollTo({ top: 0 });
   }
 
   onTouchStart(e: TouchEvent) {
