@@ -31,7 +31,16 @@ export default async (req: Request, _context: Context) => {
   const blobKey = getBlobKey(req);
 
   if (req.method === 'GET') {
-    const raw = await store.get(blobKey);
+    let raw = await store.get(blobKey);
+
+    if (!raw && blobKey !== 'checklist-default') {
+      const legacyRaw = await store.get('checklist-default');
+      if (legacyRaw) {
+        await store.set(blobKey, legacyRaw);
+        raw = legacyRaw;
+      }
+    }
+
     const data = parseStored(raw);
     return new Response(JSON.stringify(data), { status: 200, headers });
   }

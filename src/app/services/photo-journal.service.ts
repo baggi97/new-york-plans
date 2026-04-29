@@ -48,9 +48,53 @@ export class PhotoJournalService {
     this.entries.set([]);
     if (this.db) this.db.close();
     this.db = await this.openDB();
-    const cached = await this.getAllLocal();
+    let cached = await this.getAllLocal();
+
+    if (cached.length === 0) {
+      cached = await this.migrateLegacyDB();
+    }
+
     this.entries.set(cached);
     this.syncFromServer();
+  }
+
+  private async migrateLegacyDB(): Promise<JournalEntry[]> {
+    const legacyName = 'nyc-journal';
+    try {
+      const dbs = await indexedDB.databases();
+      if (!dbs.some(d => d.name === legacyName)) return [];
+    } catch { /* databases() not supported, try opening */ }
+
+    try {
+      const legacyDb = await new Promise<IDBDatabase>((resolve, reject) => {
+        const req = indexedDB.open(legacyName, DB_VERSION);
+        req.onupgradeneeded = () => { req.result.close(); reject(new Error('empty')); };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+
+      const entries = await new Promise<JournalEntry[]>((resolve, reject) => {
+        const tx = legacyDb.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+
+      legacyDb.close();
+
+      if (entries.length > 0 && this.db) {
+        const tx = this.db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        for (const e of entries) store.put(e);
+        await new Promise<void>((resolve, reject) => {
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+      }
+
+      return entries;
+    } catch { return []; }
   }
 
   async init() {

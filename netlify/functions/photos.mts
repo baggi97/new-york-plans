@@ -37,9 +37,17 @@ export default async (req: Request, _context: Context) => {
   const indexKey = getIndexKey(req);
 
   if (req.method === 'GET') {
-    const ids = await getIndex(store, indexKey);
-    const entries: JournalEntry[] = [];
+    let ids = await getIndex(store, indexKey);
 
+    if (ids.length === 0 && indexKey !== '__index-default') {
+      const legacyIds = await getIndex(store, '__index-default');
+      if (legacyIds.length > 0) {
+        await setIndex(store, indexKey, legacyIds);
+        ids = legacyIds;
+      }
+    }
+
+    const entries: JournalEntry[] = [];
     for (const id of ids) {
       const raw = await store.get(id);
       if (raw) {
