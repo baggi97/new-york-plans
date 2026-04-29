@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { TripService } from './trip.service';
 
 export interface JournalEntry {
@@ -22,6 +22,7 @@ export class PhotoJournalService {
   private db: IDBDatabase | null = null;
   private pendingIds = new Set<string>();
   private localDirtyAt = 0;
+  private loadedForTrip = '';
 
   entriesByDay = computed(() => {
     const map = new Map<number, JournalEntry[]>();
@@ -33,13 +34,27 @@ export class PhotoJournalService {
     return map;
   });
 
-  async init() {
+  constructor() {
+    effect(() => {
+      const id = this.tripService.tripId();
+      if (id !== this.loadedForTrip) {
+        this.reloadForTrip();
+      }
+    });
+  }
+
+  private async reloadForTrip() {
+    this.loadedForTrip = this.tripService.tripId();
+    this.entries.set([]);
+    if (this.db) this.db.close();
     this.db = await this.openDB();
     const cached = await this.getAllLocal();
-    if (cached.length) {
-      this.entries.set(cached);
-    }
+    this.entries.set(cached);
     this.syncFromServer();
+  }
+
+  async init() {
+    await this.reloadForTrip();
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') this.syncFromServer();
     });

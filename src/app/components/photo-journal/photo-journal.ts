@@ -72,10 +72,9 @@ export class PhotoJournalComponent {
     const files = input.files;
     if (!files || files.length === 0) return;
 
-    for (let i = 0; i < files.length; i++) {
-      const data = await this.readFile(files[i]);
-      await this.journal.addEntry(this.dayId, data, '');
-    }
+    const reads = Array.from(files).map(f => this.readFile(f));
+    const images = await Promise.all(reads);
+    await Promise.all(images.map(data => this.journal.addEntry(this.dayId, data, '')));
     input.value = '';
   }
 
