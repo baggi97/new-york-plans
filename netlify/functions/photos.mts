@@ -39,11 +39,16 @@ export default async (req: Request, _context: Context) => {
   if (req.method === 'GET') {
     let ids = await getIndex(store, indexKey);
 
-    if (ids.length === 0 && indexKey !== '__index-default') {
-      const legacyIds = await getIndex(store, '__index-default');
+    if (indexKey !== '__index') {
+      const legacyIds = await getIndex(store, '__index');
       if (legacyIds.length > 0) {
-        await setIndex(store, indexKey, legacyIds);
-        ids = legacyIds;
+        const existing = new Set(ids);
+        const missing = legacyIds.filter(id => !existing.has(id));
+        if (missing.length > 0) {
+          ids = [...ids, ...missing];
+          await setIndex(store, indexKey, ids);
+          await setIndex(store, '__index', []);
+        }
       }
     }
 

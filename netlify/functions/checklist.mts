@@ -33,11 +33,19 @@ export default async (req: Request, _context: Context) => {
   if (req.method === 'GET') {
     let raw = await store.get(blobKey);
 
-    if (!raw && blobKey !== 'checklist-default') {
-      const legacyRaw = await store.get('checklist-default');
+    if (blobKey !== 'checklist') {
+      const legacyRaw = await store.get('checklist');
       if (legacyRaw) {
-        await store.set(blobKey, legacyRaw);
-        raw = legacyRaw;
+        const legacy = parseStored(legacyRaw);
+        const current = parseStored(raw);
+        const mergedChecked = [...new Set([...current.checked, ...legacy.checked])];
+        const mergedSkipped = [...new Set([...current.skipped, ...legacy.skipped])];
+        if (mergedChecked.length > current.checked.length || mergedSkipped.length > current.skipped.length) {
+          const merged = JSON.stringify({ checked: mergedChecked, skipped: mergedSkipped });
+          await store.set(blobKey, merged);
+          await store.delete('checklist');
+          raw = merged;
+        }
       }
     }
 
