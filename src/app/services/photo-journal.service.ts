@@ -121,10 +121,10 @@ export class PhotoJournalService {
       const remoteMap = new Map(remote.map(e => [e.id, e]));
       const localMap = new Map(local.map(e => [e.id, e]));
 
-      // Merge: keep all remote entries + any local-only entries (not yet synced)
+      // Merge: keep all remote entries + only locally pending uploads
       const merged = [...remote];
       for (const entry of local) {
-        if (!remoteMap.has(entry.id)) {
+        if (!remoteMap.has(entry.id) && this.pendingIds.has(entry.id)) {
           merged.push(entry);
         }
       }
