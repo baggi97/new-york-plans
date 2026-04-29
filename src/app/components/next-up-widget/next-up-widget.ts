@@ -1,7 +1,7 @@
 import { Component, inject, computed, signal, HostListener } from '@angular/core';
 import { TripStatusService } from '../../services/trip-status.service';
 import { ItineraryCheckService } from '../../services/itinerary-check.service';
-import { TRIP_DATA } from '../../data/trip-data';
+import { TripService } from '../../services/trip.service';
 
 @Component({
   selector: 'app-next-up-widget',
@@ -24,6 +24,7 @@ import { TRIP_DATA } from '../../data/trip-data';
 })
 export class NextUpWidgetComponent {
   private tripStatus = inject(TripStatusService);
+  private tripService = inject(TripService);
   private itinerary = inject(ItineraryCheckService);
   isVisible = signal(false);
 
@@ -42,7 +43,7 @@ export class NextUpWidgetComponent {
   nextItem = computed(() => {
     const dayNum = this.tripStatus.currentDayNumber();
     if (dayNum === 0) return null;
-    const day = TRIP_DATA.days.find(d => d.id === dayNum);
+    const day = this.tripService.days().find(d => d.id === dayNum);
     if (!day) return null;
     const idx = this.itinerary.nextUncheckedIndex(dayNum);
     if (idx === -1) return null;

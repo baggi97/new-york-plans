@@ -1,5 +1,6 @@
 import { Component, inject, AfterViewInit, OnDestroy, ChangeDetectorRef, signal } from '@angular/core';
 import { TripStatusService } from '../../services/trip-status.service';
+import { TripService } from '../../services/trip.service';
 
 @Component({
   selector: 'app-hero-section',
@@ -15,9 +16,9 @@ import { TripStatusService } from '../../services/trip-status.service';
       <div class="hero__overlay"></div>
       <div class="hero__content">
         <span class="hero__countdown">{{ tripStatus.heroLabel() }}</span>
-        <span class="hero__eyebrow">April 2026 · 6 dage · 2 rejsende</span>
-        <h1 class="hero__title">New York</h1>
-        <p class="hero__subtitle">A curated guide for two</p>
+        <span class="hero__eyebrow">{{ trip.dates }} · {{ trip.days.length }} dage · {{ trip.travelers }}</span>
+        <h1 class="hero__title">{{ trip.title }}</h1>
+        <p class="hero__subtitle">{{ trip.subtitle }}</p>
       </div>
       <div class="hero__scroll-hint">
         <span>Scroll ned</span>
@@ -31,23 +32,21 @@ import { TripStatusService } from '../../services/trip-status.service';
 })
 export class HeroSectionComponent implements AfterViewInit, OnDestroy {
   tripStatus = inject(TripStatusService);
+  private tripService = inject(TripService);
   private cdr = inject(ChangeDetectorRef);
   private interval?: ReturnType<typeof setInterval>;
 
   activeIdx = signal(0);
 
-  images = [
-    'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=1600&q=80',
-    'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=1600&q=80',
-    'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1600&q=80',
-    'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=1600&q=80',
-    'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=1600&q=80',
-  ];
+  get trip() { return this.tripService.trip(); }
+  get images() { return this.trip.heroImages ?? []; }
 
   ngAfterViewInit() {
     this.cdr.detectChanges();
     this.interval = setInterval(() => {
-      this.activeIdx.update(i => (i + 1) % this.images.length);
+      if (this.images.length > 0) {
+        this.activeIdx.update(i => (i + 1) % this.images.length);
+      }
     }, 7000);
   }
 

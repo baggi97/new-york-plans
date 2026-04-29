@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { TRIP_DATA } from '../../data/trip-data';
+import { Component, inject } from '@angular/core';
+import { TripService } from '../../services/trip.service';
 
 @Component({
   selector: 'app-tipping-guide',
@@ -8,7 +8,7 @@ import { TRIP_DATA } from '../../data/trip-data';
     <div class="tipping">
       <div class="tipping__header">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-        <h3 class="tipping__title">Tipping i NYC</h3>
+        <h3 class="tipping__title">Tipping i {{ tripService.destination().city }}</h3>
       </div>
       <div class="tipping__list">
         @for (rule of rules; track rule.category) {
@@ -23,5 +23,6 @@ import { TRIP_DATA } from '../../data/trip-data';
   styleUrl: './tipping-guide.scss',
 })
 export class TippingGuideComponent {
-  rules = TRIP_DATA.practicalInfo.tipping;
+  tripService = inject(TripService);
+  get rules() { return this.tripService.practicalInfo().tipping; }
 }

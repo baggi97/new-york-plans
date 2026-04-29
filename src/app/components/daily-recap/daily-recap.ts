@@ -4,6 +4,7 @@ import { ItineraryCheckService } from '../../services/itinerary-check.service';
 import { PhotoJournalService } from '../../services/photo-journal.service';
 import { WeatherService } from '../../services/weather.service';
 import { TripStatusService } from '../../services/trip-status.service';
+import { TripService } from '../../services/trip.service';
 
 @Component({
   selector: 'app-daily-recap',
@@ -50,6 +51,7 @@ export class DailyRecapComponent {
   @Input({ required: true }) day!: TripDay;
 
   private tripStatus = inject(TripStatusService);
+  private tripService = inject(TripService);
   private itinerary = inject(ItineraryCheckService);
   private journal = inject(PhotoJournalService);
   weatherService = inject(WeatherService);
@@ -79,8 +81,9 @@ export class DailyRecapComponent {
       `${this.photoCount()} fotos taget`,
     ].filter(Boolean).join(' · ');
 
+    const city = this.tripService.destination().city;
     if (navigator.share) {
-      try { await navigator.share({ title: `NYC Dag ${this.day.id} recap`, text }); }
+      try { await navigator.share({ title: `${city} Dag ${this.day.id} recap`, text }); }
       catch { /* cancelled */ }
     } else {
       await navigator.clipboard.writeText(text);

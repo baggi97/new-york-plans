@@ -1,12 +1,20 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { TRIP_DATA } from '../data/trip-data';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { TripService } from './trip.service';
 
 @Injectable({ providedIn: 'root' })
 export class TripStatusService {
+  private tripService = inject(TripService);
   private now = signal(new Date());
 
-  private tripStart = this.parseLocalDate(TRIP_DATA.tripStart);
-  private tripEnd = this.parseLocalDate(TRIP_DATA.tripEnd, true);
+  private get tripData() { return this.tripService.trip(); }
+
+  private get tripStart() {
+    return this.parseLocalDate(this.tripData.tripStart);
+  }
+
+  private get tripEnd() {
+    return this.parseLocalDate(this.tripData.tripEnd, true);
+  }
 
   status = computed(() => {
     const now = this.now();
@@ -18,11 +26,7 @@ export class TripStatusService {
   daysUntil = computed(() => {
     const now = this.now();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const start = new Date(
-      parseInt(TRIP_DATA.tripStart.slice(0, 4)),
-      parseInt(TRIP_DATA.tripStart.slice(5, 7)) - 1,
-      parseInt(TRIP_DATA.tripStart.slice(8, 10)),
-    );
+    const start = this.parseLocalDate(this.tripData.tripStart);
     const diff = start.getTime() - today.getTime();
     return Math.max(0, Math.round(diff / (1000 * 60 * 60 * 24)));
   });
@@ -36,13 +40,14 @@ export class TripStatusService {
 
   currentDayNumber = computed(() => {
     if (this.status() !== 'during') return 0;
-    const nycNow = new Date(this.now().toLocaleString('en-US', { timeZone: 'America/New_York' }));
-    for (const day of TRIP_DATA.days) {
+    const destTz = this.tripService.destTz();
+    const destNow = new Date(this.now().toLocaleString('en-US', { timeZone: destTz }));
+    for (const day of this.tripService.days()) {
       const dayDate = new Date(day.isoDate + 'T00:00:00');
       if (
-        nycNow.getFullYear() === dayDate.getFullYear() &&
-        nycNow.getMonth() === dayDate.getMonth() &&
-        nycNow.getDate() === dayDate.getDate()
+        destNow.getFullYear() === dayDate.getFullYear() &&
+        destNow.getMonth() === dayDate.getMonth() &&
+        destNow.getDate() === dayDate.getDate()
       ) {
         return day.id;
       }
@@ -52,6 +57,8 @@ export class TripStatusService {
 
   heroLabel = computed(() => {
     const s = this.status();
+    const trip = this.tripData;
+    const totalDays = trip.days.length;
     if (s === 'before') {
       const d = this.daysUntil();
       if (d === 0) return 'I morgen flyver vi!';
@@ -60,26 +67,30 @@ export class TripStatusService {
     }
     if (s === 'during') {
       const day = this.currentDayNumber();
-      return day > 0 ? `Dag ${day} af 6` : 'Vi er i New York!';
+      return day > 0 ? `Dag ${day} af ${totalDays}` : `Vi er i ${trip.destination.city}!`;
     }
-    return 'Minder fra New York';
+    return `Minder fra ${trip.destination.city}`;
   });
 
-  nycTime = computed(() => {
+  destTime = computed(() => {
     return this.now().toLocaleString('da-DK', {
-      timeZone: 'America/New_York',
+      timeZone: this.tripService.destTz(),
       hour: '2-digit',
       minute: '2-digit',
     });
   });
 
-  dkTime = computed(() => {
+  homeTime = computed(() => {
     return this.now().toLocaleString('da-DK', {
-      timeZone: 'Europe/Copenhagen',
+      timeZone: this.tripService.homeTz(),
       hour: '2-digit',
       minute: '2-digit',
     });
   });
+
+  // Keep backward compat aliases
+  nycTime = this.destTime;
+  dkTime = this.homeTime;
 
   constructor() {
     setInterval(() => this.now.set(new Date()), 30_000);

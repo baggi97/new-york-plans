@@ -1,7 +1,7 @@
 import { Component, signal, inject, HostListener } from '@angular/core';
 import { DaySectionComponent } from '../day-section/day-section';
 import { TripStatusService } from '../../services/trip-status.service';
-import { TRIP_DATA } from '../../data/trip-data';
+import { TripService } from '../../services/trip.service';
 import { hapticTap } from '../../utils/haptics';
 
 @Component({
@@ -36,7 +36,8 @@ import { hapticTap } from '../../utils/haptics';
 })
 export class DaySwiperComponent {
   private tripStatus = inject(TripStatusService);
-  days = TRIP_DATA.days;
+  private tripService = inject(TripService);
+  get days() { return this.tripService.days(); }
   activeDay = signal(1);
   slideDir = signal<'left' | 'right' | null>(null);
 

@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "nyc-magazine": {
+    "travel-guide": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -88,10 +88,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "nyc-magazine:build:production"
+              "buildTarget": "travel-guide:build:production"
             },
             "development": {
-              "buildTarget": "nyc-magazine:build:development"
+              "buildTarget": "travel-guide:build:development"
             }
           },
           "defaultConfiguration": "development"

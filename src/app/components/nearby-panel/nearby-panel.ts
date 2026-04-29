@@ -1,7 +1,7 @@
 import { Component, inject, signal, computed, OnDestroy, HostListener } from '@angular/core';
 import { GeolocationService, haversineMeters } from '../../services/geolocation.service';
 import { TripStatusService } from '../../services/trip-status.service';
-import { TRIP_DATA } from '../../data/trip-data';
+import { TripService } from '../../services/trip.service';
 import { MapMarker } from '../../data/trip.interfaces';
 import { hapticTap } from '../../utils/haptics';
 
@@ -54,6 +54,7 @@ interface NearbyItem {
 export class NearbyPanelComponent implements OnDestroy {
   geo = inject(GeolocationService);
   private tripStatus = inject(TripStatusService);
+  private tripService = inject(TripService);
   isOpen = signal(false);
   isVisible = signal(false);
 
@@ -67,8 +68,8 @@ export class NearbyPanelComponent implements OnDestroy {
     if (!pos) return [];
     const dayNum = this.tripStatus.currentDayNumber();
     const day = dayNum > 0
-      ? TRIP_DATA.days.find(d => d.id === dayNum)
-      : TRIP_DATA.days[0];
+      ? this.tripService.days().find(d => d.id === dayNum)
+      : this.tripService.days()[0];
     if (!day) return [];
 
     return day.markers

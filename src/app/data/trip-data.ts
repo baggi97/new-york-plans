@@ -1,12 +1,31 @@
 import { TripData } from './trip.interfaces';
 
 export const TRIP_DATA: TripData = {
+  id: 'new-york-2026',
   title: 'New York',
   subtitle: 'A curated guide for two',
   dates: '22.–27. april 2026',
   travelers: '2 personer',
   tripStart: '2026-04-22',
   tripEnd: '2026-04-27',
+  destination: {
+    city: 'New York',
+    country: 'USA',
+    timezone: 'America/New_York',
+    lat: 40.7128,
+    lng: -74.006,
+    currency: 'USD',
+    mapZoom: 12,
+  },
+  homeCurrency: 'DKK',
+  homeTimezone: 'Europe/Copenhagen',
+  heroImages: [
+    'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=60',
+    'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=60',
+    'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=60',
+    'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=800&q=60',
+    'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=60',
+  ],
   days: [
     {
       id: 1,
@@ -47,8 +66,6 @@ export const TRIP_DATA: TripData = {
         { label: 'Gordon Ramsay Fish & Chips', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Gordon+Ramsay+Fish+and+Chips+Times+Square+New+York' },
         { label: 'S&P Lunch', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=S%26P+Lunch+New+York' },
       ],
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.183792036255!2d-73.9871078!3d40.7579747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1710000000000',
-      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.758,-73.987&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C40.758,-73.987&key=',
       markers: [
         { label: 'Millennium Hotel', lat: 40.7570, lng: -73.9878, category: 'hotel' },
         { label: 'Times Square', lat: 40.7580, lng: -73.9855, category: 'highlight' },
@@ -120,8 +137,6 @@ export const TRIP_DATA: TripData = {
         { label: 'Pier 17', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pier+17+New+York' },
         { label: 'Pier 35', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pier+35+New+York' },
       ],
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.518079498!2d-73.9893421!3d40.7063095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a197c06b7cb%3A0x40a06c78f79e5de6!2sBrooklyn%20Bridge!5e0!3m2!1sen!2sus!4v1710000000000',
-      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.706,-73.997&zoom=13&size=600x300&scale=2&maptype=roadmap&key=',
       markers: [
         { label: 'DUMBO Manhattan Bridge View', lat: 40.7033, lng: -73.9894, category: 'highlight' },
         { label: 'Brooklyn Bridge', lat: 40.7061, lng: -73.9969, category: 'highlight' },
@@ -190,8 +205,6 @@ export const TRIP_DATA: TripData = {
         { label: 'Brooklyn Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York' },
         { label: '230 Fifth', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=230+Fifth+Rooftop+Bar+New+York' },
       ],
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.3!2d-73.9654!3d40.7812!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2589a018531e3%3A0xb9df1f7387a94119!2sCentral%20Park!5e0!3m2!1sen!2sus!4v1710000000000',
-      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.775,-73.970&zoom=14&size=600x300&scale=2&maptype=roadmap&key=',
       markers: [
         { label: 'Gapstow Bridge', lat: 40.7645, lng: -73.9709, category: 'highlight' },
         { label: 'Bow Bridge', lat: 40.7736, lng: -73.9712, category: 'highlight' },
@@ -275,8 +288,6 @@ export const TRIP_DATA: TripData = {
         { label: 'Pookie Bakery', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pookie+Bakery+New+York' },
         { label: 'Glace NY', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Glace+NY+New+York' },
       ],
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.8!2d-73.9973!3d40.7158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25987b5a8a305%3A0x1481f4d5b6aaf50!2sSoHo%2C%20New%20York!5e0!3m2!1sen!2sus!4v1710000000000',
-      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.720,-73.998&zoom=13&size=600x300&scale=2&maptype=roadmap&key=',
       markers: [
         { label: "Bubby's", lat: 40.7168, lng: -74.0099, category: 'food' },
         { label: 'Chinatown', lat: 40.7158, lng: -73.9970, category: 'highlight' },
@@ -353,8 +364,6 @@ export const TRIP_DATA: TripData = {
         { label: "Danny & Coop's Cheesesteaks", googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Danny+and+Coops+Cheesesteaks+New+York' },
         { label: 'Seven Sins Bar', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Seven+Sins+Bar+New+York' },
       ],
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.5!2d-73.9857!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9aeb1c6b5%3A0x35b1cfbc89a6097f!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1710000000000',
-      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.748,-73.986&zoom=14&size=600x300&scale=2&maptype=roadmap&key=',
       markers: [
         { label: 'Grand Central Terminal', lat: 40.7527, lng: -73.9772, category: 'highlight' },
         { label: 'Chrysler Building', lat: 40.7516, lng: -73.9755, category: 'highlight' },
@@ -410,8 +419,6 @@ export const TRIP_DATA: TripData = {
         { label: 'Brooklyn Diner', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Brooklyn+Diner+New+York' },
         { label: 'Green Kitchen', googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Green+Kitchen+New+York' },
       ],
-      mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.183792036255!2d-73.9871078!3d40.7579747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1710000000000',
-      mapStaticUrl: 'https://maps.googleapis.com/maps/api/staticmap?center=40.758,-73.987&zoom=15&size=600x300&scale=2&maptype=roadmap&key=',
       markers: [
         { label: 'Millennium Hotel', lat: 40.7570, lng: -73.9878, category: 'hotel' },
         { label: 'Bryant Park', lat: 40.7536, lng: -73.9832, category: 'highlight' },

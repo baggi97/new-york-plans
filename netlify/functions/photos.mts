@@ -10,16 +10,21 @@ interface JournalEntry {
 }
 
 const STORE_NAME = 'journal-photos';
-const INDEX_KEY = '__index';
 
-async function getIndex(store: ReturnType<typeof getStore>): Promise<string[]> {
-  const raw = await store.get(INDEX_KEY);
+function getIndexKey(req: Request): string {
+  const url = new URL(req.url);
+  const tripId = url.searchParams.get('tripId') || 'default';
+  return `__index-${tripId}`;
+}
+
+async function getIndex(store: ReturnType<typeof getStore>, key: string): Promise<string[]> {
+  const raw = await store.get(key);
   if (!raw) return [];
   try { return JSON.parse(raw); } catch { return []; }
 }
 
-async function setIndex(store: ReturnType<typeof getStore>, ids: string[]) {
-  await store.set(INDEX_KEY, JSON.stringify(ids));
+async function setIndex(store: ReturnType<typeof getStore>, key: string, ids: string[]) {
+  await store.set(key, JSON.stringify(ids));
 }
 
 export default async (req: Request, _context: Context) => {
@@ -29,9 +34,10 @@ export default async (req: Request, _context: Context) => {
 
   const store = getStore(STORE_NAME);
   const headers = { 'Content-Type': 'application/json' };
+  const indexKey = getIndexKey(req);
 
   if (req.method === 'GET') {
-    const ids = await getIndex(store);
+    const ids = await getIndex(store, indexKey);
     const entries: JournalEntry[] = [];
 
     for (const id of ids) {
@@ -73,9 +79,9 @@ export default async (req: Request, _context: Context) => {
       };
 
       await store.set(entry.id, JSON.stringify(entry));
-      const ids = await getIndex(store);
+      const ids = await getIndex(store, indexKey);
       ids.push(entry.id);
-      await setIndex(store, ids);
+      await setIndex(store, indexKey, ids);
 
       return new Response(JSON.stringify(entry), { status: 201, headers });
     } catch {
@@ -91,9 +97,9 @@ export default async (req: Request, _context: Context) => {
     }
 
     await store.delete(id);
-    const ids = await getIndex(store);
+    const ids = await getIndex(store, indexKey);
     const filtered = ids.filter(i => i !== id);
-    await setIndex(store, filtered);
+    await setIndex(store, indexKey, filtered);
 
     return new Response(JSON.stringify({ ok: true }), { status: 200, headers });
   }

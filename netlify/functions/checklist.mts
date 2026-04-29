@@ -2,7 +2,6 @@ import type { Context } from '@netlify/functions';
 import { getStore } from '@netlify/blobs';
 
 const STORE_NAME = 'itinerary';
-const BLOB_KEY = 'checklist';
 
 interface ChecklistData {
   checked: string[];
@@ -12,9 +11,14 @@ interface ChecklistData {
 function parseStored(raw: string | null): ChecklistData {
   if (!raw) return { checked: [], skipped: [] };
   const parsed = JSON.parse(raw);
-  // Backward compat: old format was a plain string array (checked only)
   if (Array.isArray(parsed)) return { checked: parsed, skipped: [] };
   return { checked: parsed.checked ?? [], skipped: parsed.skipped ?? [] };
+}
+
+function getBlobKey(req: Request): string {
+  const url = new URL(req.url);
+  const tripId = url.searchParams.get('tripId') || 'default';
+  return `checklist-${tripId}`;
 }
 
 export default async (req: Request, _context: Context) => {
@@ -24,9 +28,10 @@ export default async (req: Request, _context: Context) => {
 
   const store = getStore(STORE_NAME);
   const headers = { 'Content-Type': 'application/json' };
+  const blobKey = getBlobKey(req);
 
   if (req.method === 'GET') {
-    const raw = await store.get(BLOB_KEY);
+    const raw = await store.get(blobKey);
     const data = parseStored(raw);
     return new Response(JSON.stringify(data), { status: 200, headers });
   }
@@ -34,14 +39,13 @@ export default async (req: Request, _context: Context) => {
   if (req.method === 'PUT') {
     try {
       const body = await req.json();
-      // Accept both old format (plain array) and new format ({checked, skipped})
       let data: ChecklistData;
       if (Array.isArray(body)) {
         data = { checked: body, skipped: [] };
       } else {
         data = { checked: body.checked ?? [], skipped: body.skipped ?? [] };
       }
-      await store.set(BLOB_KEY, JSON.stringify(data));
+      await store.set(blobKey, JSON.stringify(data));
       return new Response(JSON.stringify({ ok: true }), { status: 200, headers });
     } catch {
       return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400, headers });

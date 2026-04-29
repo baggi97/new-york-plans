@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'nyc-v43';
+const CACHE_VERSION = 'travel-v2';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -222,7 +222,7 @@ self.addEventListener('push', function (event) {
   try {
     var data = event.data.json();
     event.waitUntil(
-      self.registration.showNotification(data.title || 'NYC 2026', {
+      self.registration.showNotification(data.title || 'Rejseguide', {
         body: data.body || '',
         icon: '/icons/icon-192x192.png',
         badge: '/icons/icon-192x192.png',

@@ -2,6 +2,7 @@ import { Component, HostListener, signal, ElementRef, ViewChild, AfterViewInit, 
 import { NgClass } from '@angular/common';
 import { DarkModeService } from '../../services/dark-mode.service';
 import { TripStatusService } from '../../services/trip-status.service';
+import { TripService } from '../../services/trip.service';
 import { hapticTap } from '../../utils/haptics';
 
 @Component({
@@ -12,7 +13,7 @@ import { hapticTap } from '../../utils/haptics';
     <nav class="nav" [ngClass]="{ 'nav--visible': isVisible(), 'nav--scrolled': isScrolled() }">
       <div class="nav__progress" [style.width.%]="scrollProgress()"></div>
       <div class="nav__inner">
-        <a href="#top" class="nav__logo">NYC</a>
+        <a href="#top" class="nav__logo">{{ tripService.destination().city }}</a>
         <div class="nav__links" #linksContainer>
           @for (link of links; track link.id) {
             <a [href]="'#' + link.id"
@@ -28,11 +29,11 @@ import { hapticTap } from '../../utils/haptics';
           }
         </div>
         <div class="nav__tools">
-          <span class="nav__timezone" title="New York / Danmark">
+          <span class="nav__timezone" [title]="tripService.destination().city + ' / Hjemme'">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span class="nav__tz-label">NYC</span> {{ tripStatus.nycTime() }}
+            <span class="nav__tz-label">{{ tripService.destination().city }}</span> {{ tripStatus.destTime() }}
             <span class="nav__tz-sep">·</span>
-            <span class="nav__tz-label">DK</span> {{ tripStatus.dkTime() }}
+            <span class="nav__tz-label">Hjem</span> {{ tripStatus.homeTime() }}
           </span>
           <button class="nav__darkmode" (click)="darkMode.toggle()" [attr.aria-label]="darkMode.isDark() ? 'Lys tilstand' : 'Mørk tilstand'">
             @if (darkMode.isDark()) {
@@ -52,6 +53,7 @@ export class StickyNavComponent implements AfterViewInit {
 
   darkMode = inject(DarkModeService);
   tripStatus = inject(TripStatusService);
+  tripService = inject(TripService);
 
   isVisible = signal(false);
   isScrolled = signal(false);

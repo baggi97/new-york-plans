@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { TRIP_DATA } from '../data/trip-data';
+import { TripService } from './trip.service';
 import { ConnectivityService } from './connectivity.service';
 
 export interface DayWeather {
@@ -20,10 +20,11 @@ export interface DayWeather {
 @Injectable({ providedIn: 'root' })
 export class WeatherService {
   private connectivity = inject(ConnectivityService);
+  private tripService = inject(TripService);
   private weatherData = signal<DayWeather[]>([]);
   private hasFetched = false;
 
-  private tripDates = TRIP_DATA.days.map(d => d.isoDate);
+  private get tripDates() { return this.tripService.days().map(d => d.isoDate); }
 
   byDate = computed(() => {
     const map = new Map<string, DayWeather>();
@@ -52,10 +53,11 @@ export class WeatherService {
   private async fetchData() {
     this.hasFetched = true;
     try {
+      const dest = this.tripService.destination();
       const res = await fetch(
-        'https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.006' +
+        `https://api.open-meteo.com/v1/forecast?latitude=${dest.lat}&longitude=${dest.lng}` +
         '&daily=temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,weather_code,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,uv_index_max,sunrise,sunset' +
-        '&wind_speed_unit=ms&timezone=America%2FNew_York&start_date=' +
+        `&wind_speed_unit=ms&timezone=${encodeURIComponent(dest.timezone)}&start_date=` +
         this.tripDates[0] + '&end_date=' + this.tripDates[this.tripDates.length - 1]
       );
       if (!res.ok) throw new Error();

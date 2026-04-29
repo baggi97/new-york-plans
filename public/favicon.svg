@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="14" fill="#3d4f6f"/>
-  <text x="32" y="26" text-anchor="middle" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#faf8f5" letter-spacing="0.5">NYC</text>
-  <line x1="18" y1="31" x2="46" y2="31" stroke="#c9a96e" stroke-width="1" opacity="0.7"/>
-  <text x="32" y="44" text-anchor="middle" font-family="Georgia, serif" font-size="9" font-style="italic" fill="#c9a96e" opacity="0.9">'26</text>
+  <text x="32" y="28" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#faf8f5" letter-spacing="0.5">✈</text>
+  <line x1="18" y1="34" x2="46" y2="34" stroke="#c9a96e" stroke-width="1" opacity="0.7"/>
+  <text x="32" y="48" text-anchor="middle" font-family="Georgia, serif" font-size="9" font-style="italic" fill="#c9a96e" opacity="0.9">Guide</text>
 </svg>

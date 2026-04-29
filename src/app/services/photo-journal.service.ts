@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { TripService } from './trip.service';
 
 export interface JournalEntry {
   id: string;
@@ -8,13 +9,15 @@ export interface JournalEntry {
   timestamp: number;
 }
 
-const API = '/.netlify/functions/photos';
-const DB_NAME = 'nyc-journal';
+const API_BASE = '/.netlify/functions/photos';
 const STORE_NAME = 'entries';
 const DB_VERSION = 1;
 
 @Injectable({ providedIn: 'root' })
 export class PhotoJournalService {
+  private tripService = inject(TripService);
+  private get apiUrl() { return `${API_BASE}?tripId=${this.tripService.tripId()}`; }
+  private get dbName() { return `${this.tripService.tripId()}-journal`; }
   entries = signal<JournalEntry[]>([]);
   private db: IDBDatabase | null = null;
   private pendingIds = new Set<string>();
@@ -51,7 +54,7 @@ export class PhotoJournalService {
     if (Date.now() - this.localDirtyAt < 5000) return;
 
     try {
-      const res = await fetch(API);
+      const res = await fetch(this.apiUrl);
       if (!res.ok) return;
       const remote: JournalEntry[] = await res.json();
 
@@ -95,7 +98,7 @@ export class PhotoJournalService {
 
     if (navigator.onLine) {
       try {
-        const res = await fetch(API, {
+        const res = await fetch(this.apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ dayId, imageData, caption }),
@@ -124,7 +127,7 @@ export class PhotoJournalService {
 
     if (navigator.onLine) {
       try {
-        await fetch(`${API}?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        await fetch(`${this.apiUrl}&id=${encodeURIComponent(id)}`, { method: 'DELETE' });
       } catch { /* best effort */ }
     }
   }
@@ -139,7 +142,7 @@ export class PhotoJournalService {
 
     if (navigator.onLine) {
       try {
-        await fetch(API, {
+        await fetch(this.apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id, caption }),
@@ -150,7 +153,7 @@ export class PhotoJournalService {
 
   private openDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      const req = indexedDB.open(this.dbName, DB_VERSION);
       req.onupgradeneeded = () => {
         const db = req.result;
         if (!db.objectStoreNames.contains(STORE_NAME)) {

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { TRIP_DATA } from '../../data/trip-data';
+import { Component, inject } from '@angular/core';
+import { TripService } from '../../services/trip.service';
 
 interface FoodDayGroup {
   dayId: number;
@@ -85,11 +85,15 @@ interface FoodDayGroup {
   styleUrl: './food-list.scss',
 })
 export class FoodListComponent {
-  groups: FoodDayGroup[] = TRIP_DATA.days.map(day => ({
-    dayId: day.id,
-    dayTitle: day.title,
-    date: day.date,
-    food: day.food,
-    fromList: day.fromList,
-  }));
+  private tripService = inject(TripService);
+
+  get groups(): FoodDayGroup[] {
+    return this.tripService.days().map(day => ({
+      dayId: day.id,
+      dayTitle: day.title,
+      date: day.date,
+      food: day.food,
+      fromList: day.fromList,
+    }));
+  }
 }

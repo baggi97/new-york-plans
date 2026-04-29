@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, inject, signal } from '@angular/core';
-import { TRIP_DATA } from '../../data/trip-data';
 import { MapMarker } from '../../data/trip.interfaces';
+import { TripService } from '../../services/trip.service';
 import { GeolocationService, haversineMeters } from '../../services/geolocation.service';
 
 const MARKER_COLORS = {
@@ -101,7 +101,8 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
   private connectivity = inject(ConnectivityService);
   private darkMode = inject(DarkModeService);
   private geo = inject(GeolocationService);
-  days = TRIP_DATA.days;
+  private tripService = inject(TripService);
+  get days() { return this.tripService.days(); }
   activeDay = 1;
   showOffline = signal(!navigator.onLine);
   routeInfo = signal<string | null>(null);
@@ -163,8 +164,8 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
     this.map = new this.mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style,
-      center: [-73.985, 40.748],
-      zoom: 12,
+      center: [this.tripService.destination().lng, this.tripService.destination().lat],
+      zoom: this.tripService.destination().mapZoom ?? 12,
       attributionControl: false,
     });
 

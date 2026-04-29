@@ -1,5 +1,5 @@
-import { Component, signal, computed } from '@angular/core';
-import { TRIP_DATA } from '../../data/trip-data';
+import { Component, signal, computed, inject } from '@angular/core';
+import { TripService } from '../../services/trip.service';
 import { ChecklistItem } from '../../data/trip.interfaces';
 import { hapticTap } from '../../utils/haptics';
 
@@ -39,8 +39,10 @@ import { hapticTap } from '../../utils/haptics';
   styleUrl: './checklist.scss',
 })
 export class ChecklistComponent {
-  items = TRIP_DATA.practicalInfo.checklist;
-  categories = [...new Set(this.items.map(i => i.category))];
+  private tripService = inject(TripService);
+  get items() { return this.tripService.practicalInfo().checklist; }
+  get categories() { return [...new Set(this.items.map(i => i.category))]; }
+  private get lsKey() { return this.tripService.tripId() + '-checklist'; }
 
   private checked = signal<Set<string>>(this.loadChecked());
 
@@ -69,13 +71,13 @@ export class ChecklistComponent {
 
   private loadChecked(): Set<string> {
     try {
-      const stored = localStorage.getItem('nyc-checklist');
+      const stored = localStorage.getItem(this.lsKey);
       if (stored) return new Set(JSON.parse(stored));
     } catch { /* ignore */ }
     return new Set();
   }
 
   private saveChecked(checked: Set<string>) {
-    localStorage.setItem('nyc-checklist', JSON.stringify([...checked]));
+    localStorage.setItem(this.lsKey, JSON.stringify([...checked]));
   }
 }

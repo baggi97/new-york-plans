@@ -2,6 +2,7 @@ import { Component, Input, ElementRef, ViewChild, AfterViewInit, OnDestroy, inje
 import { ConnectivityService } from '../../services/connectivity.service';
 import { DarkModeService } from '../../services/dark-mode.service';
 import { MapMarker } from '../../data/trip.interfaces';
+import { TripService } from '../../services/trip.service';
 import { environment } from '../../../environments/environment';
 
 const MARKER_COLORS = {
@@ -31,6 +32,7 @@ export class MapEmbedComponent implements AfterViewInit, OnDestroy {
 
   private connectivity = inject(ConnectivityService);
   private darkMode = inject(DarkModeService);
+  private tripService = inject(TripService);
   showOffline = signal(!navigator.onLine);
 
   private mapboxgl: any;
@@ -84,8 +86,8 @@ export class MapEmbedComponent implements AfterViewInit, OnDestroy {
     this.map = new this.mapboxgl.Map({
       container: this.mapEl.nativeElement,
       style,
-      center: [-73.985, 40.748],
-      zoom: 12,
+      center: [this.tripService.destination().lng, this.tripService.destination().lat],
+      zoom: this.tripService.destination().mapZoom ?? 12,
       attributionControl: false,
       interactive: false,
     });

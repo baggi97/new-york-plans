@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { TripService } from '../../services/trip.service';
 
 @Component({
   selector: 'app-site-footer',
@@ -9,12 +10,12 @@ import { Component } from '@angular/core';
         <div class="footer__divider"></div>
         <div class="footer__content">
           <div class="footer__brand">
-            <span class="footer__logo">NYC 2026</span>
-            <p class="footer__tagline">En personlig rejseguide til New York</p>
+            <span class="footer__logo">{{ trip.title }}</span>
+            <p class="footer__tagline">En personlig rejseguide til {{ trip.destination.city }}</p>
           </div>
           <div class="footer__details">
-            <p>22.–27. april 2026</p>
-            <p>2 rejsende · 6 dage · 1 by</p>
+            <p>{{ trip.dates }}</p>
+            <p>{{ trip.travelers }} · {{ trip.days.length }} dage</p>
           </div>
         </div>
         <p class="footer__note">
@@ -25,4 +26,7 @@ import { Component } from '@angular/core';
   `,
   styleUrl: './site-footer.scss',
 })
-export class SiteFooterComponent {}
+export class SiteFooterComponent {
+  private tripService = inject(TripService);
+  get trip() { return this.tripService.trip(); }
+}

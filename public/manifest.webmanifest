@@ -1,7 +1,7 @@
 {
-  "name": "New York 2026 — A Curated Guide for Two",
-  "short_name": "NYC '26",
-  "description": "En personlig, kureret rejseguide til 6 dage i New York City. April 2026.",
+  "name": "Rejseguide — Travel Guide",
+  "short_name": "Rejseguide",
+  "description": "En personlig, kureret rejseguide til dine rejser.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#faf8f5",

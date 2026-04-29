@@ -6,6 +6,7 @@ import { MapEmbedComponent } from '../map-embed/map-embed';
 import { PhotoJournalComponent } from '../photo-journal/photo-journal';
 import { DailyRecapComponent } from '../daily-recap/daily-recap';
 import { TripStatusService } from '../../services/trip-status.service';
+import { TripService } from '../../services/trip.service';
 import { WeatherService } from '../../services/weather.service';
 import { ItineraryCheckService } from '../../services/itinerary-check.service';
 import { hapticTap, hapticSuccess } from '../../utils/haptics';
@@ -192,6 +193,7 @@ export class DaySectionComponent implements OnInit, OnDestroy {
   @Input({ required: true }) day!: TripDay;
 
   private tripStatus = inject(TripStatusService);
+  private tripService = inject(TripService);
   weatherService = inject(WeatherService);
   itinerary = inject(ItineraryCheckService);
 
@@ -267,7 +269,7 @@ export class DaySectionComponent implements OnInit, OnDestroy {
 
     if (navigator.share) {
       try {
-        await navigator.share({ title: `NYC Dag ${this.day.id}`, text, url });
+        await navigator.share({ title: `${this.tripService.destination().city} Dag ${this.day.id}`, text, url });
       } catch { /* user cancelled */ }
     } else {
       await navigator.clipboard.writeText(`${text}\n${url}`);

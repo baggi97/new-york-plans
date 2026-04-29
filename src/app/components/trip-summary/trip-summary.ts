@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { TRIP_DATA } from '../../data/trip-data';
+import { Component, inject } from '@angular/core';
+import { TripService } from '../../services/trip.service';
 
 @Component({
   selector: 'app-trip-summary',
@@ -9,7 +9,7 @@ import { TRIP_DATA } from '../../data/trip-data';
       <div class="container">
         <div class="summary__header">
           <span class="summary__eyebrow">Rejseoverblik</span>
-          <h2 class="summary__title">6 dage i New York</h2>
+          <h2 class="summary__title">{{ trip.days.length }} dage i {{ trip.title }}</h2>
           <p class="summary__subtitle">{{ trip.dates }} · {{ trip.travelers }}</p>
         </div>
         <div class="summary__grid">
@@ -40,5 +40,6 @@ import { TRIP_DATA } from '../../data/trip-data';
   styleUrl: './trip-summary.scss',
 })
 export class TripSummaryComponent {
-  trip = TRIP_DATA;
+  private tripService = inject(TripService);
+  get trip() { return this.tripService.trip(); }
 }

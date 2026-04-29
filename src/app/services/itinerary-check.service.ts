@@ -1,14 +1,17 @@
-import { Injectable, signal } from '@angular/core';
-import { TRIP_DATA } from '../data/trip-data';
+import { Injectable, signal, inject } from '@angular/core';
+import { TripService } from './trip.service';
 
 const API = '/.netlify/functions/checklist';
-const LS_CHECKED = 'nyc-itinerary';
-const LS_SKIPPED = 'nyc-itinerary-skipped';
 
 @Injectable({ providedIn: 'root' })
 export class ItineraryCheckService {
-  private checked = signal<Set<string>>(this.loadSet(LS_CHECKED));
-  private skipped = signal<Set<string>>(this.loadSet(LS_SKIPPED));
+  private tripService = inject(TripService);
+
+  private get lsChecked() { return this.tripService.tripId() + '-itinerary'; }
+  private get lsSkipped() { return this.tripService.tripId() + '-itinerary-skipped'; }
+
+  private checked = signal<Set<string>>(this.loadSet(this.lsChecked));
+  private skipped = signal<Set<string>>(this.loadSet(this.lsSkipped));
   private pushInFlight = false;
   private localDirtyAt = 0;
   private pushTimer?: ReturnType<typeof setTimeout>;
@@ -41,7 +44,7 @@ export class ItineraryCheckService {
       next.add(key);
     }
     this.checked.set(next);
-    this.saveSet(LS_CHECKED, next);
+    this.saveSet(this.lsChecked, next);
     this.localDirtyAt = Date.now();
     this.debouncedPush();
   }
@@ -51,7 +54,7 @@ export class ItineraryCheckService {
     const next = new Set(this.skipped());
     next.add(key);
     this.skipped.set(next);
-    this.saveSet(LS_SKIPPED, next);
+    this.saveSet(this.lsSkipped, next);
     this.localDirtyAt = Date.now();
     this.debouncedPush();
   }
@@ -61,13 +64,13 @@ export class ItineraryCheckService {
     const next = new Set(this.skipped());
     next.delete(key);
     this.skipped.set(next);
-    this.saveSet(LS_SKIPPED, next);
+    this.saveSet(this.lsSkipped, next);
     this.localDirtyAt = Date.now();
     this.debouncedPush();
   }
 
   dayProgress(dayId: number): { done: number; total: number } {
-    const day = TRIP_DATA.days.find(d => d.id === dayId);
+    const day = this.tripService.days().find(d => d.id === dayId);
     if (!day) return { done: 0, total: 0 };
     let total = 0;
     let done = 0;
@@ -81,7 +84,7 @@ export class ItineraryCheckService {
   }
 
   nextUncheckedIndex(dayId: number): number {
-    const day = TRIP_DATA.days.find(d => d.id === dayId);
+    const day = this.tripService.days().find(d => d.id === dayId);
     if (!day) return -1;
     for (let i = 0; i < day.highlights.length; i++) {
       const key = `${dayId}-${i}`;
@@ -104,7 +107,7 @@ export class ItineraryCheckService {
     if (Date.now() - this.localDirtyAt < 3000) return;
 
     try {
-      const res = await fetch(API);
+      const res = await fetch(`${API}?tripId=${this.tripService.tripId()}`);
       if (!res.ok) return;
       const data = await res.json();
 
@@ -121,12 +124,12 @@ export class ItineraryCheckService {
       let changed = false;
       if (mergedChecked.size !== localChecked.size) {
         this.checked.set(mergedChecked);
-        this.saveSet(LS_CHECKED, mergedChecked);
+        this.saveSet(this.lsChecked, mergedChecked);
         changed = true;
       }
       if (mergedSkipped.size !== localSkipped.size) {
         this.skipped.set(mergedSkipped);
-        this.saveSet(LS_SKIPPED, mergedSkipped);
+        this.saveSet(this.lsSkipped, mergedSkipped);
         changed = true;
       }
 
@@ -140,7 +143,7 @@ export class ItineraryCheckService {
     if (!navigator.onLine) return;
     this.pushInFlight = true;
     try {
-      await fetch(API, {
+      await fetch(`${API}?tripId=${this.tripService.tripId()}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

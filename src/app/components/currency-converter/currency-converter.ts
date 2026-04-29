@@ -1,7 +1,6 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { ConnectivityService } from '../../services/connectivity.service';
-
-const NYC_TAX_RATE = 0.08875;
+import { TripService } from '../../services/trip.service';
 
 @Component({
   selector: 'app-currency-converter',
@@ -14,53 +13,35 @@ const NYC_TAX_RATE = 0.08875;
       </h3>
       <div class="currency__row">
         <div class="currency__field">
-          <label class="currency__label">USD</label>
-          <input type="number" class="currency__input" [value]="usd()" (input)="onUsdInput($event)" placeholder="0" inputmode="decimal" />
+          <label class="currency__label">{{ destCurrency }}</label>
+          <input type="number" class="currency__input" [value]="foreign()" (input)="onForeignInput($event)" placeholder="0" inputmode="decimal" />
         </div>
         <span class="currency__arrow">→</span>
         <div class="currency__field">
-          <label class="currency__label">DKK</label>
-          <input type="number" class="currency__input" [value]="dkk()" (input)="onDkkInput($event)" placeholder="0" inputmode="decimal" />
+          <label class="currency__label">{{ homeCurrency }}</label>
+          <input type="number" class="currency__input" [value]="home()" (input)="onHomeInput($event)" placeholder="0" inputmode="decimal" />
         </div>
       </div>
-      <span class="currency__rate">1 USD ≈ {{ rate().toFixed(2) }} DKK</span>
+      <span class="currency__rate">1 {{ destCurrency }} ≈ {{ rate().toFixed(2) }} {{ homeCurrency }}</span>
 
-      @if (usd() > 0) {
+      @if (foreign() > 0) {
         <div class="currency__breakdown">
-          <div class="currency__mode">
-            <button class="currency__mode-btn" [class.currency__mode-btn--active]="mode() === 'restaurant'" (click)="mode.set('restaurant')">Restaurant</button>
-            <button class="currency__mode-btn" [class.currency__mode-btn--active]="mode() === 'shop'" (click)="mode.set('shop')">Butik</button>
+          <div class="currency__tip-section">
+            <span class="currency__tip-label">Drikkepenge</span>
+            <div class="currency__tip-options">
+              @for (pct of tipOptions; track pct) {
+                <button class="currency__tip-btn" [class.currency__tip-btn--active]="tipPct() === pct" (click)="tipPct.set(pct)">{{ pct }}%</button>
+              }
+            </div>
           </div>
-
-          @if (mode() === 'restaurant') {
-            <div class="currency__tip-section">
-              <span class="currency__tip-label">Drikkepenge</span>
-              <div class="currency__tip-options">
-                @for (pct of tipOptions; track pct) {
-                  <button class="currency__tip-btn" [class.currency__tip-btn--active]="tipPct() === pct" (click)="tipPct.set(pct)">{{ pct }}%</button>
-                }
-              </div>
-            </div>
-            <div class="currency__detail-row">
-              <span>+ tip</span>
-              <span>\${{ tipAmount().toFixed(2) }}</span>
-            </div>
-            <div class="currency__total-row">
-              <span>Total</span>
-              <span>\${{ totalUsd().toFixed(2) }} ≈ {{ totalDkk().toFixed(0) }} kr.</span>
-            </div>
-          }
-
-          @if (mode() === 'shop') {
-            <div class="currency__detail-row">
-              <span>Sales tax 8.875%</span>
-              <span>+ \${{ taxAmount().toFixed(2) }}</span>
-            </div>
-            <div class="currency__total-row">
-              <span>Total</span>
-              <span>\${{ totalUsd().toFixed(2) }} ≈ {{ totalDkk().toFixed(0) }} kr.</span>
-            </div>
-          }
+          <div class="currency__detail-row">
+            <span>+ tip</span>
+            <span>{{ tipAmount().toFixed(2) }} {{ destCurrency }}</span>
+          </div>
+          <div class="currency__total-row">
+            <span>Total</span>
+            <span>{{ totalForeign().toFixed(2) }} {{ destCurrency }} ≈ {{ totalHome().toFixed(0) }} {{ homeCurrency }}</span>
+          </div>
         </div>
       }
     </div>
@@ -69,51 +50,49 @@ const NYC_TAX_RATE = 0.08875;
 })
 export class CurrencyConverterComponent implements OnInit {
   private connectivity = inject(ConnectivityService);
+  private tripService = inject(TripService);
+
+  get destCurrency() { return this.tripService.destination().currency; }
+  get homeCurrency() { return this.tripService.trip().homeCurrency; }
 
   rate = signal(6.85);
-  usd = signal(25);
-  dkk = signal(171);
-  mode = signal<'restaurant' | 'shop'>('restaurant');
+  foreign = signal(25);
+  home = signal(171);
   tipPct = signal(18);
   tipOptions = [15, 18, 20];
 
-  tipAmount = computed(() => this.usd() * (this.tipPct() / 100));
-  taxAmount = computed(() => this.usd() * NYC_TAX_RATE);
-
-  totalUsd = computed(() => {
-    if (this.mode() === 'restaurant') return this.usd() + this.tipAmount();
-    return this.usd() + this.taxAmount();
-  });
-
-  totalDkk = computed(() => this.totalUsd() * this.rate());
+  tipAmount = computed(() => this.foreign() * (this.tipPct() / 100));
+  totalForeign = computed(() => this.foreign() + this.tipAmount());
+  totalHome = computed(() => this.totalForeign() * this.rate());
 
   ngOnInit() {
     this.fetchRate();
-    this.dkk.set(Math.round(this.usd() * this.rate() * 100) / 100);
+    this.home.set(Math.round(this.foreign() * this.rate() * 100) / 100);
     this.connectivity.onReconnect(() => this.fetchRate());
   }
 
   async fetchRate() {
     try {
-      const res = await fetch('https://open.er-api.com/v6/latest/USD');
+      const res = await fetch(`https://open.er-api.com/v6/latest/${this.destCurrency}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
-      if (data.rates?.DKK) {
-        this.rate.set(data.rates.DKK);
-        this.dkk.set(Math.round(this.usd() * this.rate() * 100) / 100);
+      const homeRate = data.rates?.[this.homeCurrency];
+      if (homeRate) {
+        this.rate.set(homeRate);
+        this.home.set(Math.round(this.foreign() * this.rate() * 100) / 100);
       }
     } catch { /* use fallback rate */ }
   }
 
-  onDkkInput(e: Event) {
+  onHomeInput(e: Event) {
     const val = parseFloat((e.target as HTMLInputElement).value) || 0;
-    this.dkk.set(val);
-    this.usd.set(Math.round((val / this.rate()) * 100) / 100);
+    this.home.set(val);
+    this.foreign.set(Math.round((val / this.rate()) * 100) / 100);
   }
 
-  onUsdInput(e: Event) {
+  onForeignInput(e: Event) {
     const val = parseFloat((e.target as HTMLInputElement).value) || 0;
-    this.usd.set(val);
-    this.dkk.set(Math.round(val * this.rate() * 100) / 100);
+    this.foreign.set(val);
+    this.home.set(Math.round(val * this.rate() * 100) / 100);
   }
 }

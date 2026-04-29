@@ -19,12 +19,13 @@ import { NearbyPanelComponent } from './components/nearby-panel/nearby-panel';
 import { BottomTabsComponent, TabId } from './components/bottom-tabs/bottom-tabs';
 import { MobileToolbarComponent } from './components/mobile-toolbar/mobile-toolbar';
 import { HomeDashboardComponent } from './components/home-dashboard/home-dashboard';
+import { TripListComponent } from './components/trip-list/trip-list';
 import { DarkModeService } from './services/dark-mode.service';
 import { PhotoJournalService } from './services/photo-journal.service';
 import { NotificationService } from './services/notification.service';
 import { ItineraryCheckService } from './services/itinerary-check.service';
 import { GeofenceService } from './services/geofence.service';
-import { TRIP_DATA } from './data/trip-data';
+import { TripService } from './services/trip.service';
 
 @Component({
   selector: 'app-root',
@@ -50,6 +51,7 @@ import { TRIP_DATA } from './data/trip-data';
     BottomTabsComponent,
     MobileToolbarComponent,
     HomeDashboardComponent,
+    TripListComponent,
   ],
   template: `
     <div id="top">
@@ -81,6 +83,11 @@ import { TRIP_DATA } from './data/trip-data';
             <div class="view-enter">
               <app-practical-info />
               <app-site-footer />
+            </div>
+          }
+          @case ('rejser') {
+            <div class="view-enter">
+              <app-trip-list (tripSelected)="onTripSelected()" />
             </div>
           }
         }
@@ -116,7 +123,8 @@ import { TRIP_DATA } from './data/trip-data';
   `,
 })
 export class AppComponent implements OnInit, OnDestroy {
-  days = TRIP_DATA.days;
+  private tripService = inject(TripService);
+  get days() { return this.tripService.days(); }
   activeTab = signal<TabId>('hjem');
   isMobile = signal(typeof window !== 'undefined' && window.innerWidth < 768);
 
@@ -144,7 +152,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.activeTab.set('dage');
   }
 
+  onTripSelected() {
+    this.activeTab.set('hjem');
+  }
+
   ngOnInit() {
+    this.tripService.init();
     this.darkMode.init();
     this.journal.init();
     this.notifications.init();

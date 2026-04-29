@@ -2,7 +2,7 @@ import { Component, inject, OnInit, OnDestroy, AfterViewInit, output, signal, co
 import { TripStatusService } from '../../services/trip-status.service';
 import { ItineraryCheckService } from '../../services/itinerary-check.service';
 import { WeatherService } from '../../services/weather.service';
-import { TRIP_DATA } from '../../data/trip-data';
+import { TripService } from '../../services/trip.service';
 import { Booking } from '../../data/trip.interfaces';
 import { hapticTap } from '../../utils/haptics';
 
@@ -22,7 +22,7 @@ import { hapticTap } from '../../utils/haptics';
       <!-- Header -->
       <div class="dash__header">
         <span class="dash__badge">{{ tripStatus.heroLabel() }}</span>
-        <h1 class="dash__title">New York</h1>
+        <h1 class="dash__title">{{ trip.title }}</h1>
         <span class="dash__dates">{{ trip.dates }} · {{ trip.travelers }}</span>
       </div>
 
@@ -54,13 +54,13 @@ import { hapticTap } from '../../utils/haptics';
 
         <div class="dash__card dash__card--clocks">
           <div class="dash__clock dash__clock--primary">
-            <span class="dash__clock-label">NYC</span>
-            <span class="dash__clock-time">{{ tripStatus.nycTime() }}</span>
+            <span class="dash__clock-label">{{ trip.destination.city }}</span>
+            <span class="dash__clock-time">{{ tripStatus.destTime() }}</span>
           </div>
           <div class="dash__clock-divider"></div>
           <div class="dash__clock dash__clock--secondary">
-            <span class="dash__clock-label">DK</span>
-            <span class="dash__clock-time">{{ tripStatus.dkTime() }}</span>
+            <span class="dash__clock-label">Hjemme</span>
+            <span class="dash__clock-time">{{ tripStatus.homeTime() }}</span>
           </div>
         </div>
       </div>
@@ -138,18 +138,13 @@ export class HomeDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   tripStatus = inject(TripStatusService);
   private itinerary = inject(ItineraryCheckService);
   weather = inject(WeatherService);
+  private tripService = inject(TripService);
 
-  trip = TRIP_DATA;
+  get trip() { return this.tripService.trip(); }
   circumference = 2 * Math.PI * 30;
 
   activeIdx = signal(0);
-  images = [
-    'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=800&q=60',
-    'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=60',
-    'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=60',
-    'https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=800&q=60',
-    'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=60',
-  ];
+  get images() { return this.trip.heroImages ?? []; }
 
   private imageInterval?: ReturnType<typeof setInterval>;
   private bookingInterval?: ReturnType<typeof setInterval>;
@@ -162,7 +157,7 @@ export class HomeDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
       return d === 0 ? '🎉' : `${d}`;
     }
     if (s === 'during') return `Dag ${this.tripStatus.currentDayNumber()}`;
-    return '6';
+    return `${this.trip.days.length}`;
   });
 
   countdownLabel = computed(() => {
@@ -173,7 +168,7 @@ export class HomeDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
       if (d === 1) return 'dag endnu';
       return 'dage endnu';
     }
-    if (s === 'during') return 'af 6';
+    if (s === 'during') return `af ${this.trip.days.length}`;
     return 'dage oplevet';
   });
 

@@ -3,7 +3,7 @@ import { CurrencyConverterComponent } from '../currency-converter/currency-conve
 import { TripStatusService } from '../../services/trip-status.service';
 import { ItineraryCheckService } from '../../services/itinerary-check.service';
 import { GeolocationService, haversineMeters } from '../../services/geolocation.service';
-import { TRIP_DATA } from '../../data/trip-data';
+import { TripService } from '../../services/trip.service';
 import { MapMarker } from '../../data/trip.interfaces';
 import { hapticTap } from '../../utils/haptics';
 
@@ -74,6 +74,7 @@ export class MobileToolbarComponent implements OnDestroy {
   navigateDay = output<number>();
 
   private tripStatus = inject(TripStatusService);
+  private tripService = inject(TripService);
   private itinerary = inject(ItineraryCheckService);
   geo = inject(GeolocationService);
 
@@ -83,7 +84,7 @@ export class MobileToolbarComponent implements OnDestroy {
   nextItem = computed(() => {
     const dayNum = this.tripStatus.currentDayNumber();
     if (dayNum === 0) return null;
-    const day = TRIP_DATA.days.find(d => d.id === dayNum);
+    const day = this.tripService.days().find(d => d.id === dayNum);
     if (!day) return null;
     const idx = this.itinerary.nextUncheckedIndex(dayNum);
     if (idx === -1) return null;
@@ -95,7 +96,7 @@ export class MobileToolbarComponent implements OnDestroy {
     const pos = this.geo.position();
     if (!pos) return [];
     const dayNum = this.tripStatus.currentDayNumber();
-    const day = dayNum > 0 ? TRIP_DATA.days.find(d => d.id === dayNum) : TRIP_DATA.days[0];
+    const day = dayNum > 0 ? this.tripService.days().find(d => d.id === dayNum) : this.tripService.days()[0];
     if (!day) return [];
     return day.markers
       .map((marker: MapMarker) => ({ marker, distance: haversineMeters(pos, marker) }))

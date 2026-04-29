@@ -47,8 +47,6 @@ export interface TripDay {
   transport: string[];
   bookings: Booking[];
   fromList: FromListItem[];
-  mapEmbedUrl: string;
-  mapStaticUrl: string;
   markers: MapMarker[];
   images: TripImage[];
   walkingDistance?: string;
@@ -83,13 +81,28 @@ export interface PracticalInfo {
   tipping: TippingRule[];
 }
 
+export interface TripDestination {
+  city: string;
+  country: string;
+  timezone: string;
+  lat: number;
+  lng: number;
+  currency: string;
+  mapZoom?: number;
+}
+
 export interface TripData {
+  id: string;
   title: string;
   subtitle: string;
   dates: string;
   travelers: string;
   tripStart: string;
   tripEnd: string;
+  destination: TripDestination;
+  homeCurrency: string;
+  homeTimezone: string;
+  heroImages?: string[];
   days: TripDay[];
   practicalInfo: PracticalInfo;
 }
