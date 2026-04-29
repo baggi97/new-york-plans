@@ -17,6 +17,8 @@ const DB_VERSION = 1;
 export class PhotoJournalService {
   entries = signal<JournalEntry[]>([]);
   private db: IDBDatabase | null = null;
+  private pendingIds = new Set<string>();
+  private localDirtyAt = 0;
 
   entriesByDay = computed(() => {
     const map = new Map<number, JournalEntry[]>();
@@ -45,12 +47,35 @@ export class PhotoJournalService {
 
   private async syncFromServer() {
     if (!navigator.onLine) return;
+    if (this.pendingIds.size > 0) return;
+    if (Date.now() - this.localDirtyAt < 5000) return;
+
     try {
       const res = await fetch(API);
       if (!res.ok) return;
       const remote: JournalEntry[] = await res.json();
-      this.entries.set(remote);
-      await this.replaceAllLocal(remote);
+
+      const local = this.entries();
+      const remoteMap = new Map(remote.map(e => [e.id, e]));
+      const localMap = new Map(local.map(e => [e.id, e]));
+
+      // Merge: keep all remote entries + any local-only entries (not yet synced)
+      const merged = [...remote];
+      for (const entry of local) {
+        if (!remoteMap.has(entry.id)) {
+          merged.push(entry);
+        }
+      }
+
+      merged.sort((a, b) => a.timestamp - b.timestamp);
+
+      const hasChanged = merged.length !== local.length ||
+        merged.some((e, i) => e.id !== local[i]?.id);
+
+      if (hasChanged) {
+        this.entries.set(merged);
+        await this.replaceAllLocal(merged);
+      }
     } catch { /* offline or server error -- use cache */ }
   }
 
@@ -63,6 +88,8 @@ export class PhotoJournalService {
       timestamp: Date.now(),
     };
 
+    this.pendingIds.add(entry.id);
+    this.localDirtyAt = Date.now();
     this.entries.update(list => [...list, entry]);
     await this.putLocal(entry);
 
@@ -75,20 +102,23 @@ export class PhotoJournalService {
         });
         if (res.ok) {
           const serverEntry: JournalEntry = await res.json();
-          await this.deleteLocal(entry.id);
           await this.putLocal(serverEntry);
+          await this.deleteLocal(entry.id);
           this.entries.update(list =>
             list.map(e => e.id === entry.id ? serverEntry : e)
           );
+          this.pendingIds.delete(entry.id);
           return serverEntry;
         }
       } catch { /* keep local version */ }
     }
 
+    this.pendingIds.delete(entry.id);
     return entry;
   }
 
   async removeEntry(id: string) {
+    this.localDirtyAt = Date.now();
     this.entries.update(list => list.filter(e => e.id !== id));
     await this.deleteLocal(id);
 
@@ -102,6 +132,7 @@ export class PhotoJournalService {
   async updateCaption(id: string, caption: string) {
     const entry = this.entries().find(e => e.id === id);
     if (!entry) return;
+    this.localDirtyAt = Date.now();
     const updated = { ...entry, caption };
     this.entries.update(list => list.map(e => e.id === id ? updated : e));
     await this.putLocal(updated);
