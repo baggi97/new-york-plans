@@ -112,19 +112,30 @@ import { fireConfetti } from '../../utils/confetti';
               </div>
               <ul class="day__list">
                 @for (item of day.highlights; track item.label; let i = $index) {
-                  <li [class.day__list-item--checked]="itinerary.isChecked(day.id, i)">
-                    <label class="day__check-label">
-                      <input type="checkbox" [checked]="itinerary.isChecked(day.id, i)" (change)="onToggle(day.id, i)" />
-                      <span class="day__checkbox">
-                        @if (itinerary.isChecked(day.id, i)) {
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  <li [class.day__list-item--checked]="itinerary.isChecked(day.id, i)"
+                      [class.day__list-item--skipped]="itinerary.isSkipped(day.id, i)">
+                    @if (itinerary.isSkipped(day.id, i)) {
+                      <div class="day__check-label day__check-label--skipped">
+                        <span class="day__item-label">{{ item.label }}</span>
+                        <button class="day__restore-btn" (click)="onUnskip(day.id, i)">Gendan</button>
+                      </div>
+                    } @else {
+                      <label class="day__check-label">
+                        <input type="checkbox" [checked]="itinerary.isChecked(day.id, i)" (change)="onToggle(day.id, i)" />
+                        <span class="day__checkbox">
+                          @if (itinerary.isChecked(day.id, i)) {
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                          }
+                        </span>
+                        <span class="day__item-label">{{ item.label }}</span>
+                        @if (item.duration) {
+                          <span class="day__item-duration">{{ item.duration }}</span>
                         }
-                      </span>
-                      <span class="day__item-label">{{ item.label }}</span>
-                      @if (item.duration) {
-                        <span class="day__item-duration">{{ item.duration }}</span>
-                      }
-                    </label>
+                      </label>
+                      <button class="day__skip-btn" (click)="onSkip(day.id, i)" title="Spring over">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      </button>
+                    }
                   </li>
                 }
               </ul>
@@ -301,6 +312,17 @@ export class DaySectionComponent implements OnInit, OnDestroy {
     hapticTap();
     this.itinerary.toggle(dayId, index);
     this.checkCompletion();
+  }
+
+  onSkip(dayId: number, index: number) {
+    hapticTap();
+    this.itinerary.skip(dayId, index);
+    this.checkCompletion();
+  }
+
+  onUnskip(dayId: number, index: number) {
+    hapticTap();
+    this.itinerary.unskip(dayId, index);
   }
 
   private checkCompletion() {
