@@ -39,7 +39,7 @@ export default async (req: Request, _context: Context) => {
   if (req.method === 'GET') {
     let ids = await getIndex(store, indexKey);
 
-    if (indexKey !== '__index') {
+    if (indexKey === '__index-new-york-2026') {
       const legacyIds = await getIndex(store, '__index');
       if (legacyIds.length > 0) {
         const existing = new Set(ids);
@@ -47,8 +47,10 @@ export default async (req: Request, _context: Context) => {
         if (missing.length > 0) {
           ids = [...ids, ...missing];
           await setIndex(store, indexKey, ids);
-          await setIndex(store, '__index', []);
         }
+        await setIndex(store, '__index', []);
+        // Clean up Barcelona index that was incorrectly polluted by earlier migration
+        await setIndex(store, '__index-barcelona-2026', []);
       }
     }
 

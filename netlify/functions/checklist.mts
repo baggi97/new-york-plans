@@ -33,7 +33,7 @@ export default async (req: Request, _context: Context) => {
   if (req.method === 'GET') {
     let raw = await store.get(blobKey);
 
-    if (blobKey !== 'checklist') {
+    if (blobKey === 'checklist-new-york-2026') {
       const legacyRaw = await store.get('checklist');
       if (legacyRaw) {
         const legacy = parseStored(legacyRaw);
@@ -43,9 +43,9 @@ export default async (req: Request, _context: Context) => {
         if (mergedChecked.length > current.checked.length || mergedSkipped.length > current.skipped.length) {
           const merged = JSON.stringify({ checked: mergedChecked, skipped: mergedSkipped });
           await store.set(blobKey, merged);
-          await store.delete('checklist');
           raw = merged;
         }
+        await store.delete('checklist');
       }
     }
 
