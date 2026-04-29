@@ -7,6 +7,9 @@ const LS_KEY = 'nyc-itinerary';
 @Injectable({ providedIn: 'root' })
 export class ItineraryCheckService {
   private checked = signal<Set<string>>(this.load());
+  private pushInFlight = false;
+  private localDirtyAt = 0;
+  private pushTimer?: ReturnType<typeof setTimeout>;
 
   init() {
     this.syncFromServer();
@@ -32,7 +35,8 @@ export class ItineraryCheckService {
     }
     this.checked.set(next);
     this.save(next);
-    this.pushToServer(next);
+    this.localDirtyAt = Date.now();
+    this.debouncedPush();
   }
 
   dayProgress(dayId: number): { done: number; total: number } {
@@ -55,27 +59,50 @@ export class ItineraryCheckService {
     return -1;
   }
 
+  private debouncedPush() {
+    if (this.pushTimer) clearTimeout(this.pushTimer);
+    this.pushTimer = setTimeout(() => {
+      this.pushToServer(this.checked());
+    }, 500);
+  }
+
   private async syncFromServer() {
     if (!navigator.onLine) return;
+    if (this.pushInFlight) return;
+    if (Date.now() - this.localDirtyAt < 3000) return;
+
     try {
       const res = await fetch(API);
       if (!res.ok) return;
       const items: string[] = await res.json();
-      const set = new Set(items);
-      this.checked.set(set);
-      this.save(set);
-    } catch { /* offline or server error -- use cache */ }
+      const serverSet = new Set(items);
+
+      // Merge: union of server and local, so no checks are lost
+      const local = this.checked();
+      const merged = new Set([...local, ...serverSet]);
+
+      // Only update if there's a difference
+      if (merged.size !== local.size) {
+        this.checked.set(merged);
+        this.save(merged);
+        // Push the merged set back so both devices stay in sync
+        this.pushToServer(merged);
+      }
+    } catch { /* offline or server error -- use local cache */ }
   }
 
   private async pushToServer(checked: Set<string>) {
     if (!navigator.onLine) return;
+    this.pushInFlight = true;
     try {
       await fetch(API, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify([...checked]),
       });
-    } catch { /* best effort */ }
+    } catch { /* best effort */ } finally {
+      this.pushInFlight = false;
+    }
   }
 
   private load(): Set<string> {
