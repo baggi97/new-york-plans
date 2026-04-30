@@ -1,0 +1,117 @@
+.install-prompt {
+  position: fixed;
+  bottom: 7.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 420px;
+  width: calc(100% - 2rem);
+  padding: 1rem 1.25rem;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border, #e8e2da);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(44, 40, 37, 0.15);
+  animation: install-slide-up 0.4s ease-out;
+
+  [data-theme='dark'] & {
+    background: var(--card-bg, #2a2725);
+    border-color: var(--border, #3d3835);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  }
+}
+
+@keyframes install-slide-up {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.install-prompt__icon {
+  flex-shrink: 0;
+  color: var(--navy, #3d4f6f);
+
+  [data-theme='dark'] & {
+    color: var(--gold, #c9a96e);
+  }
+}
+
+.install-prompt__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.install-prompt__text {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--text-primary, #2c2825);
+
+  [data-theme='dark'] & {
+    color: var(--text-primary, #e8e2da);
+  }
+
+  strong {
+    font-weight: 600;
+  }
+}
+
+.install-prompt__share-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0.15rem;
+  color: var(--navy, #3d4f6f);
+
+  [data-theme='dark'] & {
+    color: var(--gold, #c9a96e);
+  }
+}
+
+.install-prompt__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.install-prompt__btn {
+  border: none;
+  border-radius: 100px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.install-prompt__btn--accept {
+  background: var(--navy, #3d4f6f);
+  color: #fff;
+
+  &:hover {
+    background: var(--sage, #7a9a7e);
+  }
+}
+
+.install-prompt__btn--dismiss {
+  background: transparent;
+  color: var(--text-secondary, #7a7068);
+  padding: 0.3rem 0.9rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

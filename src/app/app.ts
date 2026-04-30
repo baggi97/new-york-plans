@@ -16,6 +16,7 @@ import { CurrencyFabComponent } from './components/currency-fab/currency-fab';
 import { UpdateToastComponent } from './components/update-toast/update-toast';
 import { NotificationPromptComponent } from './components/notification-prompt/notification-prompt';
 import { NearbyPanelComponent } from './components/nearby-panel/nearby-panel';
+import { InstallPromptComponent } from './components/install-prompt/install-prompt';
 import { BottomTabsComponent, TabId } from './components/bottom-tabs/bottom-tabs';
 import { MobileToolbarComponent } from './components/mobile-toolbar/mobile-toolbar';
 import { HomeDashboardComponent } from './components/home-dashboard/home-dashboard';
@@ -52,6 +53,7 @@ import { TripService } from './services/trip.service';
     MobileToolbarComponent,
     HomeDashboardComponent,
     TripListComponent,
+    InstallPromptComponent,
   ],
   template: `
     <div id="top">
@@ -114,6 +116,7 @@ import { TripService } from './services/trip.service';
       <app-update-toast />
       <app-notification-prompt />
       <app-nearby-panel />
+      <app-install-prompt />
     </div>
   `,
   styles: `
