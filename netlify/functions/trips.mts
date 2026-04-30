@@ -21,6 +21,12 @@ async function setIndex(store: ReturnType<typeof getStore>, index: TripMeta[]) {
   await store.set(INDEX_KEY, JSON.stringify(index));
 }
 
+function getAllowedTrips(req: Request): Set<string> | null {
+  const header = req.headers.get('x-travel-trips');
+  if (!header || header === '*') return null;
+  return new Set(header.split(',').map(s => s.trim()).filter(Boolean));
+}
+
 export default async (req: Request, _context: Context) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204 });
@@ -31,14 +37,20 @@ export default async (req: Request, _context: Context) => {
   const url = new URL(req.url);
   const id = url.searchParams.get('id');
 
+  const allowed = getAllowedTrips(req);
+
   if (req.method === 'GET') {
     if (id) {
+      if (allowed && !allowed.has(id)) {
+        return new Response(JSON.stringify({ error: 'Access denied' }), { status: 403, headers });
+      }
       const raw = await store.get(id);
       if (!raw) return new Response(JSON.stringify({ error: 'Trip not found' }), { status: 404, headers });
       return new Response(raw, { status: 200, headers });
     }
     const index = await getIndex(store);
-    return new Response(JSON.stringify(index), { status: 200, headers });
+    const filtered = allowed ? index.filter(t => allowed.has(t.id)) : index;
+    return new Response(JSON.stringify(filtered), { status: 200, headers });
   }
 
   if (req.method === 'PUT') {

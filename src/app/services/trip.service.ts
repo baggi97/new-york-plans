@@ -29,9 +29,14 @@ export class TripService {
 
   async init() {
     await this.loadTrips();
+    const list = this.trips();
     const savedId = localStorage.getItem(LS_ACTIVE_TRIP);
-    if (savedId && savedId !== this.activeTrip().id) {
+    const availableIds = new Set(list.map(t => t.id));
+
+    if (savedId && availableIds.has(savedId) && savedId !== this.activeTrip().id) {
       await this.selectTrip(savedId);
+    } else if (list.length > 0 && !availableIds.has(this.activeTrip().id)) {
+      await this.selectTrip(list[0].id);
     }
   }
 
@@ -40,15 +45,15 @@ export class TripService {
       const res = await fetch(API);
       if (!res.ok) return;
       const list: TripMeta[] = await res.json();
-      const seedTrips = [TRIP_DATA, BARCELONA_DATA];
-      const existingIds = new Set(list.map(t => t.id));
-      const missing = seedTrips.filter(t => !existingIds.has(t.id));
-      if (missing.length > 0) {
-        await Promise.all(missing.map(t => this.saveTrip(t)));
-        for (const t of missing) {
+
+      if (list.length === 0) {
+        const seedTrips = [TRIP_DATA, BARCELONA_DATA];
+        await Promise.all(seedTrips.map(t => this.saveTrip(t)));
+        for (const t of seedTrips) {
           list.push({ id: t.id, title: t.title, city: t.destination.city, dates: t.dates });
         }
       }
+
       this.trips.set(list);
     } catch { /* offline -- use default */ }
   }
