@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <title>Invite Admin — Rejseguide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --text: #2c2825;
+      --muted: #7a7068;
+      --border: #e8e2da;
+      --navy: #3d4f6f;
+      --gold: #c9a96e;
+      --sage: #7a9a7e;
+      --red: #b43c3c;
+      --radius: 12px;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Playfair Display', Georgia, serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 4px 16px rgba(44, 40, 37, 0.08);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 0.3rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--bg);
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--navy);
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 100px;
+      background: var(--navy);
+      color: #fff;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:hover { background: var(--sage); }
+    button:active { transform: scale(0.98); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .status {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      text-align: center;
+      display: none;
+    }
+
+    .status--ok {
+      display: block;
+      background: rgba(122, 154, 126, 0.12);
+      color: var(--sage);
+    }
+
+    .status--err {
+      display: block;
+      background: rgba(180, 60, 60, 0.1);
+      color: var(--red);
+    }
+
+    .link-box {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      background: rgba(61, 79, 111, 0.06);
+      word-break: break-all;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .link-box a {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .link-box .copy-btn {
+      display: inline-block;
+      width: auto;
+      padding: 0.3rem 0.8rem;
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 6px;
+      background: var(--navy);
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .invite-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .invite-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+
+    .invite-list li:last-child { border-bottom: none; }
+
+    .invite-name { font-weight: 600; color: var(--text); }
+
+    .invite-meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .badge--unused {
+      background: rgba(201, 169, 110, 0.15);
+      color: var(--gold);
+    }
+
+    .badge--used {
+      background: rgba(122, 154, 126, 0.15);
+      color: var(--sage);
+    }
+
+    .revoke-btn {
+      width: auto;
+      padding: 0.2rem 0.6rem;
+      margin-left: 0.5rem;
+      font-size: 0.65rem;
+      border-radius: 6px;
+      background: var(--red);
+    }
+
+    .invite-right {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .empty-msg {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .trip-picker {
+      margin-bottom: 1rem;
+    }
+
+    .trip-picker__list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+    }
+
+    .trip-picker__item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .trip-picker__item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+      accent-color: var(--navy);
+    }
+
+    .trip-picker__loading {
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding: 0.4rem 0;
+    }
+
+    .trip-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-top: 0.2rem;
+    }
+
+    .badge--trip {
+      background: rgba(61, 79, 111, 0.1);
+      color: var(--navy);
+      font-size: 0.6rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Invitationer</h1>
+    <p class="subtitle">Generer invitationslinks til rejseguiden</p>
+
+    <label for="secret">Admin kode</label>
+    <input id="secret" type="password" placeholder="Indtast admin kode" autocomplete="off">
+
+    <label for="name">Navn / enhed</label>
+    <input id="name" type="text" placeholder="F.eks. Mors telefon">
+
+    <div class="trip-picker">
+      <label>Rejser</label>
+      <div class="trip-picker__list" id="trip-picker">
+        <label class="trip-picker__item">
+          <input type="checkbox" id="trip-all" checked>
+          <span>Alle rejser</span>
+        </label>
+        <div id="trip-checkboxes" class="trip-picker__loading">Indtast admin kode for at indlæse rejser...</div>
+      </div>
+    </div>
+
+    <button id="generate">Generer invitation</button>
+    <div id="status"></div>
+    <div id="link-box" class="link-box"></div>
+  </div>
+
+  <div class="card" id="list-card" style="display:none;">
+    <h2>Aktive invitationer</h2>
+    <p class="subtitle">Klik "Slet" for at tilbagekalde adgang</p>
+    <ul class="invite-list" id="invite-list"></ul>
+  </div>
+
+  <script>
+    var secretEl = document.getElementById('secret');
+    var nameEl = document.getElementById('name');
+    var btn = document.getElementById('generate');
+    var statusEl = document.getElementById('status');
+    var linkBox = document.getElementById('link-box');
+    var listCard = document.getElementById('list-card');
+    var listEl = document.getElementById('invite-list');
+    var tripAllEl = document.getElementById('trip-all');
+    var tripCheckboxesEl = document.getElementById('trip-checkboxes');
+    var availableTrips = [];
+
+    function apiUrl(path) {
+      return '/.netlify/functions/invites' + (path || '');
+    }
+
+    function showStatus(msg, ok) {
+      statusEl.className = 'status ' + (ok ? 'status--ok' : 'status--err');
+      statusEl.textContent = msg;
+    }
+
+    function getSelectedTripIds() {
+      if (tripAllEl.checked) return ['*'];
+      var checked = document.querySelectorAll('.trip-cb:checked');
+      return Array.from(checked).map(function (cb) { return cb.value; });
+    }
+
+    async function loadTrips() {
+      try {
+        var res = await fetch('/.netlify/functions/trips');
+        if (!res.ok) return;
+        availableTrips = await res.json();
+        tripCheckboxesEl.innerHTML = '';
+        availableTrips.forEach(function (trip) {
+          var lbl = document.createElement('label');
+          lbl.className = 'trip-picker__item';
+          var cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.className = 'trip-cb';
+          cb.value = trip.id;
+          cb.disabled = tripAllEl.checked;
+          var span = document.createElement('span');
+          span.textContent = trip.city + ' — ' + trip.dates;
+          lbl.appendChild(cb);
+          lbl.appendChild(span);
+          tripCheckboxesEl.appendChild(lbl);
+        });
+      } catch (e) {
+        tripCheckboxesEl.textContent = 'Kunne ikke indlæse rejser';
+      }
+    }
+
+    tripAllEl.addEventListener('change', function () {
+      var cbs = document.querySelectorAll('.trip-cb');
+      cbs.forEach(function (cb) {
+        cb.disabled = tripAllEl.checked;
+        if (tripAllEl.checked) cb.checked = false;
+      });
+    });
+
+    async function loadInvites() {
+      var secret = secretEl.value.trim();
+      if (!secret) return;
+
+      try {
+        var res = await fetch(apiUrl('?secret=' + encodeURIComponent(secret)));
+        if (!res.ok) return;
+        var invites = await res.json();
+
+        if (invites.length === 0) {
+          listCard.style.display = 'block';
+          listEl.innerHTML = '<li class="empty-msg">Ingen invitationer endnu</li>';
+          return;
+        }
+
+        listCard.style.display = 'block';
+        listEl.innerHTML = '';
+
+        invites.forEach(function (inv) {
+          var li = document.createElement('li');
+
+          var left = document.createElement('div');
+          var nameSpan = document.createElement('div');
+          nameSpan.className = 'invite-name';
+          nameSpan.textContent = inv.name;
+          left.appendChild(nameSpan);
+
+          var meta = document.createElement('div');
+          meta.className = 'invite-meta';
+          var created = new Date(inv.createdAt).toLocaleDateString('da-DK', {
+            day: 'numeric', month: 'short', year: 'numeric'
+          });
+          meta.textContent = 'Oprettet ' + created;
+          if (inv.usedAt) {
+            meta.textContent += ' · Brugt ' + new Date(inv.usedAt).toLocaleDateString('da-DK', {
+              day: 'numeric', month: 'short', year: 'numeric'
+            });
+          }
+          left.appendChild(meta);
+
+          var tripBadges = document.createElement('div');
+          tripBadges.className = 'trip-badges';
+          var trips = inv.tripIds || ['*'];
+          if (trips.length === 1 && trips[0] === '*') {
+            var b = document.createElement('span');
+            b.className = 'badge badge--trip';
+            b.textContent = 'Alle rejser';
+            tripBadges.appendChild(b);
+          } else {
+            trips.forEach(function (tid) {
+              var match = availableTrips.find(function (t) { return t.id === tid; });
+              var b = document.createElement('span');
+              b.className = 'badge badge--trip';
+              b.textContent = match ? match.city : tid;
+              tripBadges.appendChild(b);
+            });
+          }
+          left.appendChild(tripBadges);
+
+          var right = document.createElement('div');
+          right.className = 'invite-right';
+
+          var badge = document.createElement('span');
+          badge.className = 'badge ' + (inv.usedAt ? 'badge--used' : 'badge--unused');
+          badge.textContent = inv.usedAt ? 'Brugt' : 'Venter';
+          right.appendChild(badge);
+
+          var revokeBtn = document.createElement('button');
+          revokeBtn.className = 'revoke-btn';
+          revokeBtn.textContent = 'Slet';
+          revokeBtn.onclick = function () { revokeInvite(inv.token); };
+          right.appendChild(revokeBtn);
+
+          li.appendChild(left);
+          li.appendChild(right);
+          listEl.appendChild(li);
+        });
+      } catch (e) {
+        console.error('Failed to load invites', e);
+      }
+    }
+
+    async function revokeInvite(token) {
+      var secret = secretEl.value.trim();
+      if (!secret) return;
+
+      try {
+        var res = await fetch(
+          apiUrl('?token=' + encodeURIComponent(token) + '&secret=' + encodeURIComponent(secret)),
+          { method: 'DELETE' }
+        );
+        if (res.ok) {
+          loadInvites();
+        } else {
+          showStatus('Kunne ikke slette invitationen', false);
+        }
+      } catch (e) {
+        showStatus('Netværksfejl', false);
+      }
+    }
+
+    btn.addEventListener('click', async function () {
+      var secret = secretEl.value.trim();
+      var name = nameEl.value.trim();
+
+      if (!secret) {
+        showStatus('Indtast admin kode', false);
+        return;
+      }
+
+      var tripIds = getSelectedTripIds();
+      if (tripIds.length === 0) {
+        showStatus('Vælg mindst én rejse', false);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Genererer...';
+      statusEl.className = 'status';
+      linkBox.style.display = 'none';
+
+      try {
+        var res = await fetch(apiUrl(), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-secret': secret
+          },
+          body: JSON.stringify({ name: name || 'Unnamed', tripIds: tripIds }),
+        });
+
+        var data = await res.json();
+
+        if (!res.ok) {
+          showStatus(data.error || 'Fejl ' + res.status, false);
+        } else {
+          showStatus('Invitation oprettet!', true);
+          linkBox.style.display = 'block';
+          linkBox.innerHTML =
+            '<a href="' + data.url + '" target="_blank">' + data.url + '</a>' +
+            '<br><button class="copy-btn" onclick="copyLink(\'' + data.url + '\')">Kopiér link</button>';
+          nameEl.value = '';
+          loadInvites();
+        }
+      } catch (e) {
+        showStatus('Netværksfejl — prøv igen', false);
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Generer invitation';
+    });
+
+    function copyLink(url) {
+      navigator.clipboard.writeText(url).then(function () {
+        var copyBtn = document.querySelector('.copy-btn');
+        if (copyBtn) {
+          copyBtn.textContent = 'Kopieret!';
+          setTimeout(function () { copyBtn.textContent = 'Kopiér link'; }, 2000);
+        }
+      });
+    }
+
+    function onSecretReady() {
+      loadInvites();
+      loadTrips();
+    }
+    secretEl.addEventListener('change', onSecretReady);
+    secretEl.addEventListener('blur', onSecretReady);
+  </script>
+</body>
+</html>

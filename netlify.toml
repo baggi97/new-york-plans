@@ -24,6 +24,10 @@
   [headers.values]
     Content-Type = "application/manifest+json"
 
+## Edge Function: auth gate — config is inline in netlify/edge-functions/auth.ts
+## Runs on all paths (/*), excludes /icons/* and /.netlify/functions/*
+## Requires ACCESS_SECRET env var to be set (if unset, auth is disabled)
+
 ## SPA fallback redirect is in public/_redirects so it only applies in
 ## production builds, not during `netlify dev` (which proxies to Angular's
 ## dev server that already handles SPA routing).

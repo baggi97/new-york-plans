@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'travel-1.1.6';
+const CACHE_VERSION = 'travel-1.3.0';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -130,6 +130,10 @@ function isNetlifyFunction(url) {
   return url.pathname.startsWith('/.netlify/functions/');
 }
 
+async function isAuthGateResponse(response) {
+  return response.status === 403;
+}
+
 async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
@@ -166,6 +170,9 @@ async function networkFirstWithCache(request) {
   const cache = await caches.open(STATIC_CACHE);
   try {
     const response = await fetch(request);
+    if (await isAuthGateResponse(response)) {
+      return response;
+    }
     if (response.ok) {
       cache.put(request, response.clone());
     }

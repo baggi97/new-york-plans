@@ -1,6 +1,6 @@
-# New York 2026 — A Curated Guide for Two
+# Rejseguide — Travel Guide
 
-En premium digital rejseguide til 6 dage i New York City, bygget som et editorial rejsemagasin.
+En premium digital rejseguide bygget som et editorial rejsemagasin. Understøtter flere rejser (New York, Barcelona, osv.).
 
 ## Kør lokalt
 
@@ -10,6 +10,16 @@ npx ng serve
 ```
 
 Åbn [http://localhost:4200](http://localhost:4200) i din browser.
+
+## Environment Variables (Netlify UI)
+
+| Variable | Required | Description |
+|---|---|---|
+| `MAPBOX_TOKEN` | Yes | Mapbox GL public token for maps |
+| `VAPID_PUBLIC_KEY` | Yes | VAPID key for push notifications |
+| `PUSH_SECRET` | Yes | Admin secret for sending push notifications |
+| `ACCESS_SECRET` | Yes | Used to HMAC-sign access cookies. Generate with `openssl rand -hex 32`. If unset, auth gate is disabled. |
+| `INVITE_SECRET` | No | Admin secret for generating invitations. Falls back to `PUSH_SECRET` if unset. |
 
 ## Teknologi
 
