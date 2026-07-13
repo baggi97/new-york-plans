@@ -58,6 +58,8 @@ interface RouteOption {
           }
           @if (routeInfo()) {
             <div class="trip-map__route-bar">
+              <span class="trip-map__route-label">{{ routeInfo() }}</span>
+              <div class="trip-map__route-controls">
               @if (hasWalkRoute() && hasTransitRoute()) {
                 <div class="trip-map__route-toggle">
                   <button class="trip-map__mode-btn"
@@ -72,8 +74,8 @@ interface RouteOption {
                   </button>
                 </div>
               }
-              <span class="trip-map__route-label">{{ routeInfo() }}</span>
-              <button class="trip-map__route-close" (click)="clearRoute()">✕ Luk</button>
+                <button class="trip-map__route-close" (click)="clearRoute()">✕ Luk</button>
+              </div>
             </div>
           }
         </div>
@@ -148,6 +150,7 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
 
   setDay(id: number) {
     this.activeDay = id;
+    this.clearRoute();
     this.updateMarkers();
   }
 
