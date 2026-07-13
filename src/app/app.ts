@@ -66,7 +66,7 @@ import { TripService } from './services/trip.service';
           }
           @case ('dage') {
             <div class="view-enter">
-              <app-day-swiper />
+              <app-day-swiper [initialDay]="pendingDay()" />
             </div>
           }
           @case ('mad') {
@@ -126,6 +126,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private tripService = inject(TripService);
   get days() { return this.tripService.days(); }
   activeTab = signal<TabId>('hjem');
+  pendingDay = signal<number | null>(null);
   isMobile = signal(typeof window !== 'undefined' && window.innerWidth < 768);
 
   private darkMode = inject(DarkModeService);
@@ -145,10 +146,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   onTabChange(tab: TabId) {
+    // A direct tab tap should open the day view on today, not a stale day.
+    this.pendingDay.set(null);
     this.activeTab.set(tab);
   }
 
   onNavigateDay(dayId: number) {
+    this.pendingDay.set(dayId);
     this.activeTab.set('dage');
     // After the day view renders, scroll to that day's program list
     // (mirrors the old next-up widget's jump to the next item).

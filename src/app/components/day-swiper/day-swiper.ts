@@ -1,4 +1,4 @@
-import { Component, signal, inject, HostListener } from '@angular/core';
+import { Component, signal, inject, input, HostListener, OnInit } from '@angular/core';
 import { DaySectionComponent } from '../day-section/day-section';
 import { TripStatusService } from '../../services/trip-status.service';
 import { TripService } from '../../services/trip.service';
@@ -34,10 +34,11 @@ import { hapticTap } from '../../utils/haptics';
   `,
   styleUrl: './day-swiper.scss',
 })
-export class DaySwiperComponent {
+export class DaySwiperComponent implements OnInit {
   private tripStatus = inject(TripStatusService);
   private tripService = inject(TripService);
   get days() { return this.tripService.days(); }
+  initialDay = input<number | null>(null);
   activeDay = signal(1);
   slideDir = signal<'left' | 'right' | null>(null);
 
@@ -48,12 +49,14 @@ export class DaySwiperComponent {
 
   activeDayData = signal(this.days[0]);
 
-  constructor() {
+  ngOnInit() {
+    const target = this.initialDay();
     const today = this.tripStatus.currentDayNumber();
-    if (today > 0 && today <= this.days.length) {
-      this.activeDay.set(today);
-      this.activeDayData.set(this.days[today - 1]);
-    }
+    const id = target && target >= 1 && target <= this.days.length
+      ? target
+      : (today > 0 && today <= this.days.length ? today : 1);
+    this.activeDay.set(id);
+    this.activeDayData.set(this.days[id - 1]);
   }
 
   goTo(id: number) {
@@ -86,3 +89,4 @@ export class DaySwiperComponent {
     }
   }
 }
+
