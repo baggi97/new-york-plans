@@ -4,6 +4,7 @@ import { DarkModeService } from '../../services/dark-mode.service';
 import { MapMarker } from '../../data/trip.interfaces';
 import { TripService } from '../../services/trip.service';
 import { environment } from '../../../environments/environment';
+import { loadMapbox } from '../../utils/mapbox-loader';
 
 const MARKER_COLORS = {
   light: { highlight: '#3d4f6f', food: '#c9a96e', hotel: '#7a9a7e' },
@@ -75,8 +76,7 @@ export class MapEmbedComponent implements AfterViewInit, OnDestroy {
   private async initMap() {
     if (this.map || !this.mapEl) return;
 
-    const mb = await import('mapbox-gl');
-    this.mapboxgl = mb.default ?? mb;
+    this.mapboxgl = await loadMapbox();
     this.mapboxgl.accessToken = environment.mapboxToken;
 
     const style = this.darkMode.isDark()

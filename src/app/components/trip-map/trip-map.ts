@@ -10,6 +10,7 @@ const MARKER_COLORS = {
 import { ConnectivityService } from '../../services/connectivity.service';
 import { DarkModeService } from '../../services/dark-mode.service';
 import { environment } from '../../../environments/environment';
+import { loadMapbox } from '../../utils/mapbox-loader';
 
 interface RouteSegment {
   mode: 'WALK' | 'TRANSIT';
@@ -153,8 +154,7 @@ export class TripMapComponent implements AfterViewInit, OnDestroy {
   private async initMap() {
     if (this.map || !this.mapContainer) return;
 
-    const mb = await import('mapbox-gl');
-    this.mapboxgl = mb.default ?? mb;
+    this.mapboxgl = await loadMapbox();
     this.mapboxgl.accessToken = environment.mapboxToken;
 
     const style = this.darkMode.isDark()
