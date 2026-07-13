@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'travel-1.4.3';
+const CACHE_VERSION = 'travel-1.4.4';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
@@ -191,6 +191,10 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
   if (event.request.method !== 'GET') return;
+
+  // Ignore non-http(s) schemes (e.g. chrome-extension://) — the Cache API
+  // cannot store them and cache.put() throws.
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
 
   if (isGoogleMapsEmbed(url)) return;
 
