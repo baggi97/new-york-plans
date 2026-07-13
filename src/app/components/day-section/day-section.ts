@@ -42,6 +42,9 @@ import { fireConfetti } from '../../utils/confetti';
               <span class="day__weather-icon">{{ weatherService.icon(w.code) }}</span>
               <span class="day__weather-temp">{{ w.tempMax }}°</span>
               <span class="day__weather-label">{{ weatherService.label(w.code) }}</span>
+              @if (w.estimated) {
+                <span class="day__weather-est" title="Typisk vejr baseret på sidste års målinger — endnu uden for prognosen">≈ typisk</span>
+              }
               @if (w.precipitation > 0) {
                 <span class="day__weather-rain">💧 {{ w.precipitation }} mm</span>
               }

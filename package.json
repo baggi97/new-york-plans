@@ -8,7 +8,8 @@
     "start": "npm run env:inject && ng serve; npm run env:restore",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "push-trip": "node scripts/push-trip.mjs"
   },
   "private": true,
   "dependencies": {

@@ -120,6 +120,18 @@
     color: var(--color-text-muted);
   }
 
+  &__weather-est {
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-accent-gold);
+    background: rgba(201, 169, 110, 0.14);
+    border-radius: 100px;
+    padding: 0.1em 0.6em;
+  }
+
   &__weather-rain {
     font-family: var(--font-sans);
     font-size: 0.72rem;

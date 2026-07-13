@@ -34,7 +34,7 @@ import { TripService } from '../../services/trip.service';
           @if (weather()) {
             <div class="recap__stat">
               <span class="recap__stat-value">{{ weatherService.icon(weather()!.code) }} {{ weather()!.tempMax }}°</span>
-              <span class="recap__stat-label">Vejr</span>
+              <span class="recap__stat-label">{{ weather()!.estimated ? 'Vejr ≈ typisk' : 'Vejr' }}</span>
             </div>
           }
         </div>

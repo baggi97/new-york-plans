@@ -17,6 +17,9 @@ import { TripService } from '../../services/trip.service';
             <div class="weather__day">
               <span class="weather__icon">{{ weather.icon(w.code) }}</span>
               <span class="weather__date">{{ formatDate(w.date) }}</span>
+              @if (w.estimated) {
+                <span class="weather__estimate" title="Typisk vejr baseret på sidste års målinger — endnu uden for prognosen">≈ typisk</span>
+              }
               <span class="weather__temp">{{ w.tempMin }}° / {{ w.tempMax }}°</span>
               <span class="weather__feels">Føles: {{ w.feelsMax }}°</span>
               <hr class="weather__separator" />

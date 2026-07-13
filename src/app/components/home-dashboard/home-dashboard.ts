@@ -34,33 +34,25 @@ import { hapticTap } from '../../utils/haptics';
           <span class="dash__card-label">{{ countdownLabel() }}</span>
         </div>
 
-        <div class="dash__card dash__card--weather">
+        <div class="dash__card">
           @if (todayWeather(); as w) {
-            <div class="dash__weather-left">
-              <span class="dash__weather-icon">{{ weather.icon(w.code) }}</span>
-              <span class="dash__weather-high">{{ w.tempMax }}°</span>
-              <span class="dash__weather-low">{{ w.tempMin }}°</span>
-            </div>
-            <div class="dash__weather-right">
-              <span class="dash__weather-desc">{{ weather.label(w.code) }}</span>
-              <span class="dash__weather-stat">💧 {{ w.precipProbability }}%</span>
-              <span class="dash__weather-stat">💨 {{ w.windSpeed }} m/s</span>
-            </div>
+            <span class="dash__card-icon">{{ weather.icon(w.code) }}</span>
+            <span class="dash__card-value">{{ w.tempMax }}°<span class="dash__card-value-sub">/{{ w.tempMin }}°</span></span>
+            <span class="dash__card-label">{{ weather.label(w.code) }}@if (w.estimated) {<span class="dash__card-est">≈ typisk</span>}</span>
           } @else {
-            <span class="dash__weather-icon">🌤️</span>
+            <span class="dash__card-icon">🌤️</span>
             <span class="dash__card-label">Vejr</span>
           }
         </div>
 
         <div class="dash__card dash__card--clocks">
           <div class="dash__clock dash__clock--primary">
-            <span class="dash__clock-label">{{ trip.destination.city }}</span>
             <span class="dash__clock-time">{{ tripStatus.destTime() }}</span>
+            <span class="dash__clock-label">{{ trip.destination.city }}</span>
           </div>
-          <div class="dash__clock-divider"></div>
           <div class="dash__clock dash__clock--secondary">
-            <span class="dash__clock-label">Hjemme</span>
             <span class="dash__clock-time">{{ tripStatus.homeTime() }}</span>
+            <span class="dash__clock-label">Hjemme</span>
           </div>
         </div>
       </div>

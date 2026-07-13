@@ -55,7 +55,7 @@
 
   &__badge {
     font-family: var(--font-sans);
-    font-size: 0.65rem;
+    font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -89,9 +89,9 @@
   // Status cards
   &__cards {
     display: grid;
-    grid-template-columns: 1fr 1fr minmax(0, 1.3fr);
-    gap: 0.4rem;
-    padding: 0.6rem var(--space-md) 0;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    padding: 0.7rem var(--space-md) 0;
     flex: 0 0 auto;
   }
 
@@ -100,25 +100,25 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.2rem;
-    padding: 0.55rem 0.4rem;
+    gap: 0.25rem;
+    padding: 0.75rem 0.5rem;
     background: rgba(0, 0, 0, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-md);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    min-height: 68px;
+    min-height: 94px;
   }
 
   &__card-icon {
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     line-height: 1;
     margin-bottom: 0.05rem;
   }
 
   &__card-value {
     font-family: var(--font-serif);
-    font-size: 1.1rem;
+    font-size: 1.45rem;
     font-weight: 600;
     color: #fff;
     line-height: 1;
@@ -127,122 +127,72 @@
     &--mono {
       font-family: var(--font-sans);
       font-variant-numeric: tabular-nums;
-      font-size: 1.15rem;
+      font-size: 1.45rem;
     }
+  }
+
+  &__card-value-sub {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
   }
 
   &__card-label {
     font-family: var(--font-sans);
-    font-size: 0.62rem;
-    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     line-height: 1.2;
     text-align: center;
   }
 
-  &__card--weather {
-    flex-direction: row;
-    gap: 0;
-    padding: 0.5rem 0.3rem;
-    align-items: center;
-  }
-
-  &__weather-left {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.1rem;
-  }
-
-  &__weather-icon {
-    font-size: 1.5rem;
-    line-height: 1;
-  }
-
-  &__weather-high {
-    font-family: var(--font-sans);
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1;
-  }
-
-  &__weather-low {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.65);
-    line-height: 1;
-  }
-
-  &__weather-right {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.2rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.12);
-    padding-left: 0.35rem;
-    margin-left: 0.15rem;
-  }
-
-  &__weather-desc {
-    font-family: var(--font-sans);
-    font-size: 0.65rem;
+  &__card-est {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.6rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.1;
-    text-align: center;
-  }
-
-  &__weather-stat {
-    font-family: var(--font-sans);
-    font-size: 0.58rem;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1;
+    letter-spacing: 0.04em;
+    color: var(--color-accent-gold);
   }
 
   &__card--clocks {
-    flex-direction: row;
-    gap: 0;
-    padding: 0.5rem 0.15rem;
+    gap: 0.4rem;
     overflow: hidden;
   }
 
   &__clock {
-    flex: 1;
     min-width: 0;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.15rem;
+    gap: 0.05rem;
 
     &--primary .dash__clock-label {
       color: var(--color-accent-gold);
     }
 
     &--primary .dash__clock-time {
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #fff;
     }
 
     &--secondary .dash__clock-label {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.55);
     }
 
     &--secondary .dash__clock-time {
       font-size: 0.95rem;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.75);
     }
   }
 
   &__clock-label {
     font-family: var(--font-sans);
-    font-size: 0.55rem;
+    font-size: 0.62rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -255,15 +205,7 @@
   &__clock-time {
     font-family: var(--font-sans);
     font-variant-numeric: tabular-nums;
-    line-height: 1;
-  }
-
-  &__clock-divider {
-    width: 1px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.12);
-    flex-shrink: 0;
-    margin: 0 0.15rem;
+    line-height: 1.1;
   }
 
   // Main section
@@ -349,13 +291,13 @@
 
   &__progress-detail {
     font-family: var(--font-sans);
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     color: rgba(255, 255, 255, 0.75);
   }
 
   &__progress-next {
     font-family: var(--font-sans);
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     color: rgba(255, 255, 255, 0.9);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -366,7 +308,7 @@
   &__days {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.4rem;
+    gap: 0.55rem;
     width: 100%;
   }
 
@@ -374,9 +316,9 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.15rem;
-    padding: 0.5rem 0.6rem;
-    min-height: 72px;
+    gap: 0.2rem;
+    padding: 0.75rem 0.85rem;
+    min-height: 90px;
     background: rgba(0, 0, 0, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-md);
@@ -401,9 +343,9 @@
 
   &__day-date {
     font-family: var(--font-sans);
-    font-size: 0.55rem;
+    font-size: 0.72rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.65);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     line-height: 1;
@@ -411,21 +353,21 @@
 
   &__day-num {
     font-family: var(--font-serif);
-    font-size: 0.8rem;
+    font-size: 0.92rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.55);
     line-height: 1;
   }
 
   &__day-theme {
     font-family: var(--font-sans);
-    font-size: 0.65rem;
+    font-size: 0.85rem;
     color: var(--color-accent-gold);
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 1.25;
     flex: 1;
     text-align: left;
-    margin: 0.25rem 0;
+    margin: 0.3rem 0;
   }
 
   &__day-tags {
@@ -436,7 +378,7 @@
 
   &__day-tag {
     font-family: var(--font-sans);
-    font-size: 0.55rem;
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.7);
     line-height: 1;
     white-space: nowrap;
@@ -454,7 +396,7 @@
 
   &__section-label {
     font-family: var(--font-sans);
-    font-size: 0.65rem;
+    font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -495,7 +437,7 @@
 
   &__booking-time {
     font-family: var(--font-sans);
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     font-weight: 600;
     color: var(--color-accent-gold);
     font-variant-numeric: tabular-nums;
