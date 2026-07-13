@@ -20,11 +20,12 @@ export const BARCELONA_DATA: TripData = {
   homeCurrency: 'DKK',
   homeTimezone: 'Europe/Copenhagen',
   heroImages: [
-    'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800&q=60',
-    'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&q=60',
-    'https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800&q=60',
-    'https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800&q=60',
-    'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=800&q=60',
+    'https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=800&q=60', // Sagrada Família
+    'https://images.unsplash.com/photo-1544366981-53db834f982a?w=800&q=60',    // Camp Nou
+    'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800&q=60', // Barri Gòtic
+    'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=800&q=60', // Montjuïc
+    'https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=800&q=60',    // Barcelona
+    'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=800&q=60', // Barceloneta
   ],
   days: [
     {

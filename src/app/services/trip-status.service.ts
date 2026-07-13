@@ -1,10 +1,11 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { TripService } from './trip.service';
+import { now as clockNow } from '../utils/clock';
 
 @Injectable({ providedIn: 'root' })
 export class TripStatusService {
   private tripService = inject(TripService);
-  private now = signal(new Date());
+  private now = signal(clockNow());
 
   private get tripData() { return this.tripService.trip(); }
 
@@ -93,6 +94,6 @@ export class TripStatusService {
   dkTime = this.homeTime;
 
   constructor() {
-    setInterval(() => this.now.set(new Date()), 30_000);
+    setInterval(() => this.now.set(clockNow()), 30_000);
   }
 }

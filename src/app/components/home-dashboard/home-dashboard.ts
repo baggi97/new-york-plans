@@ -5,6 +5,7 @@ import { WeatherService } from '../../services/weather.service';
 import { TripService } from '../../services/trip.service';
 import { Booking } from '../../data/trip.interfaces';
 import { hapticTap } from '../../utils/haptics';
+import { nowMs } from '../../utils/clock';
 
 @Component({
   selector: 'app-home-dashboard',
@@ -17,7 +18,6 @@ import { hapticTap } from '../../utils/haptics';
              [style.backgroundImage]="'url(' + img + ')'">
         </div>
       }
-      <div class="dash__overlay"></div>
 
       <!-- Header -->
       <div class="dash__header">
@@ -92,11 +92,21 @@ import { hapticTap } from '../../utils/haptics';
                 </div>
                 <span class="dash__day-theme">{{ day.theme }}</span>
                 <div class="dash__day-tags">
-                  @if (dayWeather(day.isoDate); as w) {
-                    <span class="dash__day-tag">{{ weather.icon(w.code) }} {{ w.tempMax }}°</span>
-                  }
-                  @if (day.bookings.length > 0) {
-                    <span class="dash__day-tag dash__day-tag--booking">📋 {{ day.bookings.length }}</span>
+                  @if (isAfter()) {
+                    @let comp = dayCompletion(day.id);
+                    @if (comp.total > 0) {
+                      <span class="dash__day-tag dash__day-tag--done"
+                        [class.dash__day-tag--full]="comp.pct === 100">
+                        ✓ {{ comp.done }}/{{ comp.total }} · {{ comp.pct }}%
+                      </span>
+                    }
+                  } @else {
+                    @if (dayWeather(day.isoDate); as w) {
+                      <span class="dash__day-tag">{{ weather.icon(w.code) }} {{ w.tempMax }}°</span>
+                    }
+                    @if (day.bookings.length > 0) {
+                      <span class="dash__day-tag dash__day-tag--booking">📋 {{ day.bookings.length }}</span>
+                    }
                   }
                 </div>
               </button>
@@ -134,6 +144,7 @@ export class HomeDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
 
   get trip() { return this.tripService.trip(); }
   circumference = 2 * Math.PI * 30;
+  isAfter = computed(() => this.tripStatus.status() === 'after');
 
   activeIdx = signal(0);
   get images() { return this.trip.heroImages ?? []; }
@@ -246,15 +257,20 @@ export class HomeDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     return this.weather.byDate().get(isoDate) ?? null;
   }
 
+  dayCompletion(dayId: number) {
+    const { done, total } = this.itinerary.dayProgress(dayId);
+    return { done, total, pct: total > 0 ? Math.round((done / total) * 100) : 0 };
+  }
+
   private updateBookingCountdowns() {
     const map = new Map<string, { countdown: string; soon: boolean }>();
-    const now = Date.now();
+    const now = nowMs();
 
     for (const day of this.trip.days) {
       for (const b of day.bookings) {
         if (!b.time) continue;
         const diff = new Date(b.time).getTime() - now;
-        if (diff <= 0 || diff > 48 * 3600_000) continue;
+        if (diff <= 0 || diff > 12 * 3600_000) continue;
 
         const h = Math.floor(diff / 3600_000);
         const m = Math.floor((diff % 3600_000) / 60_000);

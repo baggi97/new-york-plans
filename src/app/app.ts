@@ -11,7 +11,6 @@ import { SiteFooterComponent } from './components/site-footer/site-footer';
 import { LightboxComponent } from './components/lightbox/lightbox';
 import { OfflineIndicatorComponent } from './components/offline-indicator/offline-indicator';
 import { BackToTopComponent } from './components/back-to-top/back-to-top';
-import { NextUpWidgetComponent } from './components/next-up-widget/next-up-widget';
 import { CurrencyFabComponent } from './components/currency-fab/currency-fab';
 import { UpdateToastComponent } from './components/update-toast/update-toast';
 import { NotificationPromptComponent } from './components/notification-prompt/notification-prompt';
@@ -44,7 +43,6 @@ import { TripService } from './services/trip.service';
     LightboxComponent,
     OfflineIndicatorComponent,
     BackToTopComponent,
-    NextUpWidgetComponent,
     CurrencyFabComponent,
     UpdateToastComponent,
     NotificationPromptComponent,
@@ -111,7 +109,6 @@ import { TripService } from './services/trip.service';
       <app-lightbox />
       <app-offline-indicator />
       <app-back-to-top />
-      <app-next-up-widget />
       <app-currency-fab />
       <app-update-toast />
       <app-notification-prompt />
@@ -151,8 +148,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.activeTab.set(tab);
   }
 
-  onNavigateDay(_dayId: number) {
+  onNavigateDay(dayId: number) {
     this.activeTab.set('dage');
+    // After the day view renders, scroll to that day's program list
+    // (mirrors the old next-up widget's jump to the next item).
+    setTimeout(() => {
+      const el = document.getElementById(`program-${dayId}`);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, 220);
   }
 
   onTripSelected() {
