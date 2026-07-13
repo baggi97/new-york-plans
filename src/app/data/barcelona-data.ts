@@ -52,7 +52,9 @@ export const BARCELONA_DATA: TripData = {
       transport: ['Rodalies R2 Nord: El Prat (T2) → Barcelona-Sants (~20 min)', 'Gåtur til Moxy Barcelona'],
       bookings: [],
       fromList: [],
-      markers: [],
+      markers: [
+        { label: 'Moxy Barcelona', lat: 41.3792, lng: 2.1429, category: 'hotel' },
+      ],
       images: [
         { url: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=1200&q=80', alt: 'Barcelona', hero: true },
       ],
@@ -110,7 +112,9 @@ export const BARCELONA_DATA: TripData = {
       transport: [],
       bookings: [],
       fromList: [],
-      markers: [],
+      markers: [
+        { label: 'Moxy Barcelona', lat: 41.3792, lng: 2.1429, category: 'hotel' },
+      ],
       images: [
         { url: 'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=1200&q=80', alt: 'Barcelona', hero: true },
       ],
@@ -173,7 +177,9 @@ export const BARCELONA_DATA: TripData = {
       transport: ['Rodalies R2 Nord: Barcelona-Sants → El Prat (T2) (~20 min)'],
       bookings: [],
       fromList: [],
-      markers: [],
+      markers: [
+        { label: 'Moxy Barcelona', lat: 41.3792, lng: 2.1429, category: 'hotel' },
+      ],
       images: [
         { url: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=1200&q=80', alt: 'Barcelona', hero: true },
       ],
