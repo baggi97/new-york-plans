@@ -111,23 +111,29 @@ export const BARCELONA_DATA: TripData = {
     },
     {
       id: 3,
-      title: 'Fri dag',
+      title: 'Fri dag & Font Màgica',
       date: '29. juli',
       isoDate: '2026-07-29',
-      theme: 'Ingen planer',
-      funFact: 'Barcelona fik først rigtige strande efter OL i 1992, da hele kystlinjen blev forvandlet fra industrihavn til strandpromenade.',
+      theme: 'Fri dag & aften-vandshow',
+      funFact: 'Font Màgica blev bygget til verdensudstillingen i 1929. Det gratis show med lys, vand og musik trækker over 2,5 mio. besøgende om året.',
       intro:
-        'En helt fri dag uden planlagte aktiviteter — brug den som I har lyst til.',
+        'En fri dag til jer selv. Om aftenen slutter I af ved Font Màgica på Plaça d\'Espanya, hvor lys, vand og musik danser — showet starter kl. 21:30 og er gratis.',
       highlights: [
-        { label: 'Fri dag – ingen planlagte aktiviteter' },
+        { label: 'Fri dag – jeres egne planer' },
+        { label: 'Font Màgica – lys- og vandshow (kl. 21:30)', duration: '~30 min' },
       ],
-      tips: [],
+      tips: [
+        'Font Màgica kører onsdag–søndag om sommeren; showet starter kl. 21:30 (gratis, ingen billet)',
+        'Metro L1/L3 til Plaça d\'Espanya — fontænen ligger lige ved MNAC',
+        'Kom lidt før for en god plads på trappen op mod MNAC',
+      ],
       food: [],
-      transport: [],
+      transport: ['Metro L1/L3 → Plaça d\'Espanya (Font Màgica)'],
       bookings: [],
       fromList: [],
       markers: [
         { label: 'Moxy Barcelona', lat: 41.3792, lng: 2.1429, category: 'hotel' },
+        { label: 'Font Màgica', lat: 41.3714, lng: 2.1519, category: 'highlight' },
       ],
       images: [
         { url: 'https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=1200&q=80', alt: 'Barcelona', hero: true },

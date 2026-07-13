@@ -6,13 +6,14 @@ const STORE_NAME = 'itinerary';
 interface ChecklistData {
   checked: string[];
   skipped: string[];
+  moved: Record<string, number>;
 }
 
 function parseStored(raw: string | null): ChecklistData {
-  if (!raw) return { checked: [], skipped: [] };
+  if (!raw) return { checked: [], skipped: [], moved: {} };
   const parsed = JSON.parse(raw);
-  if (Array.isArray(parsed)) return { checked: parsed, skipped: [] };
-  return { checked: parsed.checked ?? [], skipped: parsed.skipped ?? [] };
+  if (Array.isArray(parsed)) return { checked: parsed, skipped: [], moved: {} };
+  return { checked: parsed.checked ?? [], skipped: parsed.skipped ?? [], moved: parsed.moved ?? {} };
 }
 
 function getBlobKey(req: Request): string {
@@ -59,9 +60,9 @@ export default async (req: Request, _context: Context) => {
       const body = await req.json();
       let data: ChecklistData;
       if (Array.isArray(body)) {
-        data = { checked: body, skipped: [] };
+        data = { checked: body, skipped: [], moved: {} };
       } else {
-        data = { checked: body.checked ?? [], skipped: body.skipped ?? [] };
+        data = { checked: body.checked ?? [], skipped: body.skipped ?? [], moved: body.moved ?? {} };
       }
       await store.set(blobKey, JSON.stringify(data));
       return new Response(JSON.stringify({ ok: true }), { status: 200, headers });

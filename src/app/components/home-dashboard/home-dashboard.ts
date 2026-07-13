@@ -212,8 +212,8 @@ export class HomeDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   nextItemLabel = computed(() => {
     const day = this.currentDay();
     if (!day) return null;
-    const idx = this.itinerary.nextUncheckedIndex(day.id);
-    return idx >= 0 ? day.highlights[idx]?.label ?? null : null;
+    const item = this.itinerary.nextUncheckedItem(day.id);
+    return item ? item.highlight.label : null;
   });
 
   upcomingBookings = computed(() => {

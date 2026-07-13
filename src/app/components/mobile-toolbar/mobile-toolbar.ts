@@ -84,12 +84,9 @@ export class MobileToolbarComponent implements OnDestroy {
   nextItem = computed(() => {
     const dayNum = this.tripStatus.currentDayNumber();
     if (dayNum === 0) return null;
-    const day = this.tripService.days().find(d => d.id === dayNum);
-    if (!day) return null;
-    const idx = this.itinerary.nextUncheckedIndex(dayNum);
-    if (idx === -1) return null;
-    const highlight = day.highlights[idx];
-    return { dayId: dayNum, label: highlight.label };
+    const item = this.itinerary.nextUncheckedItem(dayNum);
+    if (!item) return null;
+    return { dayId: dayNum, label: item.highlight.label };
   });
 
   nearbyItems = computed(() => {
