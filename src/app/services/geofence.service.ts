@@ -35,6 +35,7 @@ export class GeofenceService {
     if (!day) return;
 
     for (const marker of day.markers) {
+      if (!marker.notify) continue; // only key places alert, not every pin
       const key = `${dayNum}-${marker.label}`;
       if (this.triggered.has(key)) continue;
 

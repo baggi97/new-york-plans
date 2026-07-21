@@ -33,6 +33,8 @@ export interface MapMarker {
   lat: number;
   lng: number;
   category: 'highlight' | 'food' | 'hotel';
+  /** When true, a proximity (geofence) notification fires near this place. */
+  notify?: boolean;
 }
 
 export interface TripDay {

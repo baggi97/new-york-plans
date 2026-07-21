@@ -124,7 +124,7 @@ export const BARCELONA_DATA: TripData = {
         { label: 'Scuffers (tøj)', googleMapsUrl: 'https://www.google.com/maps/place/Scuffers+Barcelona/data=!4m2!3m1!1s0x12a4a30c5ebfaf71:0xed6e55d10b46c30f' },
       ],
       markers: [
-        { label: 'Spotify Camp Nou', lat: 41.3809, lng: 2.1228, category: 'highlight' },
+        { label: 'Spotify Camp Nou', lat: 41.3809, lng: 2.1228, category: 'highlight', notify: true },
         { label: 'Casa Batlló', lat: 41.3915, lng: 2.1647, category: 'highlight' },
         { label: 'Plaça de Catalunya', lat: 41.3859, lng: 2.17, category: 'highlight' },
         { label: 'El Nacional', lat: 41.3906, lng: 2.1665, category: 'food' },
@@ -184,7 +184,7 @@ export const BARCELONA_DATA: TripData = {
       ],
       markers: [
         { label: 'Moxy Barcelona', lat: 41.3792, lng: 2.1429, category: 'hotel' },
-        { label: 'Font Màgica', lat: 41.3714, lng: 2.1519, category: 'highlight' },
+        { label: 'Font Màgica', lat: 41.3714, lng: 2.1519, category: 'highlight', notify: true },
         { label: 'Barcelona-katedralen', lat: 41.3839, lng: 2.1766, category: 'highlight' },
         { label: 'Santa Maria del Mar', lat: 41.3838, lng: 2.182, category: 'highlight' },
         { label: 'Palau de la Música Catalana', lat: 41.3876, lng: 2.1752, category: 'highlight' },
@@ -243,12 +243,12 @@ export const BARCELONA_DATA: TripData = {
         { label: 'Bunkers del Carmel', googleMapsUrl: 'https://www.google.com/maps/place/Bunkers+del+Carmel/data=!4m2!3m1!1s0x12a4a34ce3cd2c89:0x78eec059f995ffe3' },
       ],
       markers: [
-        { label: 'Sagrada Família', lat: 41.4036, lng: 2.1744, category: 'highlight' },
+        { label: 'Sagrada Família', lat: 41.4036, lng: 2.1744, category: 'highlight', notify: true },
         { label: 'Arc de Triomf', lat: 41.3921, lng: 2.1809, category: 'highlight' },
         { label: 'Parc de la Ciutadella', lat: 41.3884, lng: 2.1863, category: 'highlight' },
         { label: 'Playa de Bogatell', lat: 41.394, lng: 2.2067, category: 'highlight' },
         { label: 'Casa Vicens', lat: 41.4035, lng: 2.1506, category: 'highlight' },
-        { label: 'Bunkers del Carmel', lat: 41.4194, lng: 2.1617, category: 'highlight' },
+        { label: 'Bunkers del Carmel', lat: 41.4194, lng: 2.1617, category: 'highlight', notify: true },
         { label: 'Perikete', lat: 41.3807, lng: 2.1887, category: 'food' },
       ],
       images: [
