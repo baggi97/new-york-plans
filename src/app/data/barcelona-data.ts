@@ -75,13 +75,13 @@ export const BARCELONA_DATA: TripData = {
     },
     {
       id: 2,
-      title: 'Camp Nou',
+      title: 'Camp Nou & Passeig de Gràcia',
       date: '28. juli',
       isoDate: '2026-07-28',
-      theme: 'FC Barcelona & Spotify Camp Nou',
+      theme: 'FC Barcelona, Gaudí & shopping',
       funFact: 'Spotify Camp Nou er Europas største fodboldstadion med plads til knap 100.000 tilskuere. Det gennemgår i disse år den store Espai Barça-renovering.',
       intro:
-        'Dagens højdepunkt er jeres booking til Spotify Camp Nou kl. 10:00 — adgang til FC Barcelona-museet og til tribunerne med udsigt over selve stadionet (dele er allerede genåbnet efter renoveringen). Resten af dagen er fri.',
+        'Morgenen starter på Spotify Camp Nou kl. 10:00 — FC Barcelona-museet og tribunerne med udsigt over stadionet. Efter frokost går turen til Passeig de Gràcia: Casa Batlló, shopping og Plaça de Catalunya, og en middag i Eixample.',
       highlights: [
         { label: 'Transport til Spotify Camp Nou', duration: '~30 min' },
         { label: 'Spotify Camp Nou — museum + tribuner', duration: 'kl. 10:00' },
@@ -135,13 +135,13 @@ export const BARCELONA_DATA: TripData = {
     },
     {
       id: 3,
-      title: 'Fri dag & Font Màgica',
+      title: 'Gamle by & Font Màgica',
       date: '29. juli',
       isoDate: '2026-07-29',
-      theme: 'Fri dag & aften-vandshow',
+      theme: 'Gotisk kvarter, El Born & aften-vandshow',
       funFact: 'Font Màgica blev bygget til verdensudstillingen i 1929. Det gratis show med lys, vand og musik trækker over 2,5 mio. besøgende om året.',
       intro:
-        'En fri dag til jer selv. Om aftenen slutter I af ved Font Màgica på Plaça d\'Espanya, hvor lys, vand og musik danser — showet starter kl. 21:30 og er gratis.',
+        'En dag i den gamle by: La Boqueria og La Rambla, det gotiske kvarter med katedralen, El Born (Santa Maria del Mar & Palau de la Música) og El Raval. Om aftenen slutter I ved Plaça d\'Espanya, hvor Font Màgica danser med lys, vand og musik fra kl. 21:30 (gratis).',
       highlights: [
         { label: 'La Boqueria & La Rambla', duration: 'formiddag' },
         { label: 'Det gotiske kvarter + Barcelona-katedralen', duration: '~1.5 time' },
@@ -200,13 +200,13 @@ export const BARCELONA_DATA: TripData = {
     },
     {
       id: 4,
-      title: 'Sagrada Família',
+      title: 'Strand, Sagrada & Bunkers',
       date: '30. juli',
       isoDate: '2026-07-30',
-      theme: 'Gaudís mesterværk',
+      theme: 'Strand, Gaudí & solnedgang',
       funFact: 'Sagrada Família har været under opbygning siden 1882 — over 140 år. Gaudí sagde om forsinkelsen: »Min klient har ingen travlt«, med henvisning til Gud.',
       intro:
-        'Jeres booking til Sagrada Família er kl. 16:45. Dagen indtil da er fri — mød op i god tid til det tidsbestemte besøg.',
+        'Formiddag ved havet — Arc de Triomf og Parc de la Ciutadella på vejen til stranden ved Barceloneta/Bogatell, med frokost tæt på vandet. Om eftermiddagen jeres booking til Sagrada Família kl. 16:45, og dagen slutter med solnedgang fra Bunkers del Carmel.',
       highlights: [
         { label: 'Morgenmad', duration: 'morgen' },
         { label: 'Arc de Triomf + Parc de la Ciutadella', duration: 'formiddag' },
